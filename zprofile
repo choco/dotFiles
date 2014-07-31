@@ -47,12 +47,6 @@ path=(
   $path
 )
 
-export GLASSFISH_HOME=/usr/local/opt/glassfish/libexec
-export PATH=${PATH}:${GLASSFISH_HOME}/bin
-alias quakeLive="wine ~/.wine/drive_c/Program\ Files/Quake\ Live/Launcher.exe"
-#alias vim="reattach-to-user-namespace -l vim"
-export JAVA_HOME=$(/usr/libexec/java_home)
-
 #
 # Less
 #
@@ -81,3 +75,11 @@ if [[ ! -d "$TMPPREFIX" ]]; then
   mkdir -p "$TMPPREFIX"
 fi
 
+# Base16 Shell
+BASE16_SCHEME="ocean"
+BASE16_SHELL="$HOME/.config/base16-shell/base16-$BASE16_SCHEME.dark.sh"
+#$BASE16_SHELL
+
+# Vagrant Configuration
+export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
+#export VAGRANT_VMWARE_FUSION_APP='/Applications/VMware Fusion Tech Preview.app'

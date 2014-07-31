@@ -5,7 +5,12 @@ set nocompatible
 syntax enable
 
 " 256 color terminal
-set t_Co=256
+if &t_Co != 256 && ! has("gui_running")  
+  echomsg ""
+  echomsg "err: please use GUI or a 256-color terminal (so that t_Co=256 could be set)"
+  echomsg ""
+  finish
+endif
 
 " configure Vundle
 filetype on " without this vim emits a zero exit status, later, because of :ft off
@@ -100,6 +105,18 @@ autocmd FileType markdown setlocal spell
 " Automatically wrap at 80 characters for Markdown
 autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 
+" Automatically start NERDTree if no file is specified
+autocmd vimenter * if !argc() | NERDTree | endif
+" Close vim if NERDTree is the only open buffer
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+
+" Syntastic configuration
+"let g:syntastic_c_check_header = 1
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_enable_signs = 1
+"let g:syntastic_cpp_check_header = 1
+
 " Enable spellchecking for Git commits
 autocmd FileType gitcommit setlocal spell
 
@@ -148,4 +165,10 @@ let java_highlight_functions="style"
 " Toggle paste mode for code
 set pastetoggle=<F2>
 
-" 
+" YouCompleteMe configuration
+let g:ycm_complete_in_comments = 0
+let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_autoclose_preview_window_after_insertion = 1
+
+
