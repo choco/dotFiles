@@ -1,0 +1,11 @@
+[user]
+	name = Enrico Ghirardi
+	email = i@choco.me
+[credential]
+	helper = osxkeychain
+[push]
+	default = simple
+[core]
+	excludesfile = gitignore_global
+[color]
+	ui = always

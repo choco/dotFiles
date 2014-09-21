@@ -1,23 +1,29 @@
-ENV['HOMEBREW_CASK_OPTS'] = "--appdir=/Applications"
+def brew_install(package, *args)
+  versions = `brew list #{package} --versions`
+  options = args.last.is_a?(Hash) ? args.pop : {}
 
-def brew_install(package, *options)
-  `brew list #{package}`
-  return if $?.success?
+  # if brew exits with error we install tmux
+  if versions.empty?
+    sh "brew install #{package} #{args.join ' '}"
+  elsif options[:requires]
+    # brew did not error out, verify tmux is greater than 1.8
+    # e.g. brew_tmux_query = 'tmux 1.9a'
+    installed_version = versions.split(/\n/).first.split(' ')[1]
+    unless version_match?(options[:version], installed_version)
+      sh "brew upgrade #{package} #{args.join ' '}"
+    end
+  end
+end
 
-  sh "brew install #{package} #{options.join ' '}"
+def version_match?(requirement, version)
+  # This is a hack, but it lets us avoid a gem dep for version checking.
+  Gem::Dependency.new('', requirement).match?('', version)
 end
 
 def install_github_bundle(user, package)
   unless File.exist? File.expand_path("~/.vim/bundle/#{package}")
     sh "git clone https://github.com/#{user}/#{package} ~/.vim/bundle/#{package}"
   end
-end
-
-def brew_cask_install(package, *options)
-  output = `brew cask info #{package}`
-  return unless output.include?('Not installed')
-
-  sh "brew cask install #{package} #{options.join ' '}"
 end
 
 def step(description)
@@ -104,33 +110,21 @@ namespace :install do
   desc 'Update or Install Brew'
   task :brew do
     step 'Homebrew'
-    unless system('which brew > /dev/null || ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"')
+    unless system('which brew > /dev/null || ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"')
       raise "Homebrew must be installed before continuing."
     end
   end
 
-  desc 'Install Homebrew Cask'
-  task :brew_cask do
-    step 'Homebrew Cask'
-    unless system('brew tap | grep phinze/cask > /dev/null') || system('brew tap phinze/homebrew-cask')
-      abort "Failed to tap phinze/homebrew-cask in Homebrew."
-    end
-
-    brew_install 'brew-cask'
+  desc 'Install Git'
+  task ':git' do
+      step 'git'
+      brew_install 'git'
   end
 
-  desc 'Install The Silver Searcher'
-  task :the_silver_searcher do
-    step 'the_silver_searcher'
-    brew_install 'the_silver_searcher'
-  end
-
-  desc 'Install iTerm'
-  task :iterm do
-    step 'iterm2'
-    unless app? 'iTerm'
-      brew_cask_install 'iterm2'
-    end
+  desc 'Install cmake'
+  task ':cmake' do
+      step 'cmake'
+      brew_install 'cmake'
   end
 
   desc 'Install ctags'
@@ -139,22 +133,22 @@ namespace :install do
     brew_install 'ctags'
   end
 
+  desc 'Install cscope'
+  task :cscope do
+    step 'cscope'
+    brew_install 'cscope'
+  end
+
+  desc 'Install The Silver Searcher'
+  task :the_silver_searcher do
+    step 'the_silver_searcher'
+    brew_install 'the_silver_searcher'
+  end
+
   desc 'Install reattach-to-user-namespace'
   task :reattach_to_user_namespace do
     step 'reattach-to-user-namespace'
     brew_install 'reattach-to-user-namespace'
-  end
-
-  desc 'Install git'
-  task :git do
-    step 'git'
-    brew_install 'git'
-  end
-
-  desc 'Install zsh'
-  task :zsh do
-    step 'zsh'
-    brew_install 'zsh'
   end
 
   desc 'Install tmux'
@@ -163,179 +157,47 @@ namespace :install do
     brew_install 'tmux'
   end
 
-  desc 'Install cmake'
-  task :cmake do
-    step 'cmake'
-    brew_install 'cmake'
+  desc 'Install Zsh'
+  task ':zsh' do
+      step 'zsh'
+      brew_install 'zsh'
   end
 
-  desc 'Install glassfish'
-  task :glassfish do
-    step 'glassfish'
-    brew_install 'glassfish'
+  desc 'Install Python 2'
+  task ':python2' do
+      step 'python2'
+      brew_install 'python'
+  end
+
+  desc 'Install Python 3'
+  task ':python3' do
+      step 'python3'
+      brew_install 'python3'
+  end
+
+  desc 'Install Vim'
+  task ':vim' do
+      step 'vim'
+      brew_install 'vim', ['--override-system-vi', '--with-lua', '--with-luajit']
   end
 
   desc 'Install MacVim'
-  task :macvim do
-    step 'MacVim'
-    brew_install 'macvim', ['--override-system-vim']
+  task ':macvim' do
+      step 'macvim'
+      brew_install 'macvim', ['--with-lua', '--with-luajit', '--custom-icons', '--env=std']
   end
 
-  desc 'Install Maven'
-  task :maven do
-    step 'Maven'
-    brew_install 'maven'
-  end
-
-  desc 'Install MySQL'
-  task :mysql do
-    step 'MySQL'
-    brew_install 'mysql'
-  end
-
-  desc 'Install IntelliJ IDEA'
-  task :intellij do
-    step 'IntelliJ IDEA'
-    brew_cask_install 'intellij-idea-ultimate'
-  end
-
-  desc 'Install VLC'
-  task :vlc do
-    step 'VLC'
-    brew_cask_install 'vlc'
-  end
-
-  desc 'Install Transmission'
-  task :transmission do
-    step 'Transmission'
-    brew_cask_install 'transmission'
-  end
-
-  desc 'Install The Unarchiver'
-  task :unarchiver do
-    step 'The Unarchiver'
-    brew_cask_install 'the-unarchiver'
-  end
-
-  desc 'Install TeamSpeak Client'
-  task :teamspeak do
-    step 'TeamSpeak'
-    brew_cask_install 'teamspeak-client'
-  end
-
-  desc 'Install Skype'
-  task :skype do
-    step 'Skype'
-    brew_cask_install 'skype'
-  end
-
-  desc 'Install Sequel Pro'
-  task :sequel do
-    step 'Sequel Pro'
-    brew_cask_install 'sequel-pro'
-  end
-
-  desc 'Install Plex Media Server'
-  task :plex do
-    step 'Plex Media Server'
-    brew_cask_install 'plex-media-server'
-  end
-
-  desc 'Install OpenEmu'
-  task :openemu do
-    step 'OpenEmu'
-    brew_cask_install 'openemu'
-  end
-
-  desc 'Install Little Snitch'
-  task :littlesnitch do
-    step 'Little Snitch'
-    brew_cask_install 'little-snitch'
-  end
-
-  desc 'Install Hopper Disassembler'
-  task :hopper do
-    step 'Hopper Disassembler'
-    brew_cask_install 'hopper-disassembler'
-  end
-
-  desc 'Install Google Chrome'
-  task :chrome do
-    step 'Google Chrome'
-    brew_cask_install 'google-chrome'
-  end
-
-  desc 'Install Github for Mac'
-  task :github do
-    step 'Github for Mac'
-    brew_cask_install 'github'
-  end
-
-  desc 'Install HandBrake'
-  task :handbrake do
-    step 'HandBrake'
-    brew_cask_install 'handbrake'
-  end
-
-  desc 'Install Dropbox'
-  task :dropbox do
-    step 'Dropbox'
-    brew_cask_install 'dropbox'
-  end
-
-  desc 'Install Silverlight'
-  task :silverlight do
-    step 'Silverlight'
-    brew_cask_install 'silverlight'
-  end
-
-  desc 'Install Quicklook-JSON'
-  task :qljson do
-    step 'Quicklook-JSON'
-    brew_cask_install 'quicklook-json'
-  end
-
-  desc 'Install QLPrettyPatch'
-  task :qlprettypatch do
-    step 'QLPrettyPatch'
-    brew_cask_install 'qlprettypatch'
-  end
-
-  desc 'Install QLColorCode'
-  task :qlcolorcode do
-    step 'QLColorCode'
-    brew_cask_install 'qlcolorcode'
-  end
-
-  desc 'Install QLMarkdown'
-  task :qlmarkdown do
-    step 'QLMarkdown'
-    brew_cask_install 'qlmarkdown'
-  end
-
-  desc 'Install Java'
-  task :java do
-    step 'Java'
-    brew_cask_install 'java'
-  end
-
-  desc 'Install Flash'
-  task :flash do
-    step 'Flash'
-    brew_cask_install 'flash'
-  end
-
-  desc 'Install Skim'
-  task :skim do
-    step 'Skim'
-    brew_cask_install 'skim'
+  desc 'Install Archey'
+  task ':archey' do
+      step 'archey'
+      brew_install 'archey'
   end
 
   desc 'Install Vundle'
   task :vundle do
     step 'vundle'
-    install_github_bundle 'gmarik','vundle'
-    sh '~/bin/vim -c "BundleInstall" -c "q" -c "q"'
+    install_github_bundle 'gmarik','Vundle.vim'
+    sh 'vim +PluginInstall +qall'
     sh 'cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer'
   end
 end
@@ -349,56 +211,42 @@ end
 
 COPIED_FILES = filemap(
   'vimrc.local'         => '~/.vimrc.local',
-  'vimrc.bundles.local' => '~/.vimrc.bundles.local'
+  'vimrc.bundles.local' => '~/.vimrc.bundles.local',
+  'tmux.conf.local'     => '~/.tmux.conf.local'
 )
 
 LINKED_FILES = filemap(
   'vim'           => '~/.vim',
   'tmux.conf'     => '~/.tmux.conf',
   'vimrc'         => '~/.vimrc',
-  'vimrc.bundles' => '~/.vimrc.bundles'
+  'vimrc.bundles' => '~/.vimrc.bundles',
+  'git'           => '~/.git',
+  'slate.js'      => '~/.slate.js',
+  'ssh'           => '~/.ssh',
+  'zsh/zlogin'    => '~/.zlogin',
+  'zsh/zlogout'   => '~/.zlogout',
+  'zsh/zpreztorc' => '~/.zpretzorc',
+  'zsh/zprofile'  => '~/.zprofile',
+  'zsh/zshenv'    => '~/.zshenv',
+  'zsh/zshrc'     => '~/.zshrc'
 )
 
 desc 'Install these config files.'
 task :install do
   Rake::Task['install:brew'].invoke
-  Rake::Task['install:brew_cask'].invoke
-  Rake::Task['install:the_silver_searcher'].invoke
-  Rake::Task['install:iterm'].invoke
+  Rake::Task['install:git'].invoke
+  Rake::Task['install:cmake'].invoke
   Rake::Task['install:ctags'].invoke
+  Rake::Task['install:cscope'].invoke
+  Rake::Task['install:the_silver_searcher'].invoke
   Rake::Task['install:reattach_to_user_namespace'].invoke
   Rake::Task['install:tmux'].invoke
-  Rake::Task['install:macvim'].invoke
-  Rake::Task['install:java'].invoke
-  Rake::Task['install:flash'].invoke
-  Rake::Task['install:skim'].invoke
-  Rake::Task['install:qlmarkdown'].invoke
-  Rake::Task['install:qlcolorcode'].invoke
-  Rake::Task['install:qlprettypatch'].invoke
-  Rake::Task['install:qljson'].invoke
-  Rake::Task['install:dropbox'].invoke
-  Rake::Task['install:handbrake'].invoke
-  Rake::Task['install:git'].invoke
-  Rake::Task['install:github'].invoke
-  Rake::Task['install:silverlight'].invoke
   Rake::Task['install:zsh'].invoke
-  Rake::Task['install:cmake'].invoke
-  Rake::Task['install:glassfish'].invoke
-  Rake::Task['install:maven'].invoke
-  Rake::Task['install:mysql'].invoke
-  Rake::Task['install:intellij'].invoke
-  Rake::Task['install:vlc'].invoke
-  Rake::Task['install:hopper'].invoke
-  Rake::Task['install:openemu'].invoke
-  Rake::Task['install:littlesnitch'].invoke
-  Rake::Task['install:sequel'].invoke
-  Rake::Task['install:plex'].invoke
-  Rake::Task['install:skype'].invoke
-  Rake::Task['install:teamspeak'].invoke
-  Rake::Task['install:unarchiver'].invoke
-  Rake::Task['install:transmission'].invoke
-  Rake::Task['install:chrome'].invoke
-
+  Rake::Task['install:python2'].invoke
+  Rake::Task['install:python3'].invoke
+  Rake::Task['install:vim'].invoke
+  Rake::Task['install:macvim'].invoke
+  Rake::Task['install:archey'].invoke
 
   # TODO install gem ctags?
   # TODO run gem ctags?
@@ -416,24 +264,14 @@ task :install do
   # Install Vundle and bundles
   Rake::Task['install:vundle'].invoke
 
-  step 'iterm2 colorschemes'
-  colorschemes = `defaults read com.googlecode.iterm2 'Custom Color Presets'`
-  dark  = colorschemes !~ /Solarized Dark/
-  light = colorschemes !~ /Solarized Light/
-  sh('open', '-a', '/Applications/iTerm.app', File.expand_path('iterm2-colors/base16-ocean.dark.itermcolors')) if dark
-  sh('open', '-a', '/Applications/iTerm.app', File.expand_path('iterm2-colors/base16-ocean.light.itermcolors')) if light
+  step 'coding fonts'
+  sh('open', File.expand_path('coding-fonts/source-code-pro/*'))
+  sh('open', File.expand_path('coding-fonts/source-code-pro-for-powerline/*'))
+  sh('open', File.expand_path('coding-fonts/source-code-pro-for-powerline-for-macvim/*'))
 
-  step 'iterm2 profiles'
-  puts
-  puts "  Your turn!"
-  puts
-  puts "  Go and manually set up Solarized Light and Dark profiles in iTerm2."
-  puts "  (You can do this in 'Preferences' -> 'Profiles' by adding a new profile,"
-  puts "  then clicking the 'Colors' tab, 'Load Presets...' and choosing a Solarized option.)"
-  puts "  Also be sure to set Terminal Type to 'xterm-256color' in the 'Terminal' tab."
-  puts
-  puts "  Enjoy!"
-  puts
+  step 'terminal-app color themes'
+  sh('open', File.expand_path('terminal-app-themes/Ocean Dark.terminal'))
+  sh('open', File.expand_path('terminal-app-themes/Ocean Light.terminal'))
 end
 
 desc 'Uninstall these config files.'
@@ -449,17 +287,6 @@ task :uninstall do
   COPIED_FILES.each do |orig, copy|
     rm_f copy, :verbose => true if File.read(orig) == File.read(copy)
   end
-
-  step 'homebrew'
-  puts
-  puts 'Manually uninstall homebrew if you wish: https://gist.github.com/mxcl/1173223.'
-
-  step 'iterm2'
-  puts
-  puts 'Run this to uninstall iTerm:'
-  puts
-  puts '  rm -rf /Applications/iTerm.app'
-
 end
 
 task :default => :install

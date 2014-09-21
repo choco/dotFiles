@@ -1,39 +1,98 @@
-Bundle 'airblade/vim-gitgutter'
-Bundle 'austintaylor/vim-indentobject'
-Bundle 'christoomey/vim-tmux-navigator'
-Bundle 'gmarik/vundle'
-Bundle 'juvenn/mustache.vim'
-Bundle 'kchmck/vim-coffee-script'
-Bundle 'kien/ctrlp.vim'
-Bundle 'leafgarland/typescript-vim'
-Bundle 'majutsushi/tagbar'
-Bundle 'mileszs/ack.vim'
-Bundle 'msanders/snipmate.vim'
-Bundle 'nathanaelkane/vim-indent-guides'
-Bundle 'nono/vim-handlebars'
-Bundle 'pangloss/vim-javascript'
-Bundle 'wookiehangover/jshint.vim'
-Bundle 'scrooloose/nerdtree'
-Bundle 'scrooloose/syntastic'
-Bundle 'slim-template/vim-slim'
-Bundle 'tpope/vim-bundler'
-Bundle 'tpope/vim-commentary'
-Bundle 'tpope/vim-cucumber'
-Bundle 'tpope/vim-endwise'
-Bundle 'tpope/vim-fugitive'
-Bundle 'tpope/vim-pastie'
-Bundle 'tpope/vim-ragtag'
-Bundle 'tpope/vim-rails'
-Bundle 'tpope/vim-repeat'
-Bundle 'tpope/vim-surround'
-Bundle 'tpope/vim-unimpaired'
-Bundle 'tpope/vim-vividchalk'
-Bundle 'eventualbuddha/vim-protobuf'
-Bundle 'vim-ruby/vim-ruby'
-Bundle 'vim-scripts/Align'
-Bundle 'vim-scripts/greplace.vim'
-Bundle 'vim-scripts/matchit.zip'
-Bundle 'chriskempson/base16-vim'
-Bundle 'vim-scripts/TagHighlight'
-Bundle 'Valloric/YouCompleteMe'
+filetype off
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
 
+" Plugin manager
+Plugin 'gmarik/Vundle.vim'
+
+" Git plugins
+Plugin 'airblade/vim-gitgutter' " Show signs for diffs beside line numbers column
+Plugin 'tpope/vim-fugitive' " Best git integration for Vim
+
+" Tmux plugins
+Plugin 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
+
+" Commenting aligning and Indenting Plugins
+Plugin 'nathanaelkane/vim-indent-guides' " Nice coloring of indent levels
+Plugin 'tomtom/tcomment_vim' " Easly comment stuff in/out
+Plugin 'junegunn/vim-easy-align' " Allign text easly
+
+" Colorschemes
+Plugin 'chriskempson/base16-vim'
+
+" Statusbar look and feel plugins
+Plugin 'bling/vim-airline'
+Plugin 'bling/vim-bufferline'
+
+" Text editing look and feel
+Plugin 'junegunn/goyo.vim'
+Plugin 'junegunn/limelight.vim'
+Plugin 'myusuf3/numbers.vim'
+
+" File navigation
+Plugin 'kien/ctrlp.vim'
+Plugin 'scrooloose/nerdtree'
+
+"" Language specific Plugins
+" Python
+Plugin 'tmhedberg/SimpylFold'
+Plugin 'mitsuhiko/vim-python-combined'
+" Ruby
+Plugin 'vim-ruby/vim-ruby'
+Plugin 'tpope/vim-rails'
+" Javascript
+Plugin 'pangloss/vim-javascript'
+" Markdown
+Plugin 'tpope/vim-markdown'
+" Tmux syntax
+Plugin 'andersoncustodio/vim-tmux'
+" JSON
+Plugin 'leshill/vim-json'
+" C/C++
+Plugin 'octol/vim-cpp-enhanced-highlight'
+Plugin 'kergoth/aftersyntaxc.vim'
+Plugin 'vim-jp/cpp-vim'
+" HTML/CSS
+Plugin 'JulesWang/css.vim'
+Plugin 'ap/vim-css-color'
+Plugin 'othree/html5.vim'
+" Less
+Plugin 'groenewege/vim-less'
+" Go
+Plugin 'fatih/vim-go'
+" Git
+Plugin 'tpope/vim-git'
+" Haskell
+Plugin 'travitch/hasksyn'
+" Swift
+Plugin 'toyamarinyon/vim-swift'
+" Nginx
+Plugin 'blueyed/nginx.vim'
+" CSV
+Plugin 'chrisbra/csv.vim'
+
+
+" Ctags plugins
+Plugin 'xolox/vim-misc'
+Plugin 'xolox/vim-easytags'
+Plugin 'majutsushi/tagbar'
+
+" Autocompleter and snippets
+Plugin 'Valloric/YouCompleteMe'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+
+Plugin 'mileszs/ack.vim'
+Plugin 'scrooloose/syntastic'
+Plugin 'tpope/vim-endwise'
+Plugin 'tpope/vim-pastie'
+Plugin 'tpope/vim-repeat'
+Plugin 'tpope/vim-surround'
+Plugin 'tpope/vim-unimpaired'
+Plugin 'vim-scripts/greplace.vim'
+Plugin 'vim-scripts/matchit.zip'
+Plugin 'vim-scripts/TagHighlight'
+
+call vundle#end()
+filetype plugin indent on
+filetype on

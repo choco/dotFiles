@@ -44,6 +44,9 @@ typeset -gU cdpath fpath mailpath path
 # Set the list of directories that Zsh searches for programs.
 path=(
   /usr/local/{bin,sbin}
+  $HOME/Library/Haskell/bin
+  /usr/local/opt/go/libexec/bin
+  $GOPATH/bin
   $path
 )
 
@@ -75,11 +78,9 @@ if [[ ! -d "$TMPPREFIX" ]]; then
   mkdir -p "$TMPPREFIX"
 fi
 
-# Base16 Shell
-BASE16_SCHEME="ocean"
-BASE16_SHELL="$HOME/.config/base16-shell/base16-$BASE16_SCHEME.dark.sh"
-#$BASE16_SHELL
-
 # Vagrant Configuration
 export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
-#export VAGRANT_VMWARE_FUSION_APP='/Applications/VMware Fusion Tech Preview.app'
+alias ssh-precise64="cd ~/Vagrant/precise64 && vagrant up && vagrant ssh"
+
+# Go Configuration
+export GOPATH=$HOME/Progetti/go
