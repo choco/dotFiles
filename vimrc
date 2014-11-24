@@ -1,6 +1,3 @@
-" Be iMproved!
-set nocompatible
-
 " Set correct font for the GUI
 if has('gui_running')
     set guifont=Source\ Code\ Pro\ for\ Powerline\ for\ MacVim:h12
@@ -9,8 +6,8 @@ if has('gui_running')
 endif
 
 " Load Vundle configuration and Plugins
-if filereadable(expand("~/.vimrc.bundles"))
-  source ~/.vimrc.bundles
+if filereadable(expand("~/.vimrc.plugins"))
+  source ~/.vimrc.plugins
 endif
 
 " Enable syntax highlighting
@@ -49,6 +46,13 @@ set wildignorecase
 set showfulltag
 set modeline
 set modelines=5
+set nostartofline                                            " Keep the cursor on the same column
+
+" Use The Silver Searcher instead of grep
+if executable('ag')
+    set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+    set grepformat=%f:%l:%c:%m
+endif
 
 set ignorecase                                               " case-insensitive search
 set incsearch                                                " search as you type
@@ -103,7 +107,6 @@ if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), "p")
 endif
 
-
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 
@@ -126,14 +129,10 @@ map <C-j> <C-w>j
 map <C-k> <C-w>k
 map <C-l> <C-w>l
 
-nmap <leader>a :Ack<space>
-nmap <leader>b :CtrlPBuffer<CR>
-nmap <leader>t :CtrlP<CR>
-nmap <leader>T :CtrlPClearCache<CR>:CtrlP<CR>
-nmap <leader>] :TagbarToggle<CR>
-nmap <leader><space> :call whitespace#strip_trailing()<CR>
-nmap <leader>g :GitGutterToggle<CR>
+" Keep window, delete buffer
 nmap <leader>c <Plug>Kwbd
+
+" Reload vimrc
 map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 " Move between visual lines, not literal ones!
@@ -158,9 +157,6 @@ noremap <F6> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 " Toggle paste mode for code
 set pastetoggle=<F2>
 
-" Press F4 to toggle highlighting on/off, and show current value.
-noremap <F4> :set hlsearch! hlsearch?<CR>
-
 " FileType specific configurations
 " Support for AMPL
 autocmd BufNewFile,BufRead *.mod,*.dat,*.ampl set filetype=ampl
@@ -171,27 +167,7 @@ autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 " Enable spellchecking for Git commits
 autocmd FileType gitcommit setlocal spell
 
-" plugin settings
-let g:ctrlp_match_window = 'order:ttb,max:20'
-let g:gitgutter_enabled = 0
-
-" Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
-if executable('ag')
-    let g:ackprg = 'ag --nogroup --column'
-
-    " Use Ag over Grep
-    set grepprg=ag\ --nogroup\ --nocolor
-
-    " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-    " ag is fast enough that CtrlP doesn't need to cache
-    let g:ctrlp_use_caching = 0
-endif
-
 " NERDTree configuration
-" Automatically start NERDTree if no file is specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 " Close vim if NERDTree is the only open buffer
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 let g:NERDTreeIgnore = ['\.DS_Store$']
@@ -200,13 +176,6 @@ let g:NERDSpaceDelims=1
 let g:NERDTreeMinimalUI=1
 nmap <leader>d :NERDTreeToggle<CR>
 nmap <leader>f :NERDTreeFind<CR>
-
-" Syntastic configuration
-"let g:syntastic_c_check_header = 1
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_enable_signs = 1
-"let g:syntastic_cpp_check_header = 1
 
 " Indent Guides configuration
 let g:indent_guides_guide_size  = 1
@@ -231,16 +200,12 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " Airline configuration
 let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#show_buffers = 0
-" let g:airline#extensions#tabline#left_sep = ' '
-" let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline#extensions#tabline#show_close_button = 0
-
-" Bufferline configuration
-let g:bufferline_echo = 0
-let g:bufferline_modified = '[+]'
-let g:bufferline_solo_highlight = 1
+if !has('gui_running')
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#left_sep=' '
+    let g:airline#extensions#tabline#left_alt_sep='│'
+    let g:airline#extensions#tabline#show_close_button = 0
+endif
 
 " EasyAlign configuration
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
@@ -265,3 +230,15 @@ autocmd User GoyoLeave Limelight!
 " Easytags configuration
 let g:easytags_async = 1
 let g:easytags_file = '~/.vim/tags'
+
+" Vim-Signify configuration
+let g:signify_vcs_list = [ 'git', 'hg' ]
+let g:signify_update_on_bufenter = 1
+let g:signify_disable_by_default = 1
+nnoremap <leader>g :SignifyToggle<CR>
+
+" Fzf configuration
+nnoremap <leader>t :FZF<CR>
+
+" Tagbar configuration
+nnoremap <leader>o :TagbarToggle<CR>
