@@ -21,7 +21,6 @@ Plug 'chriskempson/base16-vim'
 
 " Statusbar look and feel plugins
 Plug 'bling/vim-airline'
-" Plug 'bling/vim-bufferline'
 
 " Text editing look and feel
 Plug 'junegunn/rainbow_parentheses.vim'
@@ -54,6 +53,8 @@ Plug 'leshill/vim-json'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'kergoth/aftersyntaxc.vim'
 Plug 'vim-jp/cpp-vim'
+" C#
+Plug 'OrangeT/vim-csharp'
 " HTML/CSS
 Plug 'JulesWang/css.vim'
 Plug 'ap/vim-css-color'

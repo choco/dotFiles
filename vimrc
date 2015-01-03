@@ -73,6 +73,7 @@ set ttimeoutlen=10
 set fileformats+=mac                                         " because Mac is the way
 set lazyredraw                                               " only render when needed
 set ttyfast                                                  " faster rendering
+set ttyscroll=3
 set secure                                                   " stay safe
 set noerrorbells                                             " Disable any annoying beeps on errors.
 set visualbell

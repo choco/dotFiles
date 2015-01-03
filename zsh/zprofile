@@ -87,7 +87,6 @@ export GOPATH=$HOME/Progetti/go
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/
 
 # fzf Configuration
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_OPTS="--no-256"
 # fzf Helper Functions
 # fe [FUZZY PATTERN] - Open the selected file with the default editor
