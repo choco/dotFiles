@@ -2,6 +2,7 @@
 if has('gui_running')
     set guifont=Source\ Code\ Pro\ for\ Powerline\ for\ MacVim:h12
     set guioptions-=L
+    set linespace=2
     set guioptions-=r
 endif
 
@@ -243,3 +244,5 @@ nnoremap <leader>t :FZF<CR>
 
 " Tagbar configuration
 nnoremap <leader>o :TagbarToggle<CR>
+
+let g:indentLine_char = '︙'

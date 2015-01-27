@@ -11,8 +11,9 @@ Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
 
 " Commenting, aligning, folding and Indenting Plugs
 Plug 'Konfekt/FastFold'
-Plug 'nathanaelkane/vim-indent-guides' " Nice coloring of indent levels
+" Plug 'nathanaelkane/vim-indent-guides' " Nice coloring of indent levels
 Plug 'tomtom/tcomment_vim' " Easly comment stuff in/out
+Plug 'Yggdroot/indentLine'
 " Allign text easly
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 
@@ -44,7 +45,7 @@ Plug 'tpope/vim-rails', { 'for': 'Ruby' }
 " Javascript
 Plug 'pangloss/vim-javascript', { 'for': 'Javascript' }
 " Markdown
-Plug 'tpope/vim-markdown'
+Plug 'tpope/vim-markdown', { 'for': 'Markdown' }
 " Tmux syntax
 Plug 'andersoncustodio/vim-tmux'
 " JSON
@@ -60,19 +61,19 @@ Plug 'JulesWang/css.vim'
 Plug 'ap/vim-css-color'
 Plug 'othree/html5.vim'
 " Less
-Plug 'groenewege/vim-less'
+Plug 'groenewege/vim-less', { 'for': 'Less' }
 " Go
 Plug 'fatih/vim-go', { 'for': 'Go' }
 " Git
 Plug 'tpope/vim-git'
 " Haskell
-Plug 'travitch/hasksyn'
+Plug 'travitch/hasksyn', { 'for': 'Haskell' }
 " Swift
-Plug 'toyamarinyon/vim-swift'
+Plug 'toyamarinyon/vim-swift', { 'for': 'Swift' }
 " Nginx
-Plug 'blueyed/nginx.vim'
+Plug 'blueyed/nginx.vim', { 'for': 'Nginx' }
 " CSV
-Plug 'chrisbra/csv.vim'
+Plug 'chrisbra/csv.vim', { 'for': 'CSV' }
 
 
 " Ctags plugins
@@ -87,6 +88,7 @@ Plug 'honza/vim-snippets'
 
 Plug 'scrooloose/syntastic'
 Plug 'tpope/vim-endwise'
+Plug 'tpope/vim-sleuth'
 Plug 'tpope/vim-pastie'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
