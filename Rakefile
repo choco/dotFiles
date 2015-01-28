@@ -110,19 +110,19 @@ namespace :install do
   desc 'Update or Install Brew'
   task :brew do
     step 'Homebrew'
-    unless system('which brew > /dev/null || ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"')
+    unless system('which brew > /dev/null || ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
       raise "Homebrew must be installed before continuing."
     end
   end
 
   desc 'Install Git'
-  task ':git' do
+  task :git do
       step 'git'
       brew_install 'git'
   end
 
   desc 'Install cmake'
-  task ':cmake' do
+  task :cmake do
       step 'cmake'
       brew_install 'cmake'
   end
@@ -158,37 +158,37 @@ namespace :install do
   end
 
   desc 'Install Zsh'
-  task ':zsh' do
+  task :zsh do
       step 'zsh'
       brew_install 'zsh'
   end
 
   desc 'Install Python 2'
-  task ':python2' do
+  task :python2 do
       step 'python2'
       brew_install 'python'
   end
 
   desc 'Install Python 3'
-  task ':python3' do
+  task :python3 do
       step 'python3'
       brew_install 'python3'
   end
 
   desc 'Install Vim'
-  task ':vim' do
+  task :vim do
       step 'vim'
       brew_install 'vim', ['--override-system-vi', '--with-lua', '--with-luajit']
   end
 
   desc 'Install MacVim'
-  task ':macvim' do
+  task :macvim do
       step 'macvim'
       brew_install 'macvim', ['--with-lua', '--with-luajit', '--custom-icons', '--env=std']
   end
 
   desc 'Install Archey'
-  task ':archey' do
+  task :archey do
       step 'archey'
       brew_install 'archey'
   end
@@ -227,7 +227,7 @@ LINKED_FILES = filemap(
   'ssh'           => '~/.ssh',
   'zsh/zlogin'    => '~/.zlogin',
   'zsh/zlogout'   => '~/.zlogout',
-  'zsh/zpreztorc' => '~/.zpretzorc',
+  'zsh/zpreztorc' => '~/.zpreztorc',
   'zsh/zprofile'  => '~/.zprofile',
   'zsh/zshenv'    => '~/.zshenv',
   'zsh/zshrc'     => '~/.zshrc'
