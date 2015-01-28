@@ -1,3 +1,17 @@
+" Autoinstall vim-plug
+if empty(glob('~/.vim/autoload/plug.vim'))
+    silent !mkdir -p ~/.vim/autoload
+    silent !curl -fLo ~/.vim/autoload/plug.vim
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall
+endif
+" neovim has it's own runtime dir
+if has('nvim') &&  empty(glob('~/.nvim/autoload/plug.vim'))
+    silent !mkdir -p ~/.nvim/autoload
+    silent !curl -fLo ~/.nvim/autoload/plug.vim
+    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+endif
+
 call plug#begin('~/.vim/plugged')
 
 " Versioning plugins
