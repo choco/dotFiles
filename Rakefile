@@ -219,6 +219,7 @@ LINKED_FILES = filemap(
   'vim'           => '~/.vim',
   'tmux.conf'     => '~/.tmux.conf',
   'vimrc'         => '~/.vimrc',
+  'vimrc'         => '~/.nvimrc',
   'vimrc.plugins' => '~/.vimrc.plugins',
   'git'           => '~/.git',
   'slate.js'      => '~/.slate.js',
@@ -257,21 +258,18 @@ task :install do
     link_file orig, link
   end
 
-  COPIED_FILES.each do |orig, copy|
-    cp orig, copy, :verbose => true unless File.exist?(copy)
-  end
+  # COPIED_FILES.each do |orig, copy|
+  #   cp orig, copy, :verbose => true unless File.exist?(copy)
+  # end
 
-  # Install Vundle and bundles
-  Rake::Task['install:vundle'].invoke
-
-  step 'coding fonts'
-  sh('open', File.expand_path('coding-fonts/source-code-pro/*'))
-  sh('open', File.expand_path('coding-fonts/source-code-pro-for-powerline/*'))
-  sh('open', File.expand_path('coding-fonts/source-code-pro-for-powerline-for-macvim/*'))
-
-  step 'terminal-app color themes'
-  sh('open', File.expand_path('terminal-app-themes/Ocean Dark.terminal'))
-  sh('open', File.expand_path('terminal-app-themes/Ocean Light.terminal'))
+  # step 'coding fonts'
+  # sh('open', File.expand_path('coding-fonts/source-code-pro/*'))
+  # sh('open', File.expand_path('coding-fonts/source-code-pro-for-powerline/*'))
+  # sh('open', File.expand_path('coding-fonts/source-code-pro-for-powerline-for-macvim/*'))
+  #
+  # step 'terminal-app color themes'
+  # sh('open', File.expand_path('terminal-app-themes/Ocean Dark.terminal'))
+  # sh('open', File.expand_path('terminal-app-themes/Ocean Light.terminal'))
 end
 
 desc 'Uninstall these config files.'
