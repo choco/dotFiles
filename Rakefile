@@ -217,6 +217,7 @@ COPIED_FILES = filemap(
 
 LINKED_FILES = filemap(
   'vim'           => '~/.vim',
+  'vim'           => '~/.nvim',
   'tmux.conf'     => '~/.tmux.conf',
   'vimrc'         => '~/.vimrc',
   'vimrc'         => '~/.nvimrc',
