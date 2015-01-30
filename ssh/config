@@ -1,9 +1,8 @@
 Host github.com
-  Hostname github.com
-  PreferredAuthentications publickey
   IdentityFile ~/.ssh/id_github
 
 Host bitbucket.org
-  Hostname bitbucket.org
-  PreferredAuthentications publickey
   IdentityFile ~/.ssh/id_bitbucket
+
+Host ssh.choco.me
+  IdentityFile ~/.ssh/id_bebop

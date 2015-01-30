@@ -140,8 +140,7 @@ map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimr
 " Move between visual lines, not literal ones!
 noremap j gj
 noremap k gk
-noremap gj j
-noremap gk k
+
 " Yeah I know... I'm week
 noremap <Down> <NOP>
 noremap <Up> <NOP>
@@ -168,6 +167,9 @@ autocmd FileType markdown setlocal spell
 autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 " Enable spellchecking for Git commits
 autocmd FileType gitcommit setlocal spell
+" When commiting with git show diff in horizontal split using
+" tpope/vim-fugitive
+autocmd FileType gitcommit DiffGitCached | wincmd p
 
 " NERDTree configuration
 " Close vim if NERDTree is the only open buffer
