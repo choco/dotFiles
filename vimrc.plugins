@@ -20,6 +20,7 @@ Plug 'tpope/vim-fugitive' " Best git integration for Vim
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle'   }
 
 " Tmux plugins
+Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-dispatch'
 Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
 
@@ -33,9 +34,11 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 
 " Colorschemes
 Plug 'chriskempson/base16-vim'
+Plug 'wellsjo/wells-colorscheme.vim'
 
 " Statusbar look and feel plugins
 Plug 'bling/vim-airline'
+Plug 'zhaocai/GoldenView.Vim'
 
 " Text editing look and feel
 Plug 'junegunn/rainbow_parentheses.vim'
@@ -46,7 +49,9 @@ Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 Plug 'myusuf3/numbers.vim'
 
 " File navigation
-Plug 'scrooloose/nerdtree' , { 'on': 'NERDTreeToggle'    }
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeTabsToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeTabsToggle' }
+Plug 'jistr/vim-nerdtree-tabs' , { 'on': 'NERDTreeTabsToggle' }
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 
 "" Language specific Plugs
@@ -70,6 +75,8 @@ Plug 'kergoth/aftersyntaxc.vim'
 Plug 'vim-jp/cpp-vim'
 " C#
 Plug 'OrangeT/vim-csharp'
+" GLSL
+Plug 'tikhomirov/vim-glsl'
 " HTML/CSS
 Plug 'JulesWang/css.vim'
 Plug 'ap/vim-css-color'
@@ -80,6 +87,8 @@ Plug 'groenewege/vim-less', { 'for': 'Less' }
 Plug 'fatih/vim-go', { 'for': 'Go' }
 " Git
 Plug 'tpope/vim-git'
+" Scheme - Racket dialect
+Plug 'wlangstroth/vim-racket'
 " Haskell
 Plug 'travitch/hasksyn', { 'for': 'Haskell' }
 " Swift

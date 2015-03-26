@@ -8,7 +8,7 @@ endif
 
 " Load Vundle configuration and Plugins
 if filereadable(expand("~/.vimrc.plugins"))
-  source ~/.vimrc.plugins
+    source ~/.vimrc.plugins
 endif
 
 " Enable syntax highlighting
@@ -36,7 +36,7 @@ set scrolloff=3                                              " show context abov
 set sidescrolloff=5
 set display+=lastline
 set shiftwidth=4                                             " normal mode indentation commands use 4 spaces
-set showcmd
+set noshowcmd
 set noshowmode
 set softtabstop=4                                            " insert mode tab and backspace use 4 spaces
 set tabstop=4                                                " actual tabs occupy 4 characters
@@ -47,6 +47,7 @@ set wildignorecase
 set showfulltag
 set modeline
 set modelines=5
+set colorcolumn=80
 set nostartofline                                            " Keep the cursor on the same column
 
 " Use The Silver Searcher instead of grep
@@ -65,7 +66,6 @@ autocmd InsertEnter * :let @/=""
 autocmd InsertLeave * :let @/=""
 
 " set cursorline
-" set colorcolumn=80
 set complete-=i
 set smarttab
 set notimeout                                                " timeout on key codes
@@ -73,8 +73,9 @@ set ttimeout                                                 " but not on mappin
 set ttimeoutlen=10
 set fileformats+=mac                                         " because Mac is the way
 set lazyredraw                                               " only render when needed
-set ttyfast                                                  " faster rendering
-set ttyscroll=3
+if !has('nvim')
+    set ttyfast                                              " faster rendering
+endif
 set secure                                                   " stay safe
 set noerrorbells                                             " Disable any annoying beeps on errors.
 set visualbell
@@ -125,12 +126,6 @@ let mapleader = ','
 nnoremap <silent> <C-b> :silent :bp<CR>
 nnoremap <silent> <C-n> :silent :bn<CR>
 
-" Move between windows faster
-map <C-h> <C-w>h
-map <C-j> <C-w>j
-map <C-k> <C-w>k
-map <C-l> <C-w>l
-
 " Keep window, delete buffer
 nmap <leader>c <Plug>Kwbd
 
@@ -169,14 +164,12 @@ autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 autocmd FileType gitcommit setlocal spell
 
 " NERDTree configuration
-" Close vim if NERDTree is the only open buffer
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 let g:NERDTreeIgnore = ['\.DS_Store$']
 let g:NERDTreeShowHidden=1
 let g:NERDSpaceDelims=1
 let g:NERDTreeMinimalUI=1
-nmap <leader>d :NERDTreeToggle<CR>
-nmap <leader>f :NERDTreeFind<CR>
+nmap <leader>d :NERDTreeTabsToggle<CR>
+nmap <leader>f :NERDTreeTabsFind<CR>
 
 " Indent Guides configuration
 let g:indent_guides_guide_size  = 1
@@ -192,7 +185,7 @@ endif
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_global_ycm_extra_conf = '~/.vim/conf/ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '~/.vim/conf/ycm_conf.py'
 
 " UltiSnips configuration
 let g:UltiSnipsExpandTrigger       = "<c-e>"
@@ -244,4 +237,5 @@ nnoremap <leader>t :FZF<CR>
 " Tagbar configuration
 nnoremap <leader>o :TagbarToggle<CR>
 
-let g:indentLine_char = '︙'
+" indentLine configuration
+let g:indentLine_char = '┊'

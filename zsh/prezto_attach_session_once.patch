@@ -1,0 +1,27 @@
+From f0d00ec7dfcada90e9f3cc27dcd30c578696decc Mon Sep 17 00:00:00 2001
+From: Enrico Ghirardi <i@choco.me>
+Date: Thu, 26 Mar 2015 22:46:48 +0100
+Subject: [PATCH] Attach to tmux session only when there's no client
+
+---
+ modules/tmux/init.zsh | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/modules/tmux/init.zsh b/modules/tmux/init.zsh
+index 070abca..be96773 100644
+--- a/modules/tmux/init.zsh
++++ b/modules/tmux/init.zsh
+@@ -38,7 +38,9 @@ if [[ -z "$TMUX" && -z "$EMACS" && -z "$VIM" ]] && ( \
+   fi
+ 
+   # Attach to the 'prezto' session or to the last session used.
+-  exec tmux $_tmux_iterm_integration attach-session
++  if [[ -z $(tmux list-clients) ]]; then
++    exec tmux $_tmux_iterm_integration attach-session
++  fi
+ fi
+ 
+ #
+-- 
+2.3.4
+
