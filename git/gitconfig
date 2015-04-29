@@ -9,6 +9,6 @@
 	editor = vim
 	excludesfile = ~/.gitignore_global
 [color]
-	ui = always
+	ui = auto
 [diff]
 	tool = vimdiff
