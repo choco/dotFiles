@@ -1,18 +1,17 @@
 " Autoinstall vim-plug
 if empty(glob('~/.vim/autoload/plug.vim'))
-    silent !mkdir -p ~/.vim/autoload
-    silent !curl -fLo ~/.vim/autoload/plug.vim
+  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs
     \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    autocmd VimEnter * PlugInstall
-endif
-" neovim has it's own runtime dir
-if has('nvim') &&  empty(glob('~/.nvim/autoload/plug.vim'))
-    silent !mkdir -p ~/.nvim/autoload
-    silent !curl -fLo ~/.nvim/autoload/plug.vim
-    \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+  autocmd VimEnter * PlugInstall
 endif
 
 call plug#begin('~/.vim/plugged')
+
+Plug 'jpalardy/vim-slime'
+Plug 'kovisoft/slimv', { 'for': 'racket' }
+
+" Startup and session management
+Plug 'mhinz/vim-startify'
 
 " Versioning plugins
 Plug 'mhinz/vim-signify' " Show signs for diffs beside line numbers column
@@ -36,17 +35,22 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 Plug 'chriskempson/base16-vim'
 Plug 'wellsjo/wells-colorscheme.vim'
 
-" Statusbar look and feel plugins
+" Statusbar/tabbar look and feel plugins
 Plug 'bling/vim-airline'
-Plug 'zhaocai/GoldenView.Vim'
+Plug 'gcmt/taboo.vim'
+
+" Splits navigation look and feel
+Plug 'cHoco/GoldenView.Vim'
 
 " Text editing look and feel
 Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'luochen1990/rainbow'
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 Plug 'myusuf3/numbers.vim'
+Plug 'itchyny/vim-highlighturl'
 
 " File navigation
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeTabsToggle' }
@@ -66,7 +70,7 @@ Plug 'pangloss/vim-javascript', { 'for': 'Javascript' }
 " Markdown
 Plug 'tpope/vim-markdown', { 'for': 'Markdown' }
 " Tmux syntax
-Plug 'andersoncustodio/vim-tmux'
+Plug 'tmux-plugins/vim-tmux'
 " JSON
 Plug 'leshill/vim-json'
 " C/C++

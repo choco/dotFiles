@@ -4,6 +4,7 @@ if has('gui_running')
     set guioptions-=L
     set linespace=2
     set guioptions-=r
+    set guioptions-=e
 endif
 
 " Load Vundle configuration and Plugins
@@ -31,6 +32,9 @@ set listchars=tab:▸\ ,trail:▫
 set number                                                   " show line numbers
 set ruler                                                    " show where you are
 set linebreak                                                " break properly, don't split words
+let &showbreak = '↳ '
+set breakindent
+set breakindentopt=sbr
 set shiftround
 set scrolloff=3                                              " show context above/below cursorline
 set sidescrolloff=5
@@ -79,9 +83,9 @@ endif
 set secure                                                   " stay safe
 set noerrorbells                                             " Disable any annoying beeps on errors.
 set visualbell
-
-set splitbelow                                               " Open new split panes to right and bottom,
-set splitright                                               " which feels more natural
+"
+" set splitbelow                                               " Open new split panes to right and bottom,
+" set splitright                                               " which feels more natural
 
 " Folding
 nnoremap <Space> za
@@ -90,6 +94,8 @@ set foldmethod=syntax
 autocmd BufWinEnter * normal zR
 "set nofoldenable
 "set foldlevelstart=99
+
+set sessionoptions=buffers,curdir,resize,winpos,winsize
 
 set undofile
 set backup                                                   " enable backups
@@ -142,11 +148,20 @@ noremap <Up> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
+" Reselect visual selection after ident
+xnoremap < <gv
+xnoremap > >gv
+
 " In case you forgot to sudo
 cmap w!! %!sudo tee > /dev/null %
 
 " Color scheme preferences
-set background=dark
+let terminal_profile=$TERMINAL_PROFILE
+if terminal_profile=='light'
+    set background=light
+else
+    set background=dark
+endif
 colorscheme base16-ocean
 noremap <F6> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 
@@ -162,6 +177,8 @@ autocmd FileType markdown setlocal spell
 autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 " Enable spellchecking for Git commits
 autocmd FileType gitcommit setlocal spell
+" Enable Rainbow Parentheses for racket
+autocmd FileType racket RainbowParentheses
 
 " NERDTree configuration
 let g:NERDTreeIgnore = ['\.DS_Store$']
@@ -194,12 +211,11 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 
 " Airline configuration
 let g:airline_powerline_fonts = 1
-if !has('gui_running')
-    let g:airline#extensions#tabline#enabled = 1
-    let g:airline#extensions#tabline#left_sep=' '
-    let g:airline#extensions#tabline#left_alt_sep='│'
-    let g:airline#extensions#tabline#show_close_button = 0
-endif
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#tab_nr_type = 2
+let g:airline#extensions#tabline#left_sep=' '
+let g:airline#extensions#tabline#left_alt_sep='│'
+let g:airline#extensions#tabline#show_close_button = 1
 
 " EasyAlign configuration
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
@@ -239,3 +255,33 @@ nnoremap <leader>o :TagbarToggle<CR>
 
 " indentLine configuration
 let g:indentLine_char = '┊'
+
+" slime configuration
+let g:slime_target = "tmux"
+
+" GoldenView configuration
+let g:goldenview__enable_at_startup = 1
+let g:goldenview__enable_default_mapping = 0
+" 1. split to tiled windows
+nmap <silent> <leader>s <Plug>GoldenViewSplit
+" 2. quickly switch current window with the main pane and toggle back
+nmap <silent> <leader>m <Plug>GoldenViewSwitchMain
+nmap <silent> <leader>b <Plug>GoldenViewSwitchToggle
+" " 3. jump to next and previous window
+" nnoremap <silent> <leader>  <Plug>GoldenViewNext
+" nnoremap <silent> <leader>  <Plug>GoldenViewPrevios
+
+" temporary workaround for nvim bug https://github.com/neovim/neovim/issues/2048
+if has('nvim')
+    nmap <BS> <C-W>h
+endif
+
+" slimv configuration
+let g:slimv_leader = ';'
+
+" vim-startify configuration
+let g:startify_session_autoload = 1
+let g:startify_session_persistence = 1
+
+" taboo.vim
+let g:taboo_tabline = 0
