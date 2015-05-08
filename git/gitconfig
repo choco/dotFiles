@@ -12,3 +12,8 @@
 	ui = auto
 [diff]
 	tool = vimdiff
+	algorithm = histogram
+[filter "media"]
+	required = true
+	clean = git media clean %f
+	smudge = git media smudge %f

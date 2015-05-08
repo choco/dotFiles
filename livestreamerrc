@@ -1,0 +1,5 @@
+# Player options
+player=open -F -W -n /Applications/VLC.app --args -f
+default-stream=best
+player-http
+

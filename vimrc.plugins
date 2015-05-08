@@ -8,7 +8,6 @@ endif
 call plug#begin('~/.vim/plugged')
 
 Plug 'jpalardy/vim-slime'
-Plug 'kovisoft/slimv', { 'for': 'racket' }
 
 " Startup and session management
 Plug 'mhinz/vim-startify'
@@ -25,7 +24,6 @@ Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
 
 " Commenting, aligning, folding and Indenting Plugs
 Plug 'Konfekt/FastFold'
-" Plug 'nathanaelkane/vim-indent-guides' " Nice coloring of indent levels
 Plug 'tomtom/tcomment_vim' " Easly comment stuff in/out
 Plug 'Yggdroot/indentLine'
 " Allign text easly
@@ -33,18 +31,17 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 
 " Colorschemes
 Plug 'chriskempson/base16-vim'
-Plug 'wellsjo/wells-colorscheme.vim'
 
 " Statusbar/tabbar look and feel plugins
 Plug 'bling/vim-airline'
-Plug 'gcmt/taboo.vim'
+Plug 'cHoco/taboo.vim'
 
 " Splits navigation look and feel
 Plug 'cHoco/GoldenView.Vim'
 
 " Text editing look and feel
 Plug 'junegunn/rainbow_parentheses.vim'
-Plug 'luochen1990/rainbow'
+Plug 'kovisoft/paredit', { 'for': 'racket' }
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
@@ -53,9 +50,8 @@ Plug 'myusuf3/numbers.vim'
 Plug 'itchyny/vim-highlighturl'
 
 " File navigation
-Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeTabsToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeTabsToggle' }
-Plug 'jistr/vim-nerdtree-tabs' , { 'on': 'NERDTreeTabsToggle' }
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 
 "" Language specific Plugs
@@ -70,7 +66,7 @@ Plug 'pangloss/vim-javascript', { 'for': 'Javascript' }
 " Markdown
 Plug 'tpope/vim-markdown', { 'for': 'Markdown' }
 " Tmux syntax
-Plug 'tmux-plugins/vim-tmux'
+Plug 'tmux-plugins/vim-tmux', { 'for': 'tmux' }
 " JSON
 Plug 'leshill/vim-json'
 " C/C++

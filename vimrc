@@ -95,7 +95,7 @@ autocmd BufWinEnter * normal zR
 "set nofoldenable
 "set foldlevelstart=99
 
-set sessionoptions=buffers,curdir,resize,winpos,winsize
+set sessionoptions=buffers,tabpages,curdir,resize,winpos,winsize,globals
 
 set undofile
 set backup                                                   " enable backups
@@ -121,12 +121,19 @@ autocmd VimResized * :wincmd =
 
 " Enable basic mouse behavior such as resizing buffers.
 set mouse=a
-if exists('$TMUX')  " Support resizing in tmux
-    set ttymouse=xterm2
-endif
+set ttymouse=sgr
+map <ScrollWheelUp>   <C-y>
+map <ScrollWheelDown> <C-e>
 
 " let them know you are the king
 let mapleader = ','
+
+" Move between tabs faster
+nnoremap <silent> <C-S-b> :silent :tabp<CR>
+nnoremap <silent> <C-S-n> :silent :tabn<CR>
+" Stupid hack to support Terminal.app with modified profile mapping
+nnoremap <silent> <F11> :silent :tabp<CR>
+nnoremap <silent> <F12> :silent :tabn<CR>
 
 " Move between buffers faster
 nnoremap <silent> <C-b> :silent :bp<CR>
@@ -148,7 +155,7 @@ noremap <Up> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
 
-" Reselect visual selection after ident
+" Reselect visual selection after indent
 xnoremap < <gv
 xnoremap > >gv
 
@@ -162,7 +169,7 @@ if terminal_profile=='light'
 else
     set background=dark
 endif
-colorscheme base16-ocean
+colorscheme base16-eighties
 noremap <F6> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 
 " Toggle paste mode for code
@@ -185,8 +192,8 @@ let g:NERDTreeIgnore = ['\.DS_Store$']
 let g:NERDTreeShowHidden=1
 let g:NERDSpaceDelims=1
 let g:NERDTreeMinimalUI=1
-nmap <leader>d :NERDTreeTabsToggle<CR>
-nmap <leader>f :NERDTreeTabsFind<CR>
+nmap <leader>d :NERDTreeToggle<CR>
+nmap <leader>f :NERDTreeFind<CR>
 
 " Indent Guides configuration
 let g:indent_guides_guide_size  = 1
@@ -212,7 +219,7 @@ let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 " Airline configuration
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#tab_nr_type = 2
+let g:airline#extensions#tabline#show_tab_nr = 0
 let g:airline#extensions#tabline#left_sep=' '
 let g:airline#extensions#tabline#left_alt_sep='│'
 let g:airline#extensions#tabline#show_close_button = 1
@@ -245,7 +252,10 @@ let g:easytags_file = '~/.vim/tags'
 let g:signify_vcs_list = [ 'git', 'hg' ]
 let g:signify_update_on_bufenter = 1
 let g:signify_disable_by_default = 1
-nnoremap <leader>g :SignifyToggle<CR>
+nnoremap <leader>gt :SignifyToggle<CR>
+" hunk jumping
+nmap <leader>gj <plug>(signify-next-hunk)
+nmap <leader>gk <plug>(signify-prev-hunk)
 
 " Fzf configuration
 nnoremap <leader>t :FZF<CR>
@@ -285,3 +295,5 @@ let g:startify_session_persistence = 1
 
 " taboo.vim
 let g:taboo_tabline = 0
+let g:taboo_tab_format = "%N%U %f%m"
+let g:taboo_renamed_tab_format = "%N%U %l%m"
