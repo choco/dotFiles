@@ -145,16 +145,10 @@ namespace :install do
     brew_install 'the_silver_searcher'
   end
 
-  desc 'Install reattach-to-user-namespace'
-  task :reattach_to_user_namespace do
-    step 'reattach-to-user-namespace'
-    brew_install 'reattach-to-user-namespace'
-  end
-
   desc 'Install tmux'
   task :tmux do
     step 'tmux'
-    brew_install 'tmux'
+    brew_install 'tmux', ['--HEAD']
   end
 
   desc 'Install Zsh'
@@ -178,13 +172,20 @@ namespace :install do
   desc 'Install Vim'
   task :vim do
       step 'vim'
-      brew_install 'vim', ['--override-system-vi', '--with-lua', '--with-luajit']
+      brew_install 'vim', ['--override-system-vi', '--with-lua', '--with-luajit', '--HEAD']
   end
 
   desc 'Install MacVim'
   task :macvim do
       step 'macvim'
-      brew_install 'macvim', ['--with-lua', '--with-luajit', '--custom-icons', '--env=std']
+      brew_install 'macvim', ['--with-lua', '--with-luajit', '--custom-icons']
+  end
+
+  desc 'Install Neovim'
+  task :neovim do
+      step 'neovim'
+      sh "brew tap neovim/homebrew-neovim"
+      brew_install 'neovim', ['--HEAD']
   end
 
   desc 'Install Archey'
@@ -193,12 +194,25 @@ namespace :install do
       brew_install 'archey'
   end
 
-  desc 'Install Vundle'
-  task :vundle do
-    step 'vundle'
-    install_github_bundle 'gmarik','Vundle.vim'
-    sh 'vim +PluginInstall +qall'
-    sh 'cd ~/.vim/bundle/YouCompleteMe && ./install.sh --clang-completer'
+  desc 'Install mono'
+  task :mono do
+      step 'mono'
+      brew_install 'mono'
+  end
+
+  desc 'Install OpenGL support libraries'
+  task :opengl_support_libs do
+      step 'opengl_support_libs'
+      brew_install 'glm'
+      brew_install 'glfw3'
+      brew_install 'glew'
+      brew_install 'assimp'
+  end
+
+  desc 'Install Vim Plugins'
+  task :vim_plugins do
+    step 'vim_plugins'
+    sh 'nvim +PluginInstall +qall'
   end
 end
 
@@ -215,23 +229,37 @@ COPIED_FILES = filemap(
   'tmux.conf.local'     => '~/.tmux.conf.local'
 )
 
-LINKED_FILES = filemap(
+VIM_FILES = filemap(
   'vim'           => '~/.vim',
-  'vim'           => '~/.nvim',
-  'tmux.conf'     => '~/.tmux.conf',
   'vimrc'         => '~/.vimrc',
-  'vimrc'         => '~/.nvimrc',
-  'vimrc.plugins' => '~/.vimrc.plugins',
+  'vimrc.plugins' => '~/.vimrc.plugins'
+)
+
+NVIM_FILES = filemap(
+  'vim'           => '~/.nvim',
+  'vimrc'         => '~/.nvimrc'
+)
+
+GIT_FILES = filemap(
   'git/gitconfig' => '~/.gitconfig',
-  'git/gitignore_global' => '~/.gitignore_global',
-  'slate.js'      => '~/.slate.js',
-  'ssh'           => '~/.ssh',
+  'git/gitignore_global' => '~/.gitignore_global'
+)
+
+ZSH_FILES = filemap(
   'zsh/zlogin'    => '~/.zlogin',
   'zsh/zlogout'   => '~/.zlogout',
   'zsh/zpreztorc' => '~/.zpreztorc',
   'zsh/zprofile'  => '~/.zprofile',
   'zsh/zshenv'    => '~/.zshenv',
   'zsh/zshrc'     => '~/.zshrc'
+)
+
+OTHER_FILES = filemap(
+  'tmux.conf'     => '~/.tmux.conf',
+  'slate.js'      => '~/.slate.js',
+  'ssh'           => '~/.ssh',
+  'color_profile.sh' => '~/.color_profile.sh',
+  'livestreamerrc' => '~/.livestreamerrc'
 )
 
 desc 'Install these config files.'
@@ -242,21 +270,32 @@ task :install do
   Rake::Task['install:ctags'].invoke
   Rake::Task['install:cscope'].invoke
   Rake::Task['install:the_silver_searcher'].invoke
-  Rake::Task['install:reattach_to_user_namespace'].invoke
   Rake::Task['install:tmux'].invoke
   Rake::Task['install:zsh'].invoke
   Rake::Task['install:python2'].invoke
   Rake::Task['install:python3'].invoke
   Rake::Task['install:vim'].invoke
   Rake::Task['install:macvim'].invoke
+  Rake::Task['install:neovim'].invoke
   Rake::Task['install:archey'].invoke
-
-  # TODO install gem ctags?
-  # TODO run gem ctags?
+  Rake::Task['install:mono'].invoke
+  Rake::Task['install:opengl_support_libs'].invoke
 
   step 'symlink'
 
-  LINKED_FILES.each do |orig, link|
+  VIM_FILES.each do |orig, link|
+    link_file orig, link
+  end
+  NVIM_FILES.each do |orig, link|
+    link_file orig, link
+  end
+  GIT_FILES.each do |orig, link|
+    link_file orig, link
+  end
+  ZSH_FILES.each do |orig, link|
+    link_file orig, link
+  end
+  OTHER_FILES.each do |orig, link|
     link_file orig, link
   end
 
@@ -264,14 +303,7 @@ task :install do
   #   cp orig, copy, :verbose => true unless File.exist?(copy)
   # end
 
-  # step 'coding fonts'
-  # sh('open', File.expand_path('coding-fonts/source-code-pro/*'))
-  # sh('open', File.expand_path('coding-fonts/source-code-pro-for-powerline/*'))
-  # sh('open', File.expand_path('coding-fonts/source-code-pro-for-powerline-for-macvim/*'))
-  #
-  # step 'terminal-app color themes'
-  # sh('open', File.expand_path('terminal-app-themes/Ocean Dark.terminal'))
-  # sh('open', File.expand_path('terminal-app-themes/Ocean Light.terminal'))
+  Rake::Task['install:vim_plugins'].invoke
 end
 
 desc 'Uninstall these config files.'
@@ -279,14 +311,26 @@ task :uninstall do
   step 'un-symlink'
 
   # un-symlink files that still point to the installed locations
-  LINKED_FILES.each do |orig, link|
+  VIM_FILES.each do |orig, link|
+    unlink_file orig, link
+  end
+  NVIM_FILES.each do |orig, link|
+    unlink_file orig, link
+  end
+  GIT_FILES.each do |orig, link|
+    unlink_file orig, link
+  end
+  ZSH_FILES.each do |orig, link|
+    unlink_file orig, link
+  end
+  OTHER_FILES.each do |orig, link|
     unlink_file orig, link
   end
 
-  # delete unchanged copied files
-  COPIED_FILES.each do |orig, copy|
-    rm_f copy, :verbose => true if File.read(orig) == File.read(copy)
-  end
+  # # delete unchanged copied files
+  # COPIED_FILES.each do |orig, copy|
+  #   rm_f copy, :verbose => true if File.read(orig) == File.read(copy)
+  # end
 end
 
 task :default => :install
