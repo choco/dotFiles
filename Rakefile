@@ -203,6 +203,7 @@ namespace :install do
   desc 'Install OpenGL support libraries'
   task :opengl_support_libs do
       step 'opengl_support_libs'
+      sh "brew tap homebrew/versions"
       brew_install 'glm'
       brew_install 'glfw3'
       brew_install 'glew'
