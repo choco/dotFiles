@@ -258,7 +258,7 @@ nmap <leader>gj <plug>(signify-next-hunk)
 nmap <leader>gk <plug>(signify-prev-hunk)
 
 " Fzf configuration
-nnoremap <leader>t :FZF<CR>
+nnoremap <silent> <leader>t :silent :FZF<CR>
 
 " Tagbar configuration
 nnoremap <leader>o :TagbarToggle<CR>
@@ -281,16 +281,12 @@ nmap <silent> <leader>b <Plug>GoldenViewSwitchToggle
 " nnoremap <silent> <leader>  <Plug>GoldenViewNext
 " nnoremap <silent> <leader>  <Plug>GoldenViewPrevios
 
-" temporary workaround for nvim bug https://github.com/neovim/neovim/issues/2048
-if has('nvim')
-    nmap <BS> <C-W>h
-endif
-
 " slimv configuration
 let g:slimv_leader = ';'
 
 " vim-startify configuration
 let g:startify_files_number = 5
+let g:startify_session_remove_lines = ['set winheight=1 winwidth=1']
 let g:startify_session_autoload = 1
 let g:startify_session_persistence = 1
 let g:startify_custom_header = [
@@ -314,6 +310,8 @@ let g:startify_custom_header = [
 \ '',
 \ '',
 \ ]
+hi StartifyHeader  ctermfg=02
+hi StartifySection ctermfg=03
 
 " taboo.vim
 let g:taboo_tabline = 0
