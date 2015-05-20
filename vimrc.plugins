@@ -9,8 +9,9 @@ call plug#begin('~/.vim/plugged')
 
 Plug 'jpalardy/vim-slime'
 
-" Startup and session management
+" Startup, shutdown and session management
 Plug 'mhinz/vim-startify'
+Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 
 " Versioning plugins
 Plug 'mhinz/vim-signify' " Show signs for diffs beside line numbers column

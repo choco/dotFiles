@@ -32,15 +32,16 @@ set listchars=tab:▸\ ,trail:▫
 set number                                                   " show line numbers
 set ruler                                                    " show where you are
 set linebreak                                                " break properly, don't split words
+set formatoptions+=j
 let &showbreak = '↳ '
 set breakindent
 set breakindentopt=sbr
 set shiftround
-set scrolloff=3                                              " show context above/below cursorline
+set scrolloff=4                                              " show context above/below cursorline
 set sidescrolloff=5
 set display+=lastline
 set shiftwidth=4                                             " normal mode indentation commands use 4 spaces
-set noshowcmd
+set showcmd
 set noshowmode
 set softtabstop=4                                            " insert mode tab and backspace use 4 spaces
 set tabstop=4                                                " actual tabs occupy 4 characters
@@ -50,7 +51,8 @@ set wildmode=list:full
 set wildignorecase
 set showfulltag
 set modeline
-set modelines=5
+set modelines=2
+set synmaxcol=1000
 set colorcolumn=80
 set nostartofline                                            " Keep the cursor on the same column
 
@@ -72,13 +74,15 @@ autocmd InsertLeave * :let @/=""
 " set cursorline
 set complete-=i
 set smarttab
-set notimeout                                                " timeout on key codes
+set timeout                                                  " timeout on key codes
+set timeoutlen=800
 set ttimeout                                                 " but not on mappings
 set ttimeoutlen=10
 set fileformats+=mac                                         " because Mac is the way
 set lazyredraw                                               " only render when needed
 if !has('nvim')
     set ttyfast                                              " faster rendering
+    set ttymouse=sgr
 endif
 set secure                                                   " stay safe
 set noerrorbells                                             " Disable any annoying beeps on errors.
@@ -121,12 +125,17 @@ autocmd VimResized * :wincmd =
 
 " Enable basic mouse behavior such as resizing buffers.
 set mouse=a
-set ttymouse=sgr
 map <ScrollWheelUp>   <C-y>
 map <ScrollWheelDown> <C-e>
 
 " let them know you are the king
 let mapleader = ','
+
+" Make Y behave like other capitals
+nnoremap Y y$
+
+" qq to record, Q to replay
+nmap Q @q
 
 " Move between tabs faster
 nnoremap <silent> <C-S-b> :silent :tabp<CR>
@@ -169,6 +178,7 @@ if terminal_profile=='light'
 else
     set background=dark
 endif
+let base16colorspace=256
 colorscheme base16-eighties
 noremap <F6> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 
@@ -286,8 +296,13 @@ let g:slimv_leader = ';'
 
 " vim-startify configuration
 let g:startify_files_number = 5
+let g:startify_skiplist = [
+        \ 'COMMIT_EDITMSG',
+        \ $HOME . '/Progetti/*',
+        \ ]
 let g:startify_session_remove_lines = ['set winheight=1 winwidth=1']
 let g:startify_session_autoload = 1
+let g:startify_session_delete_buffers = 1
 let g:startify_session_persistence = 1
 let g:startify_custom_header = [
 \ '                                                                 ',
@@ -313,7 +328,11 @@ let g:startify_custom_header = [
 hi StartifyHeader  ctermfg=02
 hi StartifySection ctermfg=03
 
-" taboo.vim
+" taboo.vim configuration
 let g:taboo_tabline = 0
 let g:taboo_tab_format = "%N%U %f%m"
 let g:taboo_renamed_tab_format = "%N%U %l%m"
+
+" Sayonare configuration
+nnoremap <leader>q :Sayonara<cr>
+nnoremap <leader>Q :Sayonara!<cr>
