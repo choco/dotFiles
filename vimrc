@@ -67,9 +67,6 @@ set incsearch                                                " search as you typ
 set smartcase                                                " case-sensitive search if any caps
 set showmatch
 set gdefault                                                 " assume the /g flag on :s substitutions to replace all matches in a line
-set hlsearch                                                 "highlight searches
-autocmd InsertEnter * :let @/=""
-autocmd InsertLeave * :let @/=""
 
 " set cursorline
 set complete-=i
@@ -119,6 +116,11 @@ endif
 if !isdirectory(expand(&directory))
     call mkdir(expand(&directory), "p")
 endif
+
+" Use a blinking upright bar cursor in Insert mode, a solid block in normal
+let &t_SI = "\<Esc>[5 q"
+let &t_EI = "\<Esc>[2 q"
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
 " automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
@@ -287,9 +289,6 @@ nmap <silent> <leader>s <Plug>GoldenViewSplit
 " 2. quickly switch current window with the main pane and toggle back
 nmap <silent> <leader>m <Plug>GoldenViewSwitchMain
 nmap <silent> <leader>b <Plug>GoldenViewSwitchToggle
-" " 3. jump to next and previous window
-" nnoremap <silent> <leader>  <Plug>GoldenViewNext
-" nnoremap <silent> <leader>  <Plug>GoldenViewPrevios
 
 " slimv configuration
 let g:slimv_leader = ';'
@@ -325,8 +324,8 @@ let g:startify_custom_header = [
 \ '',
 \ '',
 \ ]
-hi StartifyHeader  ctermfg=02
-hi StartifySection ctermfg=03
+highlight default link StartifyHeader String
+highlight default link StartifySection Label
 
 " taboo.vim configuration
 let g:taboo_tabline = 0
