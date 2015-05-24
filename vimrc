@@ -53,6 +53,8 @@ set showfulltag
 set modeline
 set modelines=2
 set synmaxcol=1000
+" Update syntax highlighting for more lines increased scrolling performance
+syntax sync minlines=256
 set colorcolumn=80
 set nostartofline                                            " Keep the cursor on the same column
 
@@ -97,6 +99,19 @@ autocmd BufWinEnter * normal zR
 "set foldlevelstart=99
 
 set sessionoptions=buffers,tabpages,curdir,resize,winpos,winsize,globals
+
+" Restore last cursor position
+function! ResCur()
+  if line("'\"") <= line("$")
+    normal! g`"
+    return 1
+  endif
+endfunction
+
+augroup resCur
+  autocmd!
+  autocmd BufWinEnter * call ResCur()
+augroup END
 
 set undofile
 set backup                                                   " enable backups
@@ -165,6 +180,10 @@ noremap <Down> <NOP>
 noremap <Up> <NOP>
 noremap <Left> <NOP>
 noremap <Right> <NOP>
+inoremap <Down> <NOP>
+inoremap <Up> <NOP>
+inoremap <Left> <NOP>
+inoremap <Right> <NOP>
 
 " Reselect visual selection after indent
 xnoremap < <gv

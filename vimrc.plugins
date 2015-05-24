@@ -74,6 +74,8 @@ Plug 'leshill/vim-json'
 Plug 'octol/vim-cpp-enhanced-highlight'
 Plug 'kergoth/aftersyntaxc.vim'
 Plug 'vim-jp/cpp-vim'
+" Objective-C
+Plug 'b4winckler/vim-objc'
 " C#
 Plug 'OrangeT/vim-csharp'
 " GLSL
