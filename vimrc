@@ -1,15 +1,15 @@
 " Set correct font for the GUI
 if has('gui_running')
-    set guifont=Source\ Code\ Pro\ for\ Powerline\ for\ MacVim:h12
-    set guioptions-=L
-    set linespace=2
-    set guioptions-=r
-    set guioptions-=e
+  set guifont=Source\ Code\ Pro\ for\ Powerline\ for\ MacVim:h12
+  set guioptions-=L
+  set linespace=2
+  set guioptions-=r
+  set guioptions-=e
 endif
 
 " Load Vundle configuration and Plugins
 if filereadable(expand("~/.vimrc.plugins"))
-    source ~/.vimrc.plugins
+  source ~/.vimrc.plugins
 endif
 
 " Enable syntax highlighting
@@ -20,33 +20,32 @@ noremap! jj <ESC>
 
 " Some standard settings to make vim better
 set autoindent
-set autoread                                                 " reload files when changed on disk, i.e. via `git checkout`
+set autoread                            " reload files when changed on disk
 set backspace=indent,eol,start
-set clipboard=unnamed                                        " yank and paste with the system clipboard
+set clipboard=unnamed                   " yank & paste with system clipboard
 set encoding=utf-8
-set hidden                                                   " allow buffer switching without saving
-set expandtab                                                " expand tabs to spaces
-set laststatus=2                                             " always show statusline
-set list                                                     " show trailing whitespace
+set hidden                              " allow buffer switching without saving
+set expandtab                           " expand tabs to spaces
+set laststatus=2                        " always show statusline
+set list                                " show trailing whitespace
 set listchars=tab:▸\ ,trail:▫
-set number                                                   " show line numbers
-set ruler                                                    " show where you are
-set linebreak                                                " break properly, don't split words
+set number                              " show line numbers
+set ruler                               " show where you are
+set linebreak                           " break properly, don't split words
 set formatoptions+=j
 let &showbreak = '↳ '
 set breakindent
 set breakindentopt=sbr
 set shiftround
-set scrolloff=4                                              " show context above/below cursorline
+set scrolloff=4                         " show context above/below cursorline
 set sidescrolloff=5
 set display+=lastline
-set shiftwidth=4                                             " normal mode indentation commands use 4 spaces
 set showcmd
 set noshowmode
-set softtabstop=4                                            " insert mode tab and backspace use 4 spaces
-set tabstop=4                                                " actual tabs occupy 4 characters
-set wildignore=log/**,node_modules/**,target/**,tmp/**,*.rbc
-set wildmenu                                                 " show a navigable menu for tab completion
+set shiftwidth=4                        " normal mode indentation use 4 spaces
+set softtabstop=4                       " tab and backspace use 4 spaces
+set tabstop=4                           " actual tabs occupy 4 characters
+set wildmenu                            " show navigable menu for tab completion
 set wildmode=list:full
 set wildignorecase
 set showfulltag
@@ -56,70 +55,61 @@ set synmaxcol=1000
 " Update syntax highlighting for more lines increased scrolling performance
 syntax sync minlines=256
 set colorcolumn=80
-set nostartofline                                            " Keep the cursor on the same column
+set nostartofline                       " Keep the cursor on the same column
 
 " Use The Silver Searcher instead of grep
 if executable('ag')
-    set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
-    set grepformat=%f:%l:%c:%m
+  set grepprg=ag\ --nogroup\ --column\ --smart-case\ --nocolor\ --follow
+  set grepformat=%f:%l:%c:%m
 endif
 
-set ignorecase                                               " case-insensitive search
-set incsearch                                                " search as you type
-set smartcase                                                " case-sensitive search if any caps
+set ignorecase                          " case-insensitive search
+set incsearch                           " search as you type
+set smartcase                           " case-sensitive search if any caps
 set showmatch
-set gdefault                                                 " assume the /g flag on :s substitutions to replace all matches in a line
+set gdefault                            " assume the /g flag on :s substitutions
+                                        " to replace all matches in a line
 
-" set cursorline
 set complete-=i
 set smarttab
-set timeout                                                  " timeout on key codes
+set timeout                             " timeout on key codes
 set timeoutlen=800
-set ttimeout                                                 " but not on mappings
+set ttimeout                            " but not on mappings
 set ttimeoutlen=10
-set fileformats+=mac                                         " because Mac is the way
-set lazyredraw                                               " only render when needed
+set fileformats+=mac                    " because Mac is the way
+set lazyredraw                          " only render when needed
 if !has('nvim')
-    set ttyfast                                              " faster rendering
-    set ttymouse=sgr
+  set ttyfast                         " faster rendering
+  set ttymouse=sgr
 endif
-set secure                                                   " stay safe
-set noerrorbells                                             " Disable any annoying beeps on errors.
+set secure                              " stay safe
+set noerrorbells                        " Disable any annoying beeps on errors.
 set visualbell
-"
-" set splitbelow                                               " Open new split panes to right and bottom,
-" set splitright                                               " which feels more natural
+
+set splitbelow                          " Open new split panes to right and
+set splitright                          " bottom which feels more natural
 
 " Folding
 nnoremap <Space> za
 vnoremap <Space> zf
-set foldmethod=syntax
-autocmd BufWinEnter * normal zR
-"set nofoldenable
-"set foldlevelstart=99
+if &diff
+  set foldmethod=diff
+else
+  set foldmethod=syntax
+endif
+set foldlevelstart=99
 
+" Session and view options to save
 set sessionoptions=buffers,tabpages,curdir,resize,winpos,winsize,globals
-
-" Restore last cursor position
-function! ResCur()
-  if line("'\"") <= line("$")
-    normal! g`"
-    return 1
-  endif
-endfunction
-
-augroup resCur
-  autocmd!
-  autocmd BufWinEnter * call ResCur()
-augroup END
+set viewoptions=cursor,folds,slash,unix
 
 set undofile
-set backup                                                   " enable backups
-set noswapfile                                               " it's 2013, Vim.
+set backup
+set swapfile
 
-set undodir=~/.vim/tmp/undo//                                " undo files
-set backupdir=~/.vim/tmp/backup//                            " backups
-set directory=~/.vim/tmp/swap//                              " swap files
+set undodir=~/.vim/tmp/undo//           " undo files
+set backupdir=~/.vim/tmp/backup//       " backups
+set directory=~/.vim/tmp/swap//         " swap files
 
 " Make those folders automatically if they don't already exist.
 if !isdirectory(expand(&undodir))
@@ -137,7 +127,7 @@ let &t_SI = "\<Esc>[5 q"
 let &t_EI = "\<Esc>[2 q"
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
-" automatically rebalance windows on vim resize
+" Automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
 
 " Enable basic mouse behavior such as resizing buffers.
@@ -145,7 +135,7 @@ set mouse=a
 map <ScrollWheelUp>   <C-y>
 map <ScrollWheelDown> <C-e>
 
-" let them know you are the king
+" Let them know you are the king
 let mapleader = ','
 
 " Make Y behave like other capitals
@@ -164,9 +154,6 @@ nnoremap <silent> <F12> :silent :tabn<CR>
 " Move between buffers faster
 nnoremap <silent> <C-b> :silent :bp<CR>
 nnoremap <silent> <C-n> :silent :bn<CR>
-
-" Keep window, delete buffer
-nmap <leader>c <Plug>Kwbd
 
 " Reload vimrc
 map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
@@ -195,12 +182,13 @@ cmap w!! %!sudo tee > /dev/null %
 " Color scheme preferences
 let terminal_profile=$TERMINAL_PROFILE
 if terminal_profile=='light'
-    set background=light
+  set background=light
 else
-    set background=dark
+  set background=dark
 endif
 let base16colorspace=256
 colorscheme base16-eighties
+" Toogle between light and dark version
 noremap <F6> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 
 " Toggle paste mode for code
@@ -231,9 +219,9 @@ let g:indent_guides_guide_size  = 1
 let g:indent_guides_start_level = 2
 let g:indent_guides_enable_on_vim_startup = 1
 if !has('gui_running')
-    let g:indent_guides_auto_colors = 0
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=10
-    autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=8
+  let g:indent_guides_auto_colors = 0
+  autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=10
+  autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=8
 endif
 
 " YouCompleteMe configuration
@@ -284,7 +272,7 @@ let g:signify_vcs_list = [ 'git', 'hg' ]
 let g:signify_update_on_bufenter = 1
 let g:signify_disable_by_default = 1
 nnoremap <leader>gt :SignifyToggle<CR>
-" hunk jumping
+" Hunk jumping
 nmap <leader>gj <plug>(signify-next-hunk)
 nmap <leader>gk <plug>(signify-prev-hunk)
 
@@ -303,21 +291,18 @@ let g:slime_target = "tmux"
 " GoldenView configuration
 let g:goldenview__enable_at_startup = 1
 let g:goldenview__enable_default_mapping = 0
-" 1. split to tiled windows
+" 1. Split to tiled windows
 nmap <silent> <leader>s <Plug>GoldenViewSplit
-" 2. quickly switch current window with the main pane and toggle back
+" 2. Quickly switch current window with the main pane and toggle back
 nmap <silent> <leader>m <Plug>GoldenViewSwitchMain
 nmap <silent> <leader>b <Plug>GoldenViewSwitchToggle
-
-" slimv configuration
-let g:slimv_leader = ';'
 
 " vim-startify configuration
 let g:startify_files_number = 5
 let g:startify_skiplist = [
-        \ 'COMMIT_EDITMSG',
-        \ $HOME . '/Progetti/*',
-        \ ]
+\ 'COMMIT_EDITMSG',
+\ $HOME . '/Progetti/*',
+\ ]
 let g:startify_session_remove_lines = ['set winheight=1 winwidth=1']
 let g:startify_session_autoload = 1
 let g:startify_session_delete_buffers = 1
@@ -351,6 +336,6 @@ let g:taboo_tabline = 0
 let g:taboo_tab_format = "%N%U %f%m"
 let g:taboo_renamed_tab_format = "%N%U %l%m"
 
-" Sayonare configuration
+" Sayonara configuration
 nnoremap <leader>q :Sayonara<cr>
 nnoremap <leader>Q :Sayonara!<cr>
