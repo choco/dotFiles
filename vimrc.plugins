@@ -7,8 +7,6 @@ endif
 
 call plug#begin('~/.vim/plugged')
 
-Plug 'jpalardy/vim-slime'
-
 " Startup, shutdown and session management
 Plug 'mhinz/vim-startify'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
@@ -20,6 +18,7 @@ Plug 'tpope/vim-fugitive' " Best git integration for Vim
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle'   }
 
 " Tmux plugins
+Plug 'jpalardy/vim-slime'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-dispatch'
 Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
@@ -42,6 +41,7 @@ Plug 'cHoco/taboo.vim'
 Plug 'cHoco/GoldenView.Vim'
 
 " Text editing look and feel
+Plug 'jszakmeister/vim-togglecursor'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'kovisoft/paredit', { 'for': 'racket' }
 Plug 'junegunn/vim-pseudocl'

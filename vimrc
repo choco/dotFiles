@@ -113,19 +113,14 @@ set directory=~/.vim/tmp/swap//         " swap files
 
 " Make those folders automatically if they don't already exist.
 if !isdirectory(expand(&undodir))
-    call mkdir(expand(&undodir), "p")
+  call mkdir(expand(&undodir), "p")
 endif
 if !isdirectory(expand(&backupdir))
-    call mkdir(expand(&backupdir), "p")
+  call mkdir(expand(&backupdir), "p")
 endif
 if !isdirectory(expand(&directory))
-    call mkdir(expand(&directory), "p")
+  call mkdir(expand(&directory), "p")
 endif
-
-" Use a blinking upright bar cursor in Insert mode, a solid block in normal
-let &t_SI = "\<Esc>[5 q"
-let &t_EI = "\<Esc>[2 q"
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 
 " Automatically rebalance windows on vim resize
 autocmd VimResized * :wincmd =
@@ -261,7 +256,9 @@ nnoremap <Leader>G :Goyo<CR>
 " Limelight configuration
 " Goyo integration
 autocmd User GoyoEnter Limelight
+autocmd User GoyoEnter NumbersToggle
 autocmd User GoyoLeave Limelight!
+autocmd User GoyoLeave NumbersToggle
 
 " Easytags configuration
 let g:easytags_async = 1
@@ -339,3 +336,8 @@ let g:taboo_renamed_tab_format = "%N%U %l%m"
 " Sayonara configuration
 nnoremap <leader>q :Sayonara<cr>
 nnoremap <leader>Q :Sayonara!<cr>
+
+" Cursor + vim-tooglecursor configuration
+" Use a blinking upright bar cursor in Insert mode, a solid block in normal
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+let g:togglecursor_insert = "blinking_line"
