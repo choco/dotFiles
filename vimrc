@@ -337,7 +337,8 @@ let g:taboo_renamed_tab_format = "%N%U %l%m"
 nnoremap <leader>q :Sayonara<cr>
 nnoremap <leader>Q :Sayonara!<cr>
 
-" Cursor + vim-tooglecursor configuration
+" Cursor + vim-togglecursor configuration
 " Use a blinking upright bar cursor in Insert mode, a solid block in normal
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+let g:togglecursor_force = 'xterm'
 let g:togglecursor_insert = "blinking_line"
