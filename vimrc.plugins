@@ -24,6 +24,7 @@ Plug 'tpope/vim-dispatch'
 Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
 
 " Commenting, aligning, folding and Indenting Plugs
+Plug 'cHoco/BetterFoldText'
 Plug 'Konfekt/FastFold'
 Plug 'tomtom/tcomment_vim' " Easly comment stuff in/out
 Plug 'Yggdroot/indentLine'
@@ -49,7 +50,15 @@ Plug 'junegunn/vim-oblique'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 Plug 'myusuf3/numbers.vim'
+Plug 'tpope/vim-endwise'
 Plug 'itchyny/vim-highlighturl'
+Plug 'tpope/vim-sleuth'
+
+" Text obejcts and movements
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'tmhedberg/matchit'
 
 " File navigation
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
@@ -73,7 +82,6 @@ Plug 'tmux-plugins/vim-tmux', { 'for': 'tmux' }
 Plug 'leshill/vim-json'
 " C/C++
 Plug 'octol/vim-cpp-enhanced-highlight'
-Plug 'kergoth/aftersyntaxc.vim'
 Plug 'vim-jp/cpp-vim'
 " Objective-C
 Plug 'b4winckler/vim-objc'
@@ -102,27 +110,15 @@ Plug 'blueyed/nginx.vim', { 'for': 'Nginx' }
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'CSV' }
 
-
 " Ctags plugins
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-easytags'
+Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
 
 " Autocompleter and snippets
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer --omnisharp-completer' }
+Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --system-libclang --clang-completer --omnisharp-completer' }
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 Plug 'scrooloose/syntastic'
-Plug 'tpope/vim-endwise'
-Plug 'tpope/vim-sleuth'
-Plug 'tpope/vim-pastie'
-Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-unimpaired'
-Plug 'vim-scripts/greplace.vim'
-Plug 'vim-scripts/matchit.zip'
-runtime macros/matchit.vim
-Plug 'abudden/taghighlight-automirror'
 
 call plug#end()

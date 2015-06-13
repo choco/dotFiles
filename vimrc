@@ -55,6 +55,9 @@ set synmaxcol=1000
 " Update syntax highlighting for more lines increased scrolling performance
 syntax sync minlines=256
 set colorcolumn=80
+set cursorline
+autocmd InsertLeave * set cursorline
+autocmd InsertEnter * set nocursorline
 set nostartofline                       " Keep the cursor on the same column
 
 " Use The Silver Searcher instead of grep
@@ -97,11 +100,14 @@ if &diff
 else
   set foldmethod=syntax
 endif
-set foldlevelstart=99
+set foldlevel=0
+autocmd BufWinEnter * :silent! :%foldo!
+" Set initial foldlevel to max foldlevel (all folds open)
+" autocmd BufWinEnter * let &l:foldlevel = max(map(range(1, line('$')), 'foldlevel(v:val)'))
 
 " Session and view options to save
-set sessionoptions=buffers,tabpages,curdir,resize,winpos,winsize,globals
-set viewoptions=cursor,folds,slash,unix
+set sessionoptions=buffers,folds,tabpages,curdir,globals
+set viewoptions=cursor,folds
 
 set undofile
 set backup
@@ -209,20 +215,12 @@ let g:NERDTreeMinimalUI=1
 nmap <leader>d :NERDTreeToggle<CR>
 nmap <leader>f :NERDTreeFind<CR>
 
-" Indent Guides configuration
-let g:indent_guides_guide_size  = 1
-let g:indent_guides_start_level = 2
-let g:indent_guides_enable_on_vim_startup = 1
-if !has('gui_running')
-  let g:indent_guides_auto_colors = 0
-  autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=red   ctermbg=10
-  autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=green ctermbg=8
-endif
-
 " YouCompleteMe configuration
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_confirm_extra_conf = 0
+let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_global_ycm_extra_conf = '~/.vim/conf/ycm_conf.py'
 
 " UltiSnips configuration
@@ -260,10 +258,6 @@ autocmd User GoyoEnter NumbersToggle
 autocmd User GoyoLeave Limelight!
 autocmd User GoyoLeave NumbersToggle
 
-" Easytags configuration
-let g:easytags_async = 1
-let g:easytags_file = '~/.vim/tags'
-
 " Vim-Signify configuration
 let g:signify_vcs_list = [ 'git', 'hg' ]
 let g:signify_update_on_bufenter = 1
@@ -277,6 +271,40 @@ nmap <leader>gk <plug>(signify-prev-hunk)
 nnoremap <silent> <leader>t :silent :FZF<CR>
 
 " Tagbar configuration
+" add a definition for Objective-C to tagbar
+let g:tagbar_type_objc = {
+    \ 'ctagstype' : 'ObjectiveC',
+    \ 'kinds'     : [
+        \ 'i:interface',
+        \ 'I:implementation',
+        \ 'p:Protocol',
+        \ 'm:Object_method',
+        \ 'c:Class_method',
+        \ 'v:Global_variable',
+        \ 'F:Object field',
+        \ 'f:function',
+        \ 'p:property',
+        \ 't:type_alias',
+        \ 's:type_structure',
+        \ 'e:enumeration',
+        \ 'M:preprocessor_macro',
+    \ ],
+    \ 'sro'        : ' ',
+    \ 'kind2scope' : {
+        \ 'i' : 'interface',
+        \ 'I' : 'implementation',
+        \ 'p' : 'Protocol',
+        \ 's' : 'type_structure',
+        \ 'e' : 'enumeration'
+    \ },
+    \ 'scope2kind' : {
+        \ 'interface'      : 'i',
+        \ 'implementation' : 'I',
+        \ 'Protocol'       : 'p',
+        \ 'type_structure' : 's',
+        \ 'enumeration'    : 'e'
+    \ }
+\ }
 nnoremap <leader>o :TagbarToggle<CR>
 
 " indentLine configuration
@@ -334,11 +362,18 @@ let g:taboo_tab_format = "%N%U %f%m"
 let g:taboo_renamed_tab_format = "%N%U %l%m"
 
 " Sayonara configuration
-nnoremap <leader>q :Sayonara<cr>
-nnoremap <leader>Q :Sayonara!<cr>
+nnoremap <silent> <leader>q :silent :Sayonara<cr>
+nnoremap <silent> <leader>Q :silent :Sayonara!<cr>
 
 " Cursor + vim-togglecursor configuration
 " Use a blinking upright bar cursor in Insert mode, a solid block in normal
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let g:togglecursor_force = 'xterm'
 let g:togglecursor_insert = "blinking_line"
+
+" Faster startup time on neovim
+let g:python_host_skip_check = 1
+let g:python3_host_skip_check = 1
+
+" vim-gutentags configuration
+let g:gutentags_cache_dir = $HOME . '/.vim/tags/'
