@@ -35,7 +35,7 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 Plug 'chriskempson/base16-vim'
 
 " Statusbar/tabbar look and feel plugins
-Plug 'bling/vim-airline'
+Plug 'cHoco/vim-airline'
 Plug 'cHoco/taboo.vim'
 
 " Splits navigation look and feel
@@ -115,7 +115,8 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
 
 " Autocompleter and snippets
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --system-libclang --clang-completer --omnisharp-completer' }
+Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer --omnisharp-completer --gocode-completer' }
+Plug 'davidhalter/jedi-vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 

@@ -213,7 +213,7 @@ let g:NERDTreeShowHidden=1
 let g:NERDSpaceDelims=1
 let g:NERDTreeMinimalUI=1
 nmap <leader>d :NERDTreeToggle<CR>
-nmap <leader>f :NERDTreeFind<CR>
+nmap <leader>D :NERDTreeFind<CR>
 
 " YouCompleteMe configuration
 let g:ycm_add_preview_to_completeopt = 1
@@ -221,7 +221,13 @@ let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_collect_identifiers_from_tags_files = 1
+let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_global_ycm_extra_conf = '~/.vim/conf/ycm_conf.py'
+
+" jedi-vim configuration
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#completions_enabled = 0
+let g:jedi#use_tabs_not_buffers = 0
 
 " UltiSnips configuration
 let g:UltiSnipsJumpForwardTrigger  = "<tab>"
@@ -245,6 +251,7 @@ let g:airline#extensions#tabline#show_tab_nr = 0
 let g:airline#extensions#tabline#left_sep=' '
 let g:airline#extensions#tabline#left_alt_sep='│'
 let g:airline#extensions#tabline#show_close_button = 1
+let g:airline#extensions#tabline#exclude_preview = 1
 
 " EasyAlign configuration
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
@@ -260,13 +267,27 @@ let g:easy_align_delimiters = {
 
 " Goyo configuration
 nnoremap <Leader>G :Goyo<CR>
+function! s:goyo_enter()
+  if exists('$TMUX')
+    silent !tmux set status off
+  endif
+  DisableGoldenViewAutoResize
+  NumbersToggle
+  Limelight
+endfunction
 
-" Limelight configuration
-" Goyo integration
-autocmd User GoyoEnter Limelight
-autocmd User GoyoEnter NumbersToggle
-autocmd User GoyoLeave Limelight!
-autocmd User GoyoLeave NumbersToggle
+function! s:goyo_leave()
+  if exists('$TMUX')
+    silent !tmux set status on
+  endif
+  EnableGoldenViewAutoResize
+  NumbersToggle
+  Limelight!
+  AirlineRefresh
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " Vim-Signify configuration
 let g:signify_vcs_list = [ 'git', 'hg' ]
@@ -279,6 +300,45 @@ nmap <leader>gk <plug>(signify-prev-hunk)
 
 " Fzf configuration
 nnoremap <silent> <leader>t :silent :FZF<CR>
+function! s:buflist()
+  redir => ls
+  silent ls
+  redir END
+  return split(ls, '\n')
+endfunction
+
+function! s:bufopen(e)
+  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
+endfunction
+
+nnoremap <silent> <Leader><Enter> :call fzf#run({
+\   'source':  reverse(<sid>buflist()),
+\   'sink':    function('<sid>bufopen'),
+\   'options': '+m',
+\   'down':    len(<sid>buflist()) + 2
+\ })<CR>
+
+function! s:line_handler(l)
+  let keys = split(a:l, ':\t')
+  exec 'buf' keys[0]
+  exec keys[1]
+  normal! ^zz
+endfunction
+
+function! s:buffer_lines()
+  let res = []
+  for b in filter(range(1, bufnr('$')), 'buflisted(v:val)')
+    call extend(res, map(getbufline(b,0,"$"), 'b . ":\t" . (v:key + 1) . ":\t" . v:val '))
+  endfor
+  return res
+endfunction
+
+nnoremap <silent> <Leader>f  :call fzf#run({
+\   'source':  <sid>buffer_lines(),
+\   'sink':    function('<sid>line_handler'),
+\   'options': '--extended --nth=3..',
+\   'down':    '60%'
+\})<CR>
 
 " Tagbar configuration
 " add a definition for Objective-C to tagbar
