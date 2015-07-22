@@ -174,10 +174,10 @@
 	<data>
 	YnBsaXN0MDDUAQIDBAUGGBlYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
 	AAGGoKQHCBESVSRudWxs1AkKCwwNDg8QVk5TU2l6ZVhOU2ZGbGFnc1ZOU05hbWVWJGNs
-	YXNzI0AoAAAAAAAAEBCAAoADXxAhU291cmNlQ29kZVByb2ZvclBvd2VybGluZS1SZWd1
-	bGFy0hMUFRZaJGNsYXNzbmFtZVgkY2xhc3Nlc1ZOU0ZvbnSiFRdYTlNPYmplY3RfEA9O
-	U0tleWVkQXJjaGl2ZXLRGhtUcm9vdIABCBEaIy0yNzxCS1JbYmlydHZ4nKGstby/yNrd
-	4gAAAAAAAAEBAAAAAAAAABwAAAAAAAAAAAAAAAAAAADk
+	YXNzI0AoAAAAAAAAEBCAAoADXxAVU291cmNlQ29kZVByby1SZWd1bGFy0hMUFRZaJGNs
+	YXNzbmFtZVgkY2xhc3Nlc1ZOU0ZvbnSiFRdYTlNPYmplY3RfEA9OU0tleWVkQXJjaGl2
+	ZXLRGhtUcm9vdIABCBEaIy0yNzxCS1JbYmlydHZ4kJWgqbCzvM7R1gAAAAAAAAEBAAAA
+	AAAAABwAAAAAAAAAAAAAAAAAAADY
 	</data>
 	<key>FontAntialias</key>
 	<true/>
@@ -377,7 +377,7 @@
 	<key>name</key>
 	<string>Ocean Light</string>
 	<key>rowCount</key>
-	<integer>30</integer>
+	<integer>50</integer>
 	<key>shellExitAction</key>
 	<integer>1</integer>
 	<key>type</key>

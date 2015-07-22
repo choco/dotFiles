@@ -166,8 +166,6 @@ open terminal-app-themes/*
 
 # Install coding fonts
 open coding-fonts/source-code-pro/*
-open coding-fonts/source-code-pro-for-powerline/*
-open coding-fonts/source-code-pro-for-powerline-for-macvim/*
 
 ###############################################################################
 # Activity Monitor                                                            #
