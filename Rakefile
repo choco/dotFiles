@@ -260,7 +260,8 @@ OTHER_FILES = filemap(
   'slate.js'      => '~/.slate.js',
   'ssh'           => '~/.ssh',
   'color_profile.sh' => '~/.color_profile.sh',
-  'livestreamerrc' => '~/.livestreamerrc'
+  'livestreamerrc' => '~/.livestreamerrc',
+  'weechat' => '~/.weechat'
 )
 
 desc 'Install these config files.'
