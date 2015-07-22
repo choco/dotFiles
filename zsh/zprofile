@@ -81,7 +81,7 @@ export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
 
 # Go Configuration
 export GOPATH=$HOME/Progetti/go
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/
+# export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/
 
 # fzf Configuration
 export FZF_DEFAULT_OPTS="--no-256"
@@ -118,7 +118,32 @@ fda() {
 
 # cdf - cd into the directory of the selected file
 cdf() {
-   local file
-   local dir
-   file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
+  local file
+  local dir
+  file=$(fzf +m -q "$1") && dir=$(dirname "$file") && cd "$dir"
 }
+
+# fshow - git commit browser
+fshow() {
+  git log --graph --color=always \
+    --format="%C(auto)%h%d %s %C(black)%C(bold)%cr" "$@" |
+  fzf --ansi --no-sort --reverse --tiebreak=index --toggle-sort=\` \
+    --bind "ctrl-m:execute:
+  echo '{}' | grep -o '[a-f0-9]\{7\}' |
+  xargs -I % sh -c 'git show --color=always % | less -R'"
+}
+
+# rename tmux win
+rw() {
+  export NORENAME=1
+  if (( $# == 0 ))
+  then
+    tmux command-prompt -I \#W "rename-window '%%'"
+  else
+    tmux rename-window $1
+  fi
+}
+
+alias ida32='wine ~/.wine/drive_c/Program\ Files/IDA\ 6.6/idaq.exe'
+alias ida64='wine ~/.wine/drive_c/Program\ Files/IDA\ 6.6/idaq64.exe'
+alias lvstrm='rw livestreamer && livestreamer'

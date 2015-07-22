@@ -1,6 +1,10 @@
+" Faster startup time on neovim
+let g:python_host_skip_check = 1
+let g:python3_host_skip_check = 1
+
 " Set correct font for the GUI
 if has('gui_running')
-  set guifont=Source\ Code\ Pro\ for\ Powerline\ for\ MacVim:h12
+  set guifont=Source\ Code\ Pro:h12
   set guioptions-=L
   set linespace=2
   set guioptions-=r
@@ -187,13 +191,18 @@ if terminal_profile=='light'
 else
   set background=dark
 endif
-let base16colorspace=256
 colorscheme base16-eighties
 " Toogle between light and dark version
 noremap <F6> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 
 " Toggle paste mode for code
 set pastetoggle=<F2>
+
+" Automaticaly set tmux window name
+if exists('$TMUX') && !exists('$NORENAME')
+  au BufEnter * call system('tmux rename-window '.expand('%:t:S'))
+  au VimLeave * call system('tmux set-window automatic-rename on')
+endif
 
 " FileType specific configurations
 " Support for AMPL
@@ -440,10 +449,6 @@ nnoremap <silent> <leader>Q :silent :Sayonara!<cr>
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let g:togglecursor_force = 'xterm'
 let g:togglecursor_insert = "blinking_line"
-
-" Faster startup time on neovim
-let g:python_host_skip_check = 1
-let g:python3_host_skip_check = 1
 
 " vim-gutentags configuration
 let g:gutentags_cache_dir = $HOME . '/.vim/tags/'

@@ -8,8 +8,23 @@
 [core]
 	editor = vim
 	excludesfile = ~/.gitignore_global
+	pager = LESS=-asrRix8 less
 [color]
 	ui = auto
+	interactive = auto
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red
+	new = green
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = red
 [diff]
 	tool = vimdiff
 	algorithm = histogram
@@ -17,3 +32,6 @@
 	required = true
 	clean = git media clean %f
 	smudge = git media smudge %f
+[alias]
+	undo-commit = reset --soft HEAD^
+	lg = log --graph --decorate --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative

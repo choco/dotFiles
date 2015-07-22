@@ -1,5 +1,3 @@
 # Player options
-player=open -F -W -n /Applications/VLC.app --args -f
+player=/Applications/VLC.app/Contents/MacOS/VLC -f
 default-stream=best
-player-http
-
