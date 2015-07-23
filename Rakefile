@@ -130,7 +130,8 @@ namespace :install do
   desc 'Install ctags'
   task :ctags do
     step 'ctags'
-    brew_install 'ctags'
+    sh 'brew tap universal-ctags/universal-ctags'
+    brew_install 'universal-ctags', ['--HEAD']
   end
 
   desc 'Install cscope'
@@ -143,6 +144,12 @@ namespace :install do
   task :the_silver_searcher do
     step 'the_silver_searcher'
     brew_install 'the_silver_searcher'
+  end
+
+  desc 'Install reattach-to-user-namespace'
+  task :reattach_to_user_namespace do
+    step 'reattach_to_user_namespace'
+    brew_install 'reattach-to-user-namespace'
   end
 
   desc 'Install tmux'
@@ -210,6 +217,18 @@ namespace :install do
       brew_install 'assimp'
   end
 
+  desc 'Install aspell'
+  task :aspell do
+    step 'aspell'
+    brew_install 'aspell', ['--with-lang-en', '--with-lang-it', '--devel']
+  end
+
+  desc 'Install weechat'
+  task :weechat do
+    step 'weechat'
+    brew_install 'weechat', ['--with-aspell', '--with-lua', '--with-perl', '--with-python', '--with-ruby']
+  end
+
   desc 'Install Vim Plugins'
   task :vim_plugins do
     step 'vim_plugins'
@@ -272,6 +291,7 @@ task :install do
   Rake::Task['install:ctags'].invoke
   Rake::Task['install:cscope'].invoke
   Rake::Task['install:the_silver_searcher'].invoke
+  Rake::Task['install:reattach_to_user_namespace'].invoke
   Rake::Task['install:tmux'].invoke
   Rake::Task['install:zsh'].invoke
   Rake::Task['install:python2'].invoke
@@ -282,6 +302,8 @@ task :install do
   Rake::Task['install:archey'].invoke
   Rake::Task['install:mono'].invoke
   Rake::Task['install:opengl_support_libs'].invoke
+  Rake::Task['install:aspell'].invoke
+  Rake::Task['install:weechat'].invoke
 
   step 'symlink'
 
