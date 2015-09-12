@@ -41,8 +41,11 @@ Plug 'cHoco/taboo.vim'
 " Splits navigation look and feel
 Plug 'cHoco/GoldenView.Vim'
 
+" Compiling and building helpers
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+
 " Text editing look and feel
-Plug 'jszakmeister/vim-togglecursor'
+" Plug 'jszakmeister/vim-togglecursor'
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'kovisoft/paredit', { 'for': 'racket' }
 Plug 'junegunn/vim-pseudocl'
@@ -54,7 +57,7 @@ Plug 'tpope/vim-endwise'
 Plug 'itchyny/vim-highlighturl'
 Plug 'tpope/vim-sleuth'
 
-" Text obejcts and movements
+" Text objects and movements
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
@@ -64,6 +67,7 @@ Plug 'tmhedberg/matchit'
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf.vim'
 
 "" Language specific Plugs
 " Python
@@ -115,7 +119,16 @@ Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
 
 " Autocompleter and snippets
-Plug 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer --omnisharp-completer --gocode-completer' }
+function! BuildYCM(info)
+  " info is a dictionary with 3 fields
+  " - name:   name of the plugin
+  " - status: 'installed', 'updated', or 'unchanged'
+  " - force:  set on PlugInstall! or PlugUpdate!
+  if a:info.status == 'installed' || a:info.force
+    !./install.py --clang-completer --omnisharp-completer --gocode-completer
+  endif
+endfunction
+Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 Plug 'davidhalter/jedi-vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'

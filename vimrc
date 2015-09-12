@@ -232,6 +232,8 @@ let g:ycm_confirm_extra_conf = 0
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_global_ycm_extra_conf = '~/.vim/conf/ycm_conf.py'
+let g:ycm_extra_conf_globlist = [
+    \ '~/Progetti/*' ]
 
 " jedi-vim configuration
 let g:jedi#auto_vim_configuration = 0
@@ -447,8 +449,9 @@ nnoremap <silent> <leader>Q :silent :Sayonara!<cr>
 " Cursor + vim-togglecursor configuration
 " Use a blinking upright bar cursor in Insert mode, a solid block in normal
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-let g:togglecursor_force = 'xterm'
-let g:togglecursor_insert = "blinking_line"
+let &t_SI = "\<Esc>[5 q"
+let &t_SR = "\<Esc>[3 q"
+let &t_EI = "\<Esc>[2 q"
 
 " vim-gutentags configuration
 let g:gutentags_cache_dir = $HOME . '/.vim/tags/'
