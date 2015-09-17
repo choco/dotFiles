@@ -161,11 +161,13 @@ defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebK
 
 # Enable “focus follows mouse” for Terminal.app
 defaults write com.apple.terminal FocusFollowsMouse -bool true
-# Install Terminal.app profiles
-open terminal-app-themes/*
 
 # Install coding fonts
 open coding-fonts/source-code-pro/*
+read -p "When you've installed the fonts press any key to continue... " -n1 -s
+
+# Install Terminal.app profiles
+open terminal-app-themes/*
 
 ###############################################################################
 # Activity Monitor                                                            #

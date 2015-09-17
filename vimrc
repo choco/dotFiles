@@ -1,7 +1,10 @@
+" vim: set foldmethod=marker:
 " Faster startup time on neovim
 let g:python_host_skip_check = 1
 let g:python3_host_skip_check = 1
 
+" ============================================================================
+" GUI Settings {{{
 " Set correct font for the GUI
 if has('gui_running')
   set guifont=Source\ Code\ Pro:h12
@@ -10,12 +13,145 @@ if has('gui_running')
   set guioptions-=r
   set guioptions-=e
 endif
+" }}}
+" ============================================================================
 
-" Load Vundle configuration and Plugins
-if filereadable(expand("~/.vimrc.plugins"))
-  source ~/.vimrc.plugins
-endif
+" ============================================================================
+" Plugins {{{
+" Load Plugins
+call plug#begin('~/.vim/plugged')
 
+" Startup, shutdown and session management
+Plug 'mhinz/vim-startify'
+Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
+Plug 'kopischke/vim-stay'
+
+" Versioning plugins
+Plug 'mhinz/vim-signify' " Show signs for diffs beside line numbers column
+Plug 'tpope/vim-fugitive' " Best git integration for Vim
+Plug 'mbbill/undotree', { 'on': 'UndotreeToggle'   }
+
+" Tmux plugins
+Plug 'jpalardy/vim-slime'
+Plug 'tmux-plugins/vim-tmux-focus-events'
+Plug 'tpope/vim-dispatch'
+Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
+
+" Commenting, aligning, folding and Indenting Plugs
+Plug 'cHoco/BetterFoldText'
+Plug 'Konfekt/FastFold'
+Plug 'tomtom/tcomment_vim' " Easly comment stuff in/out
+Plug 'Yggdroot/indentLine'
+" Allign text easly
+Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
+
+" Colorschemes
+Plug 'chriskempson/base16-vim'
+
+" Statusbar/tabbar look and feel plugins
+Plug 'bling/vim-airline'
+Plug 'gcmt/taboo.vim'
+
+" Splits navigation look and feel
+Plug 'cHoco/GoldenView.Vim'
+
+" Compiling and building helpers
+Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+
+" Text editing look and feel
+Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'kovisoft/paredit', { 'for': 'racket' }
+Plug 'junegunn/vim-pseudocl'
+Plug 'junegunn/vim-oblique'
+Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
+Plug 'myusuf3/numbers.vim'
+Plug 'tpope/vim-endwise'
+Plug 'itchyny/vim-highlighturl'
+Plug 'tpope/vim-sleuth'
+
+" Text objects and movements
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-unimpaired'
+Plug 'tmhedberg/matchit'
+
+" File navigation
+Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
+Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf.vim'
+
+"" Language specific Plugs
+" Python
+Plug 'tmhedberg/SimpylFold', { 'for': 'Python' }
+Plug 'mitsuhiko/vim-python-combined', { 'for': 'Python' }
+" Ruby
+Plug 'vim-ruby/vim-ruby', { 'for': 'Ruby' }
+Plug 'tpope/vim-rails', { 'for': 'Ruby' }
+" Javascript
+Plug 'pangloss/vim-javascript', { 'for': 'Javascript' }
+" Markdown
+Plug 'tpope/vim-markdown', { 'for': 'Markdown' }
+" Tmux syntax
+Plug 'tmux-plugins/vim-tmux', { 'for': 'tmux' }
+" JSON
+Plug 'leshill/vim-json'
+" C/C++
+Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp', 'objc'] }
+Plug 'vim-jp/cpp-vim', { 'for': ['c', 'cpp', 'objc'] }
+" Objective-C
+Plug 'b4winckler/vim-objc', { 'for': 'objc' }
+" C#
+Plug 'OrangeT/vim-csharp', { 'for': 'cs' }
+" GLSL
+Plug 'tikhomirov/vim-glsl'
+" HTML/CSS
+Plug 'JulesWang/css.vim', { 'for': ['css', 'html', 'html5', 'less'] }
+Plug 'ap/vim-css-color', { 'for': ['css', 'html', 'html5', 'less'] }
+Plug 'othree/html5.vim', { 'for': ['css', 'html', 'html5'] }
+" Less
+Plug 'groenewege/vim-less', { 'for': 'Less' }
+" Go
+Plug 'fatih/vim-go', { 'for': 'Go' }
+" Git
+Plug 'tpope/vim-git'
+" Scheme - Racket dialect
+Plug 'wlangstroth/vim-racket'
+" Haskell
+Plug 'travitch/hasksyn', { 'for': 'Haskell' }
+" Swift
+Plug 'toyamarinyon/vim-swift', { 'for': 'Swift' }
+" Nginx
+Plug 'blueyed/nginx.vim', { 'for': 'Nginx' }
+" CSV
+Plug 'chrisbra/csv.vim', { 'for': 'CSV' }
+
+" Ctags plugins
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'majutsushi/tagbar'
+
+" Autocompleter and snippets
+function! BuildYCM(info)
+  " info is a dictionary with 3 fields
+  " - name:   name of the plugin
+  " - status: 'installed', 'updated', or 'unchanged'
+  " - force:  set on PlugInstall! or PlugUpdate!
+  if a:info.status == 'installed' || a:info.force
+    !./install.py --clang-completer --omnisharp-completer --gocode-completer
+  endif
+endfunction
+Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+Plug 'davidhalter/jedi-vim'
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+
+call plug#end()
+" }}}
+" ============================================================================
+
+" ============================================================================
+" General Settings {{{
 " Enable syntax highlighting
 syntax enable
 
@@ -104,10 +240,7 @@ if &diff
 else
   set foldmethod=syntax
 endif
-set foldlevel=0
-autocmd BufWinEnter * :silent! :%foldo!
-" Set initial foldlevel to max foldlevel (all folds open)
-" autocmd BufWinEnter * let &l:foldlevel = max(map(range(1, line('$')), 'foldlevel(v:val)'))
+autocmd BufWinEnter * silent! :%foldopen!
 
 " Session and view options to save
 set sessionoptions=buffers,folds,tabpages,curdir,globals
@@ -184,7 +317,7 @@ xnoremap > >gv
 " In case you forgot to sudo
 cmap w!! %!sudo tee > /dev/null %
 
-" Color scheme preferences
+" Color scheme preferences {{{
 let terminal_profile=$TERMINAL_PROFILE
 if terminal_profile=='light'
   set background=light
@@ -194,17 +327,21 @@ endif
 colorscheme base16-eighties
 " Toogle between light and dark version
 noremap <F6> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
+" }}}
 
 " Toggle paste mode for code
 set pastetoggle=<F2>
 
 " Automaticaly set tmux window name
 if exists('$TMUX') && !exists('$NORENAME')
-  au BufEnter * call system('tmux rename-window '.expand('%:t:S'))
+  au BufEnter * if empty(&buftype) | call system('tmux rename-window '.expand('%:t:S')) | endif
   au VimLeave * call system('tmux set-window automatic-rename on')
 endif
+" }}}
+" ============================================================================
 
-" FileType specific configurations
+" ============================================================================
+" FileType specific configurations {{{
 " Support for AMPL
 autocmd BufNewFile,BufRead *.mod,*.dat,*.ampl set filetype=ampl
 " Enable spellchecking for Markdown
@@ -215,16 +352,21 @@ autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 autocmd FileType gitcommit setlocal spell
 " Enable Rainbow Parentheses for racket
 autocmd FileType racket RainbowParentheses
+" }}}
+" ============================================================================
 
-" NERDTree configuration
+" ============================================================================
+" Plugins configurations {{{
+" NERDTree configuration {{{
 let g:NERDTreeIgnore = ['\.DS_Store$']
 let g:NERDTreeShowHidden=1
 let g:NERDSpaceDelims=1
 let g:NERDTreeMinimalUI=1
 nmap <leader>d :NERDTreeToggle<CR>
 nmap <leader>D :NERDTreeFind<CR>
+" }}}
 
-" YouCompleteMe configuration
+" YouCompleteMe configuration {{{
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
@@ -234,13 +376,15 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_global_ycm_extra_conf = '~/.vim/conf/ycm_conf.py'
 let g:ycm_extra_conf_globlist = [
     \ '~/Progetti/*' ]
+" }}}
 
-" jedi-vim configuration
+" jedi-vim configuration {{{
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#completions_enabled = 0
 let g:jedi#use_tabs_not_buffers = 0
+" }}}
 
-" UltiSnips configuration
+" UltiSnips configuration {{{
 let g:UltiSnipsJumpForwardTrigger  = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
 let g:UltiSnipsExpandTrigger="<nop>"
@@ -254,17 +398,19 @@ function! <SID>ExpandSnippetOrReturn()
   endif
 endfunction
 imap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "\<CR>\<Plug>DiscretionaryEnd"
+" }}}
 
-" Airline configuration
+" Airline configuration {{{
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_tab_nr = 0
-let g:airline#extensions#tabline#left_sep=' '
-let g:airline#extensions#tabline#left_alt_sep='│'
+let g:airline#extensions#tabline#left_sep = ' '
+let g:airline#extensions#tabline#left_alt_sep = '│'
 let g:airline#extensions#tabline#show_close_button = 1
 let g:airline#extensions#tabline#exclude_preview = 1
+" }}}
 
-" EasyAlign configuration
+" EasyAlign configuration {{{
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
 vmap <Leader>l <Plug>(EasyAlign)
 
@@ -275,8 +421,9 @@ let g:easy_align_delimiters = {
 \        'ignore_unmatched': 0
 \      }
 \ }
+" }}}
 
-" Goyo configuration
+" Goyo configuration {{{
 nnoremap <Leader>G :Goyo<CR>
 function! s:goyo_enter()
   if exists('$TMUX')
@@ -299,8 +446,9 @@ endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
+" }}}
 
-" Vim-Signify configuration
+" Vim-Signify configuration {{{
 let g:signify_vcs_list = [ 'git', 'hg' ]
 let g:signify_update_on_bufenter = 1
 let g:signify_disable_by_default = 1
@@ -308,50 +456,16 @@ nnoremap <leader>gt :SignifyToggle<CR>
 " Hunk jumping
 nmap <leader>gj <plug>(signify-next-hunk)
 nmap <leader>gk <plug>(signify-prev-hunk)
+" }}}
 
-" Fzf configuration
-nnoremap <silent> <leader>t :silent :FZF<CR>
-function! s:buflist()
-  redir => ls
-  silent ls
-  redir END
-  return split(ls, '\n')
-endfunction
+" Fzf configuration {{{
+nnoremap <silent> <leader>t :silent :Files<CR>
+nnoremap <silent> <Leader><Enter> :silent :Buffers<CR>
+nnoremap <silent> <Leader>f :silent :Lines<CR>
+nnoremap <silent> <Leader>u :silent :Tags<CR>
+" }}}
 
-function! s:bufopen(e)
-  execute 'buffer' matchstr(a:e, '^[ 0-9]*')
-endfunction
-
-nnoremap <silent> <Leader><Enter> :call fzf#run({
-\   'source':  reverse(<sid>buflist()),
-\   'sink':    function('<sid>bufopen'),
-\   'options': '+m',
-\   'down':    len(<sid>buflist()) + 2
-\ })<CR>
-
-function! s:line_handler(l)
-  let keys = split(a:l, ':\t')
-  exec 'buf' keys[0]
-  exec keys[1]
-  normal! ^zz
-endfunction
-
-function! s:buffer_lines()
-  let res = []
-  for b in filter(range(1, bufnr('$')), 'buflisted(v:val)')
-    call extend(res, map(getbufline(b,0,"$"), 'b . ":\t" . (v:key + 1) . ":\t" . v:val '))
-  endfor
-  return res
-endfunction
-
-nnoremap <silent> <Leader>f  :call fzf#run({
-\   'source':  <sid>buffer_lines(),
-\   'sink':    function('<sid>line_handler'),
-\   'options': '--extended --nth=3..',
-\   'down':    '60%'
-\})<CR>
-
-" Tagbar configuration
+" Tagbar configuration {{{
 " add a definition for Objective-C to tagbar
 let g:tagbar_type_objc = {
     \ 'ctagstype' : 'ObjectiveC',
@@ -387,14 +501,17 @@ let g:tagbar_type_objc = {
     \ }
 \ }
 nnoremap <leader>o :TagbarToggle<CR>
+" }}}
 
-" indentLine configuration
+" indentLine configuration {{{
 let g:indentLine_char = '┊'
+" }}}
 
-" slime configuration
+" slime configuration {{{
 let g:slime_target = "tmux"
+" }}}
 
-" GoldenView configuration
+" GoldenView configuration {{{
 let g:goldenview__enable_at_startup = 1
 let g:goldenview__enable_default_mapping = 0
 " 1. Split to tiled windows
@@ -402,8 +519,9 @@ nmap <silent> <leader>s <Plug>GoldenViewSplit
 " 2. Quickly switch current window with the main pane and toggle back
 nmap <silent> <leader>m <Plug>GoldenViewSwitchMain
 nmap <silent> <leader>b <Plug>GoldenViewSwitchToggle
+" }}}
 
-" vim-startify configuration
+" vim-startify configuration {{{
 let g:startify_files_number = 5
 let g:startify_skiplist = [
 \ 'COMMIT_EDITMSG',
@@ -436,22 +554,30 @@ let g:startify_custom_header = [
 \ ]
 highlight default link StartifyHeader String
 highlight default link StartifySection Label
+" }}}
 
-" taboo.vim configuration
+" taboo.vim configuration {{{
 let g:taboo_tabline = 0
 let g:taboo_tab_format = "%N%U %f%m"
 let g:taboo_renamed_tab_format = "%N%U %l%m"
+" }}}
 
-" Sayonara configuration
+" Sayonara configuration {{{
 nnoremap <silent> <leader>q :silent :Sayonara<cr>
 nnoremap <silent> <leader>Q :silent :Sayonara!<cr>
+" }}}
 
-" Cursor + vim-togglecursor configuration
+" Cursor configuration {{{
 " Use a blinking upright bar cursor in Insert mode, a solid block in normal
+" and a blinking underline in replace mode
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
 let &t_SI = "\<Esc>[5 q"
 let &t_SR = "\<Esc>[3 q"
 let &t_EI = "\<Esc>[2 q"
+" }}}
 
-" vim-gutentags configuration
+" vim-gutentags configuration {{{
 let g:gutentags_cache_dir = $HOME . '/.vim/tags/'
+" }}}
+" }}}
+" ============================================================================

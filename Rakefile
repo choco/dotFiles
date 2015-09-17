@@ -179,13 +179,13 @@ namespace :install do
   desc 'Install Vim'
   task :vim do
       step 'vim'
-      brew_install 'vim', ['--override-system-vi', '--with-lua', '--with-luajit', '--HEAD']
+      brew_install 'vim', ['--override-system-vi', '--with-lua', '--HEAD']
   end
 
   desc 'Install MacVim'
   task :macvim do
       step 'macvim'
-      brew_install 'macvim', ['--with-lua', '--with-luajit', '--custom-icons']
+      brew_install 'macvim', ['--with-lua', '--custom-icons']
   end
 
   desc 'Install Neovim'
@@ -232,7 +232,7 @@ namespace :install do
   desc 'Install Vim Plugins'
   task :vim_plugins do
     step 'vim_plugins'
-    sh 'nvim +PluginInstall +qall'
+    sh 'nvim +PlugInstall +qall'
   end
 end
 
@@ -252,7 +252,6 @@ COPIED_FILES = filemap(
 VIM_FILES = filemap(
   'vim'           => '~/.vim',
   'vimrc'         => '~/.vimrc',
-  'vimrc.plugins' => '~/.vimrc.plugins'
 )
 
 NVIM_FILES = filemap(
