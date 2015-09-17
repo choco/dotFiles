@@ -174,10 +174,10 @@
 	<data>
 	YnBsaXN0MDDUAQIDBAUGGBlYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
 	AAGGoKQHCBESVSRudWxs1AkKCwwNDg8QVk5TU2l6ZVhOU2ZGbGFnc1ZOU05hbWVWJGNs
-	YXNzI0AoAAAAAAAAEBCAAoADXxAVU291cmNlQ29kZVByby1SZWd1bGFy0hMUFRZaJGNs
-	YXNzbmFtZVgkY2xhc3Nlc1ZOU0ZvbnSiFRdYTlNPYmplY3RfEA9OU0tleWVkQXJjaGl2
-	ZXLRGhtUcm9vdIABCBEaIy0yNzxCS1JbYmlydHZ4kJWgqbCzvM7R1gAAAAAAAAEBAAAA
-	AAAAABwAAAAAAAAAAAAAAAAAAADY
+	YXNzI0AoAAAAAAAAEBCAAoADXxAUU291cmNlQ29kZVByby1NZWRpdW3SExQVFlokY2xh
+	c3NuYW1lWCRjbGFzc2VzVk5TRm9udKIVF1hOU09iamVjdF8QD05TS2V5ZWRBcmNoaXZl
+	ctEaG1Ryb290gAEIERojLTI3PEJLUltiaXJ0dniPlJ+or7K7zdDVAAAAAAAAAQEAAAAA
+	AAAAHAAAAAAAAAAAAAAAAAAAANc=
 	</data>
 	<key>FontAntialias</key>
 	<true/>
@@ -192,7 +192,7 @@
 	<key>RunCommandAsShell</key>
 	<false/>
 	<key>ScrollAlternateScreen</key>
-	<false/>
+	<true/>
 	<key>SelectionColor</key>
 	<data>
 	YnBsaXN0MDDUAQIDBAUGFRZYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
@@ -203,9 +203,11 @@
 	AAAZAAAAAAAAAAAAAAAAAAAA2Q==
 	</data>
 	<key>ShowActiveProcessInTitle</key>
-	<false/>
+	<true/>
 	<key>ShowCommandKeyInTitle</key>
 	<false/>
+	<key>ShowComponentsWhenTabHasCustomTitle</key>
+	<true/>
 	<key>ShowDimensionsInTitle</key>
 	<false/>
 	<key>ShowShellCommandInTitle</key>
@@ -346,33 +348,37 @@
 		<string>[33~</string>
 		<key>~F712</key>
 		<string>[34~</string>
+		<key>~^F702</key>
+		<string>[20~</string>
+		<key>~^F703</key>
+		<string>[21~</string>
 		<key>~^F728</key>
 		<string>[3;5~</string>
 	</dict>
 	<key>mouseLeftClick</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU051bWJlcgCEhAdOU1ZhbHVlAISECE5TT2Jq
-	ZWN0AIWEASqEhAFjlwGG
+	ZWN0AIWEASqEhAFjlwCG
 	</data>
 	<key>mouseMiddleClick</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU051bWJlcgCEhAdOU1ZhbHVlAISECE5TT2Jq
-	ZWN0AIWEASqEhAFjlwGG
+	ZWN0AIWEASqEhAFjlwCG
 	</data>
 	<key>mouseRightClick</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU051bWJlcgCEhAdOU1ZhbHVlAISECE5TT2Jq
-	ZWN0AIWEASqEhAFjlwGG
+	ZWN0AIWEASqEhAFjlwCG
 	</data>
 	<key>mouseWheel</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU051bWJlcgCEhAdOU1ZhbHVlAISECE5TT2Jq
-	ZWN0AIWEASqEhAFjlwGG
+	ZWN0AIWEASqEhAFjlwCG
 	</data>
 	<key>mouseWheelEmulation</key>
 	<data>
 	BAtzdHJlYW10eXBlZIHoA4QBQISEhAhOU051bWJlcgCEhAdOU1ZhbHVlAISECE5TT2Jq
-	ZWN0AIWEASqEhAFjlwGG
+	ZWN0AIWEASqEhAFjlwCG
 	</data>
 	<key>name</key>
 	<string>Ocean Dark</string>
