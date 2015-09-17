@@ -1,0 +1,8 @@
+--exclude=vim/autoload
+--exclude=vim/plugged
+--exclude=vim/tags
+--exclude=vim/view
+--exclude=vim/spell
+--exclude=vim/tmp
+--exclude=coding-fonts
+--exclude=terminal-app-themes
