@@ -1,23 +1,23 @@
 " vim: set foldmethod=marker:
-" Faster startup time on neovim
-let g:python_host_skip_check = 1
-let g:python3_host_skip_check = 1
 
 " ============================================================================
 " GUI Settings {{{
+
 " Set correct font for the GUI
 if has('gui_running')
-  set guifont=Source\ Code\ Pro:h12
+  set guifont=Source\ Code\ Pro\ plus\ Devicons:h12
   set guioptions-=L
   set linespace=2
   set guioptions-=r
   set guioptions-=e
 endif
+
 " }}}
 " ============================================================================
 
 " ============================================================================
 " Plugins {{{
+
 " Load Plugins
 call plug#begin('~/.vim/plugged')
 
@@ -47,10 +47,6 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 
 " Colorschemes
 Plug 'chriskempson/base16-vim'
-
-" Statusbar/tabbar look and feel plugins
-Plug 'bling/vim-airline'
-Plug 'gcmt/taboo.vim'
 
 " Splits navigation look and feel
 Plug 'cHoco/GoldenView.Vim'
@@ -82,6 +78,11 @@ Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 Plug 'junegunn/fzf.vim'
 
+" Statusbar/tabbar look and feel plugins
+Plug 'bling/vim-airline'
+Plug 'gcmt/taboo.vim'
+Plug 'ryanoasis/vim-devicons'
+
 "" Language specific Plugs
 " Python
 Plug 'tmhedberg/SimpylFold', { 'for': 'Python' }
@@ -98,6 +99,7 @@ Plug 'tmux-plugins/vim-tmux', { 'for': 'tmux' }
 " JSON
 Plug 'leshill/vim-json'
 " C/C++
+Plug 'justinmk/vim-syntax-extra', { 'for': ['lex', 'yacc'] }
 Plug 'octol/vim-cpp-enhanced-highlight', { 'for': ['c', 'cpp', 'objc'] }
 Plug 'vim-jp/cpp-vim', { 'for': ['c', 'cpp', 'objc'] }
 " Objective-C
@@ -147,11 +149,17 @@ Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
 call plug#end()
+
 " }}}
 " ============================================================================
 
 " ============================================================================
 " General Settings {{{
+
+" Faster startup time on neovim
+let g:python_host_skip_check = 1
+let g:python3_host_skip_check = 1
+
 " Enable syntax highlighting
 syntax enable
 
@@ -318,8 +326,7 @@ xnoremap > >gv
 cmap w!! %!sudo tee > /dev/null %
 
 " Color scheme preferences {{{
-let terminal_profile=$TERMINAL_PROFILE
-if terminal_profile=='light'
+if (exists('$TMUX') && system('tmux show-env TERMINAL_THEME') == "TERMINAL_THEME=light\n") || $TERMINAL_THEME == "light"
   set background=light
 else
   set background=dark
@@ -337,11 +344,13 @@ if exists('$TMUX') && !exists('$NORENAME')
   au BufEnter * if empty(&buftype) | call system('tmux rename-window '.expand('%:t:S')) | endif
   au VimLeave * call system('tmux set-window automatic-rename on')
 endif
+
 " }}}
 " ============================================================================
 
 " ============================================================================
 " FileType specific configurations {{{
+
 " Support for AMPL
 autocmd BufNewFile,BufRead *.mod,*.dat,*.ampl set filetype=ampl
 " Enable spellchecking for Markdown
@@ -352,11 +361,13 @@ autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 autocmd FileType gitcommit setlocal spell
 " Enable Rainbow Parentheses for racket
 autocmd FileType racket RainbowParentheses
+
 " }}}
 " ============================================================================
 
 " ============================================================================
 " Plugins configurations {{{
+
 " NERDTree configuration {{{
 let g:NERDTreeIgnore = ['\.DS_Store$']
 let g:NERDTreeShowHidden=1
@@ -368,6 +379,7 @@ nmap <leader>D :NERDTreeFind<CR>
 
 " YouCompleteMe configuration {{{
 let g:ycm_add_preview_to_completeopt = 1
+let g:ycm_always_populate_location_list = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_confirm_extra_conf = 0
@@ -406,7 +418,6 @@ let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#show_tab_nr = 0
 let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '│'
-let g:airline#extensions#tabline#show_close_button = 1
 let g:airline#extensions#tabline#exclude_preview = 1
 " }}}
 

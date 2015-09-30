@@ -156,7 +156,7 @@
 	AAAZAAAAAAAAAAAAAAAAAAAA2Q==
 	</data>
 	<key>CommandString</key>
-	<string>source ~/.color_profile.sh dark</string>
+	<string></string>
 	<key>CursorBlink</key>
 	<false/>
 	<key>CursorColor</key>
@@ -174,10 +174,10 @@
 	<data>
 	YnBsaXN0MDDUAQIDBAUGGBlYJHZlcnNpb25YJG9iamVjdHNZJGFyY2hpdmVyVCR0b3AS
 	AAGGoKQHCBESVSRudWxs1AkKCwwNDg8QVk5TU2l6ZVhOU2ZGbGFnc1ZOU05hbWVWJGNs
-	YXNzI0AoAAAAAAAAEBCAAoADXxAUU291cmNlQ29kZVByby1NZWRpdW3SExQVFlokY2xh
-	c3NuYW1lWCRjbGFzc2VzVk5TRm9udKIVF1hOU09iamVjdF8QD05TS2V5ZWRBcmNoaXZl
-	ctEaG1Ryb290gAEIERojLTI3PEJLUltiaXJ0dniPlJ+or7K7zdDVAAAAAAAAAQEAAAAA
-	AAAAHAAAAAAAAAAAAAAAAAAAANc=
+	YXNzI0AoAAAAAAAAEBCAAoADXxAZU291cmNlQ29kZVByb3BsdXNEZXZpY29uc9ITFBUW
+	WiRjbGFzc25hbWVYJGNsYXNzZXNWTlNGb250ohUXWE5TT2JqZWN0XxAPTlNLZXllZEFy
+	Y2hpdmVy0RobVHJvb3SAAQgRGiMtMjc8QktSW2JpcnR2eJSZpK20t8DS1doAAAAAAAAB
+	AQAAAAAAAAAcAAAAAAAAAAAAAAAAAAAA3A==
 	</data>
 	<key>FontAntialias</key>
 	<true/>
@@ -188,7 +188,7 @@
 	<key>ProfileCurrentVersion</key>
 	<real>2.04</real>
 	<key>RunCommandAsShell</key>
-	<false/>
+	<true/>
 	<key>ScrollAlternateScreen</key>
 	<true/>
 	<key>SelectionColor</key>
