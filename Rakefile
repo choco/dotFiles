@@ -232,7 +232,7 @@ namespace :install do
   desc 'Install Vim Plugins'
   task :vim_plugins do
     step 'vim_plugins'
-    sh 'nvim +PlugInstall +qall'
+    sh 'vim +PlugInstall +qall'
   end
 end
 
