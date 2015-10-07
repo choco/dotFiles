@@ -21,69 +21,81 @@ endif
 " Load Plugins
 call plug#begin('~/.vim/plugged')
 
-" Startup, shutdown and session management
+" Startup, shutdown and session management {{{
 Plug 'mhinz/vim-startify'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 Plug 'kopischke/vim-stay'
+" }}}
 
-" Versioning plugins
+" Versioning plugins {{{
 Plug 'mhinz/vim-signify' " Show signs for diffs beside line numbers column
 Plug 'tpope/vim-fugitive' " Best git integration for Vim
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle'   }
+" }}}
 
-" Tmux plugins
+" Tmux plugins {{{
 Plug 'jpalardy/vim-slime'
 Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-dispatch'
 Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
+" }}}
 
-" Commenting, aligning, folding and Indenting Plugs
+" Commenting, aligning, folding and Indenting Plugs {{{
 Plug 'cHoco/BetterFoldText'
 Plug 'Konfekt/FastFold'
 Plug 'tomtom/tcomment_vim' " Easly comment stuff in/out
 Plug 'Yggdroot/indentLine'
 " Allign text easly
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
+" }}}
 
-" Colorschemes
+" Colorschemes {{{
 Plug 'chriskempson/base16-vim'
+" }}}
 
-" Splits navigation look and feel
+" Splits navigation look and feel {{{
 Plug 'cHoco/GoldenView.Vim'
+" }}}
 
-" Compiling and building helpers
+" Compiling and building helpers {{{
 Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
+" }}}
 
-" Text editing look and feel
+" Text editing look and feel {{{
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'kovisoft/paredit', { 'for': 'racket' }
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
-Plug 'myusuf3/numbers.vim'
 Plug 'tpope/vim-endwise'
+Plug 'kennykaye/vim-relativity'
 Plug 'itchyny/vim-highlighturl'
 Plug 'tpope/vim-sleuth'
+Plug 'Raimondi/delimitMate'
+" }}}
 
-" Text objects and movements
+" Text objects and movements {{{
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-unimpaired'
 Plug 'tmhedberg/matchit'
+" }}}
 
-" File navigation
+" File navigation {{{
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
 Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
 Plug 'junegunn/fzf.vim'
+" }}}
 
-" Statusbar/tabbar look and feel plugins
+" Statusbar/tabbar look and feel plugins {{{
 Plug 'bling/vim-airline'
 Plug 'gcmt/taboo.vim'
 Plug 'ryanoasis/vim-devicons'
+" }}}
 
-"" Language specific Plugs
+" Language specific Plugs {{{
 " Python
 Plug 'tmhedberg/SimpylFold', { 'for': 'Python' }
 Plug 'mitsuhiko/vim-python-combined', { 'for': 'Python' }
@@ -128,12 +140,14 @@ Plug 'toyamarinyon/vim-swift', { 'for': 'Swift' }
 Plug 'blueyed/nginx.vim', { 'for': 'Nginx' }
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'CSV' }
+" }}}
 
-" Ctags plugins
+" Ctags plugins {{{
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'majutsushi/tagbar'
+" }}}
 
-" Autocompleter and snippets
+" Autocompleter and snippets {{{
 function! BuildYCM(info)
   " info is a dictionary with 3 fields
   " - name:   name of the plugin
@@ -143,10 +157,11 @@ function! BuildYCM(info)
     !./install.py --clang-completer --omnisharp-completer --gocode-completer
   endif
 endfunction
-Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM'), 'on': [] }
 Plug 'davidhalter/jedi-vim'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+Plug 'SirVer/ultisnips', { 'on': [] }
+Plug 'honza/vim-snippets', { 'on': [] }
+" }}}
 
 call plug#end()
 
@@ -369,38 +384,46 @@ autocmd FileType racket RainbowParentheses
 " Plugins configurations {{{
 
 " NERDTree configuration {{{
-let g:NERDTreeIgnore = ['\.DS_Store$']
-let g:NERDTreeShowHidden=1
-let g:NERDSpaceDelims=1
-let g:NERDTreeMinimalUI=1
+let g:NERDTreeIgnore     = ['\.DS_Store$']
+let g:NERDTreeShowHidden = 1
+let g:NERDSpaceDelims    = 1
+let g:NERDTreeMinimalUI  = 1
 nmap <leader>d :NERDTreeToggle<CR>
 nmap <leader>D :NERDTreeFind<CR>
 " }}}
 
 " YouCompleteMe configuration {{{
+" Defer YouCompleteMe load until insert mode is entered
+augroup load_us_ycm
+  autocmd!
+  autocmd InsertEnter * call plug#load('ultisnips', 'vim-snippets', 'YouCompleteMe')
+        \| call youcompleteme#Enable()
+        \| autocmd! load_us_ycm
+augroup END
+
+let g:ycm_use_ultisnips_completer = 1
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_always_populate_location_list = 1
-let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_global_ycm_extra_conf = '~/.vim/conf/ycm_conf.py'
 let g:ycm_extra_conf_globlist = [
-    \ '~/Progetti/*' ]
+    \ '~/Projects/*' ]
 " }}}
 
 " jedi-vim configuration {{{
 let g:jedi#auto_vim_configuration = 0
-let g:jedi#completions_enabled = 0
-let g:jedi#use_tabs_not_buffers = 0
+let g:jedi#completions_enabled    = 0
+let g:jedi#use_tabs_not_buffers   = 0
 " }}}
 
 " UltiSnips configuration {{{
 let g:UltiSnipsJumpForwardTrigger  = "<tab>"
 let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
-let g:UltiSnipsExpandTrigger="<nop>"
-let g:ulti_expand_or_jump_res = 0
+let g:UltiSnipsExpandTrigger       = "<nop>"
+let g:ulti_expand_or_jump_res      = 0
 function! <SID>ExpandSnippetOrReturn()
   let snippet = UltiSnips#ExpandSnippetOrJump()
   if g:ulti_expand_or_jump_res > 0
@@ -413,11 +436,11 @@ imap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>
 " }}}
 
 " Airline configuration {{{
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#show_tab_nr = 0
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '│'
+let g:airline_powerline_fonts                    = 1
+let g:airline#extensions#tabline#enabled         = 1
+let g:airline#extensions#tabline#show_tab_nr     = 0
+let g:airline#extensions#tabline#left_sep        = ' '
+let g:airline#extensions#tabline#left_alt_sep    = '│'
 let g:airline#extensions#tabline#exclude_preview = 1
 " }}}
 
@@ -440,19 +463,22 @@ function! s:goyo_enter()
   if exists('$TMUX')
     silent !tmux set status off
   endif
+  set noshowcmd
+  set scrolloff=999
   DisableGoldenViewAutoResize
-  NumbersToggle
+  Relativity!
+  set nonumber norelativenumber
   Limelight
 endfunction
-
 function! s:goyo_leave()
   if exists('$TMUX')
     silent !tmux set status on
   endif
+  set showcmd
+  set scrolloff=4
   EnableGoldenViewAutoResize
-  NumbersToggle
+  Relativity
   Limelight!
-  AirlineRefresh
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()
@@ -460,7 +486,7 @@ autocmd! User GoyoLeave nested call <SID>goyo_leave()
 " }}}
 
 " Vim-Signify configuration {{{
-let g:signify_vcs_list = [ 'git', 'hg' ]
+let g:signify_vcs_list           = [ 'git', 'hg' ]
 let g:signify_update_on_bufenter = 1
 let g:signify_disable_by_default = 1
 nnoremap <leader>gt :SignifyToggle<CR>
@@ -533,16 +559,16 @@ nmap <silent> <leader>b <Plug>GoldenViewSwitchToggle
 " }}}
 
 " vim-startify configuration {{{
-let g:startify_files_number = 5
-let g:startify_skiplist = [
-\ 'COMMIT_EDITMSG',
-\ $HOME . '/Progetti/*',
+let g:startify_files_number           = 5
+let g:startify_skiplist               = [
+      \ 'COMMIT_EDITMSG',
+      \ $HOME . '/Projects/*',
 \ ]
-let g:startify_session_remove_lines = ['set winheight=1 winwidth=1']
-let g:startify_session_autoload = 1
+let g:startify_session_remove_lines   = ['set winheight=1 winwidth=1']
+let g:startify_session_autoload       = 1
 let g:startify_session_delete_buffers = 1
-let g:startify_session_persistence = 1
-let g:startify_custom_header = [
+let g:startify_session_persistence    = 1
+let g:startify_custom_header          = [
 \ '                                                                 ',
 \ '                 ,╓╦╢╣┘                         ╣╩▄              ',
 \ '                ╣╬╬░▒Γ                ,╢Ç╖RφQ▒▄▓▒╬╬              ',
@@ -568,8 +594,8 @@ highlight default link StartifySection Label
 " }}}
 
 " taboo.vim configuration {{{
-let g:taboo_tabline = 0
-let g:taboo_tab_format = "%N%U %f%m"
+let g:taboo_tabline            = 0
+let g:taboo_tab_format         = "%N%U %f%m"
 let g:taboo_renamed_tab_format = "%N%U %l%m"
 " }}}
 
@@ -581,10 +607,10 @@ nnoremap <silent> <leader>Q :silent :Sayonara!<cr>
 " Cursor configuration {{{
 " Use a blinking upright bar cursor in Insert mode, a solid block in normal
 " and a blinking underline in replace mode
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
-let &t_SI = "\<Esc>[5 q"
-let &t_SR = "\<Esc>[3 q"
-let &t_EI = "\<Esc>[2 q"
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+let &t_SI                         = "\<Esc>[5 q"
+let &t_SR                         = "\<Esc>[3 q"
+let &t_EI                         = "\<Esc>[2 q"
 " }}}
 
 " vim-gutentags configuration {{{
