@@ -69,11 +69,11 @@ Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
-Plug 'tpope/vim-endwise'
 Plug 'kennykaye/vim-relativity'
 Plug 'itchyny/vim-highlighturl'
 Plug 'tpope/vim-sleuth'
 Plug 'Raimondi/delimitMate'
+Plug 'tpope/vim-endwise'
 " }}}
 
 " Text objects and movements {{{
@@ -382,6 +382,10 @@ autocmd FileType racket RainbowParentheses
 
 " ============================================================================
 " Plugins configurations {{{
+"  delimitMate configuration {{{
+let delimitMate_expand_cr = 2
+let delimitMate_expand_space = 1
+" }}}
 
 " NERDTree configuration {{{
 let g:NERDTreeIgnore     = ['\.DS_Store$']
@@ -482,7 +486,7 @@ endfunction
 " }}}
 
 " Mappings {{{
-imap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "\<CR>\<Plug>DiscretionaryEnd"
+imap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "<C-R>=delimitMate#ExpandReturn()<CR>\<Plug>DiscretionaryEnd"
 exec 'inoremap <silent> <expr> ' . ultisnips_ycm_move_forwards . ' pumvisible() ? "\' . ycm_key_list_select_completion[0] . '" : "<C-R>=<SID>JumpOrKey(1)<CR>"'
 exec 'inoremap <silent> <expr> ' . ultisnips_ycm_move_backwards . ' pumvisible() ? "\' . ycm_key_list_previous_completion[0] . '" : "<C-R>=<SID>JumpOrKey(0)<CR>"'
 exec 'snoremap <silent> ' . ultisnips_ycm_move_forwards . ' <Esc>:call UltiSnips#JumpForwards()<cr>'
