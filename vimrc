@@ -420,6 +420,7 @@ let g:jedi#use_tabs_not_buffers   = 0
 let g:UltiSnipsJumpForwardTrigger  = "<nop>"
 let g:UltiSnipsJumpBackwardTrigger = "<nop>"
 let g:UltiSnipsExpandTrigger       = "<nop>"
+let g:UltiSnipsUsePythonVersion = 2
 " }}}
 
 " YouCompleteMe & UltiSnips interparability configuration {{{
