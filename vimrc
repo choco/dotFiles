@@ -21,10 +21,11 @@ endif
 " Load Plugins
 call plug#begin('~/.vim/plugged')
 
-" Startup, shutdown and session management {{{
+" Startup, shutdown, saving and session management {{{
 Plug 'mhinz/vim-startify'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 Plug 'kopischke/vim-stay'
+Plug '907th/vim-auto-save', { 'for': 'tex' }
 " }}}
 
 " Versioning plugins {{{
@@ -96,14 +97,15 @@ Plug 'ryanoasis/vim-devicons'
 " }}}
 
 " Language specific Plugs {{{
+Plug 'lervag/vimtex', { 'for': 'tex'}
 " Python
-Plug 'tmhedberg/SimpylFold', { 'for': 'Python' }
-Plug 'mitsuhiko/vim-python-combined', { 'for': 'Python' }
+Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
+Plug 'mitsuhiko/vim-python-combined', { 'for': 'python' }
 " Ruby
-Plug 'vim-ruby/vim-ruby', { 'for': 'Ruby' }
-Plug 'tpope/vim-rails', { 'for': 'Ruby' }
+Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
+Plug 'tpope/vim-rails', { 'for': 'ruby' }
 " Javascript
-Plug 'pangloss/vim-javascript', { 'for': 'Javascript' }
+Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 " Markdown
 Plug 'tpope/vim-markdown', { 'for': 'Markdown' }
 " Tmux syntax
@@ -133,13 +135,11 @@ Plug 'tpope/vim-git'
 " Scheme - Racket dialect
 Plug 'wlangstroth/vim-racket'
 " Haskell
-Plug 'travitch/hasksyn', { 'for': 'Haskell' }
+Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
 " Swift
-Plug 'toyamarinyon/vim-swift', { 'for': 'Swift' }
-" Nginx
-Plug 'blueyed/nginx.vim', { 'for': 'Nginx' }
+Plug 'toyamarinyon/vim-swift', { 'for': 'swift' }
 " CSV
-Plug 'chrisbra/csv.vim', { 'for': 'CSV' }
+Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 " }}}
 
 " Ctags plugins {{{
@@ -393,14 +393,6 @@ nmap <leader>D :NERDTreeFind<CR>
 " }}}
 
 " YouCompleteMe configuration {{{
-" Defer YouCompleteMe load until insert mode is entered
-augroup load_us_ycm
-  autocmd!
-  autocmd InsertEnter * call plug#load('ultisnips', 'vim-snippets', 'YouCompleteMe')
-        \| call youcompleteme#Enable()
-        \| autocmd! load_us_ycm
-augroup END
-
 let g:ycm_use_ultisnips_completer = 1
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_always_populate_location_list = 1
@@ -411,6 +403,11 @@ let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_global_ycm_extra_conf = '~/.vim/conf/ycm_conf.py'
 let g:ycm_extra_conf_globlist = [
     \ '~/Projects/*' ]
+
+" actually don't use these mappings directly but with Tab and S-Tab in the
+" mapping for UltiSnips
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 " }}}
 
 " jedi-vim configuration {{{
@@ -420,9 +417,36 @@ let g:jedi#use_tabs_not_buffers   = 0
 " }}}
 
 " UltiSnips configuration {{{
-let g:UltiSnipsJumpForwardTrigger  = "<tab>"
-let g:UltiSnipsJumpBackwardTrigger = "<s-tab>"
+let g:UltiSnipsJumpForwardTrigger  = "<nop>"
+let g:UltiSnipsJumpBackwardTrigger = "<nop>"
 let g:UltiSnipsExpandTrigger       = "<nop>"
+" }}}
+
+" YouCompleteMe & UltiSnips interparability configuration {{{
+" Current_Setup:
+" - move between completition menu results using g:ultisnips_ycm_move_forwards
+"   and g:ultisnips_ycm_move_backwards
+" - confirm result by either continuing to type or <CR>
+" - if confirmed with <CR> and autocompletition is a snippet it's expanded
+"   (note: functions defined as some_func(arg1, arg2, ...) are converted to
+"   snippets and therefore expanded aswell)
+" - when inside snippet move with the same keys between placeholders or by
+"   completing a result with <CR>
+" - inside a snippet movement inside the completition menu is prioritized
+"   over the movement between the placeholders
+" Limitations:
+" - if semantic completition is triggered inside a snippets, placeholders are
+"   removed
+
+let g:ultisnips_ycm_move_forwards  = "<tab>"
+let g:ultisnips_ycm_move_backwards = "<s-tab>"
+
+" Escaped keys {{{
+exec 'let escaped_ultisnips_ycm_move_forwards = "\'.g:ultisnips_ycm_move_forwards.'"'
+exec 'let escaped_ultisnips_ycm_move_backwards = "\'.g:ultisnips_ycm_move_backwards.'"'
+" }}}
+
+" func ExpandSnippetOrJumpOrReturn() {{{
 let g:ulti_expand_or_jump_res      = 0
 function! <SID>ExpandSnippetOrReturn()
   let snippet = UltiSnips#ExpandSnippetOrJump()
@@ -432,7 +456,82 @@ function! <SID>ExpandSnippetOrReturn()
     return "\<C-Y>"
   endif
 endfunction
+" }}}
+
+" func JumpOrKey(direction) {{{
+let g:ulti_jump_forwards_res  = 0
+let g:ulti_jump_backwards_res = 0
+function! <SID>JumpOrKey(direction)
+  if a:direction > 0
+    call UltiSnips#JumpForwards()
+    if g:ulti_jump_forwards_res > 0
+      return ''
+    else
+      return g:escaped_ultisnips_ycm_move_forwards
+    endif
+  else
+    call UltiSnips#JumpBackwards()
+    if g:ulti_jump_backwards_res > 0
+      return ''
+    else
+      return g:escaped_ultisnips_ycm_move_backwards
+    endif
+  endif
+endfunction
+" }}}
+
+" Mappings {{{
 imap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "\<CR>\<Plug>DiscretionaryEnd"
+exec 'inoremap <silent> <expr> ' . ultisnips_ycm_move_forwards . ' pumvisible() ? "\' . ycm_key_list_select_completion[0] . '" : "<C-R>=<SID>JumpOrKey(1)<CR>"'
+exec 'inoremap <silent> <expr> ' . ultisnips_ycm_move_backwards . ' pumvisible() ? "\' . ycm_key_list_previous_completion[0] . '" : "<C-R>=<SID>JumpOrKey(0)<CR>"'
+exec 'snoremap <silent> ' . ultisnips_ycm_move_forwards . ' <Esc>:call UltiSnips#JumpForwards()<cr>'
+exec 'snoremap <silent> ' . ultisnips_ycm_move_backwards . ' <Esc>:call UltiSnips#JumpBackwards()<cr>'
+" }}}
+
+" Performance {{{
+" Defer YouCompleteMe and UltiSnips loading until insert mode is entered
+augroup load_us_ycm
+  autocmd!
+  autocmd InsertEnter * call plug#load('ultisnips', 'vim-snippets', 'YouCompleteMe')
+        \| call youcompleteme#Enable()
+        \| autocmd! load_us_ycm
+augroup END
+" }}}
+
+" create a snippet with Ultisnips for completed function names
+" note: only works with function declaration like some_fun(arg1, args2, ...)
+function! GenerateSnippet() "{{{
+  if !exists('v:completed_item') || empty(v:completed_item)
+    return
+  endif
+
+  let complete_str = v:completed_item.word
+  if complete_str == ''
+    return
+  endif
+  let abbr = v:completed_item.abbr
+  let startIdx = match(abbr,"(")
+  let endIdx = match(abbr,")")
+  if endIdx - startIdx > 1
+    let argsStr = strpart(abbr, startIdx+1, endIdx - startIdx -1)
+    let argsList = split(argsStr, ",")
+    let snippet = "("
+    let c = 1
+    for i in argsList
+      if c > 1
+        let snippet = snippet. ", "
+      endif
+      " strip space
+      let arg = substitute(i, '^\s*\(.\{-}\)\s*$', '\1', '')
+      let snippet = snippet . '${'.c.":".arg.'}'
+      let c += 1
+    endfor
+    let snippet = snippet . ")$0"
+    call UltiSnips#Anon(snippet)
+  endif
+endfunction
+autocmd CompleteDone * call GenerateSnippet()
+" }}}
 " }}}
 
 " Airline configuration {{{
@@ -615,6 +714,14 @@ let &t_EI                         = "\<Esc>[2 q"
 
 " vim-gutentags configuration {{{
 let g:gutentags_cache_dir = $HOME . '/.vim/tags/'
+let g:gutentags_resolve_symlinks = 1
 " }}}
+
+" vim-auto-save configuration {{{
+let g:auto_save = 1
+let g:auto_save_in_insert_mode = 1
+let g:auto_save_events = ["InsertLeave", "TextChanged"]
+let g:auto_save_silent = 1
+"}}}
 " }}}
 " ============================================================================
