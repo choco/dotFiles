@@ -382,9 +382,13 @@ autocmd FileType racket RainbowParentheses
 
 " ============================================================================
 " Plugins configurations {{{
-"  delimitMate configuration {{{
+" delimitMate configuration {{{
 let delimitMate_expand_cr = 2
 let delimitMate_expand_space = 1
+" }}}
+
+" vim-endwise configuration {{{
+let g:endwise_no_mappings = 1
 " }}}
 
 " NERDTree configuration {{{
@@ -425,9 +429,11 @@ let g:UltiSnipsJumpForwardTrigger  = "<nop>"
 let g:UltiSnipsJumpBackwardTrigger = "<nop>"
 let g:UltiSnipsExpandTrigger       = "<nop>"
 let g:UltiSnipsUsePythonVersion = 2
+let g:UltiSnipsEnableSnipMate = 0
 " }}}
 
 " YouCompleteMe & UltiSnips interparability configuration {{{
+" NOTE: REALLY HACKY, PROBABLY WRONG, BUT SEEMS TO WORK WELL
 " Current_Setup:
 " - move between completition menu results using g:ultisnips_ycm_move_forwards
 "   and g:ultisnips_ycm_move_backwards
@@ -446,19 +452,108 @@ let g:UltiSnipsUsePythonVersion = 2
 let g:ultisnips_ycm_move_forwards  = "<tab>"
 let g:ultisnips_ycm_move_backwards = "<s-tab>"
 
+let g:available_on_the_fly_snippet = 0
+let g:temporary_on_the_fly_snippet = ""
+let g:completedone_available_snippet = 0
+let g:completedone_snippet = ""
+
 " Escaped keys {{{
 exec 'let escaped_ultisnips_ycm_move_forwards = "\'.g:ultisnips_ycm_move_forwards.'"'
 exec 'let escaped_ultisnips_ycm_move_backwards = "\'.g:ultisnips_ycm_move_backwards.'"'
 " }}}
 
+" Hack: don't pop completion popup after confirming result {{{
+augroup modify_ctrl_y_trigger_ycm
+  autocmd!
+  au BufEnter * exec "inoremap <expr><silent> <M-NP> g:DisablePopup()"
+  au BufEnter * exec "inoremap <expr><silent> <M-PN> g:EnablePopup()"
+augroup END
+
+function! g:DisablePopup()
+  let g:ycm_auto_trigger = 0
+  return ""
+endfun
+
+function! g:EnablePopup()
+  let g:ycm_auto_trigger = 1
+  return ""
+endfun
+" }}}
+
+" create a snippet with Ultisnips for completed function names
+" note: only works with function declaration like some_fun(arg1, args2, ...)
+function! GenerateSnippet(with_brackets) "{{{
+  if !exists('v:completed_item') || empty(v:completed_item)
+    return ""
+  endif
+
+  let complete_str = v:completed_item.word
+  if complete_str == ''
+    return ""
+  endif
+  let abbr = v:completed_item.abbr
+  let startIdx = match(abbr,"(")
+  let endIdx = match(abbr,")")
+  if endIdx - startIdx > 1
+    let argsStr = strpart(abbr, startIdx+1, endIdx - startIdx -1)
+    let argsList = split(argsStr, ",")
+    let snippet = ""
+    if a:with_brackets > 0
+      let snippet = "("
+    endif
+    let c = 1
+    for i in argsList
+      if c > 1
+        let snippet = snippet. ", "
+      endif
+      " strip space
+      let arg = substitute(i, '^\s*\(.\{-}\)\s*$', '\1', '')
+      let snippet = snippet . '${'.c.":".arg.'}'
+      let c += 1
+    endfor
+    if a:with_brackets > 0
+      let snippet = snippet . ")$0"
+    else
+      let snippet = snippet . "$0" " TODO: find a way to jump over existing character
+    endif
+    return snippet
+  endif
+endfunction
+" }}}
+
 " func ExpandSnippetOrJumpOrReturn() {{{
 let g:ulti_expand_or_jump_res      = 0
 function! <SID>ExpandSnippetOrReturn()
-  let snippet = UltiSnips#ExpandSnippetOrJump()
-  if g:ulti_expand_or_jump_res > 0
-    return snippet
+  if pumvisible()
+    let snippet = UltiSnips#ExpandSnippetOrJump()
+    if g:ulti_expand_or_jump_res > 0
+      return snippet
+    else
+      let g:available_on_the_fly_snippet = 0
+      let g:temporary_on_the_fly_snippet = GenerateSnippet(1)
+      if len(g:temporary_on_the_fly_snippet)>1
+        let g:available_on_the_fly_snippet = 1
+      endif
+      call feedkeys("\<M-NP>")
+      call feedkeys("\<C-Y>")
+      call feedkeys("\<M-PN>")
+      if g:available_on_the_fly_snippet > 0
+        call UltiSnips#Anon(g:temporary_on_the_fly_snippet)
+        let g:available_on_the_fly_snippet = 0
+        let g:completedone_available_snippet = 0
+      endif
+      return ""
+    endif
   else
-    return "\<C-Y>"
+    if g:completedone_available_snippet > 0
+      call UltiSnips#Anon(g:completedone_snippet)
+      let g:completedone_available_snippet = 0
+      let g:available_on_the_fly_snippet = 0
+      return ""
+    else
+      call feedkeys("\<Plug>delimitMateCR"."\<Plug>DiscretionaryEnd")
+      return ""
+    endif
   endif
 endfunction
 " }}}
@@ -485,13 +580,48 @@ function! <SID>JumpOrKey(direction)
 endfunction
 " }}}
 
+" helper functions to invalidate compledone snippet {{{
+let g:invalidate_snippet_counter = 0
+function! InvalidateSnippet()
+  let g:completedone_available_snippet = 0
+  let g:invalidate_snippet_counter = 0
+  try
+    exec "augroup! invalidate_completedone_snippet"
+  catch /^Vim\%((\a\+)\)\=:E367/
+  endtry
+endfunction
+function! CheckInvalidateSnippet()
+  if g:invalidate_snippet_counter > 0
+    call InvalidateSnippet()
+  else
+    let g:invalidate_snippet_counter = 1
+  endif
+endfunction
+" }}}
+
 " Mappings {{{
-imap <silent> <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "<C-R>=delimitMate#ExpandReturn()<CR>\<Plug>DiscretionaryEnd"
+imap <silent><CR> <C-R>=<SID>ExpandSnippetOrReturn()<CR>
 exec 'inoremap <silent> <expr> ' . ultisnips_ycm_move_forwards . ' pumvisible() ? "\' . ycm_key_list_select_completion[0] . '" : "<C-R>=<SID>JumpOrKey(1)<CR>"'
 exec 'inoremap <silent> <expr> ' . ultisnips_ycm_move_backwards . ' pumvisible() ? "\' . ycm_key_list_previous_completion[0] . '" : "<C-R>=<SID>JumpOrKey(0)<CR>"'
 exec 'snoremap <silent> ' . ultisnips_ycm_move_forwards . ' <Esc>:call UltiSnips#JumpForwards()<cr>'
 exec 'snoremap <silent> ' . ultisnips_ycm_move_backwards . ' <Esc>:call UltiSnips#JumpBackwards()<cr>'
 " }}}
+
+function! GenerateCompleteDoneSnippet() " {{{
+  let g:completedone_available_snippet = 0
+  let g:completedone_snippet = GenerateSnippet(0)
+  if len(g:completedone_snippet) > 1
+    let g:completedone_available_snippet = 1
+    augroup invalidate_completedone_snippet
+      autocmd!
+      autocmd TextChangedI * call CheckInvalidateSnippet()
+      autocmd CursorMovedI * call CheckInvalidateSnippet()
+      autocmd InsertLeave * call InvalidateSnippet()
+    augroup END
+  endif
+endfunction
+autocmd CompleteDone * call GenerateCompleteDoneSnippet()
+" }}}
 
 " Performance {{{
 " Defer YouCompleteMe and UltiSnips loading until insert mode is entered
@@ -501,41 +631,6 @@ augroup load_us_ycm
         \| call youcompleteme#Enable()
         \| autocmd! load_us_ycm
 augroup END
-" }}}
-
-" create a snippet with Ultisnips for completed function names
-" note: only works with function declaration like some_fun(arg1, args2, ...)
-function! GenerateSnippet() "{{{
-  if !exists('v:completed_item') || empty(v:completed_item)
-    return
-  endif
-
-  let complete_str = v:completed_item.word
-  if complete_str == ''
-    return
-  endif
-  let abbr = v:completed_item.abbr
-  let startIdx = match(abbr,"(")
-  let endIdx = match(abbr,")")
-  if endIdx - startIdx > 1
-    let argsStr = strpart(abbr, startIdx+1, endIdx - startIdx -1)
-    let argsList = split(argsStr, ",")
-    let snippet = "("
-    let c = 1
-    for i in argsList
-      if c > 1
-        let snippet = snippet. ", "
-      endif
-      " strip space
-      let arg = substitute(i, '^\s*\(.\{-}\)\s*$', '\1', '')
-      let snippet = snippet . '${'.c.":".arg.'}'
-      let c += 1
-    endfor
-    let snippet = snippet . ")$0"
-    call UltiSnips#Anon(snippet)
-  endif
-endfunction
-autocmd CompleteDone * call GenerateSnippet()
 " }}}
 " }}}
 
