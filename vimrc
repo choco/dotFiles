@@ -44,13 +44,13 @@ Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
 " Commenting, aligning, folding and Indenting Plugs {{{
 Plug 'cHoco/BetterFoldText'
 Plug 'Konfekt/FastFold'
-Plug 'tomtom/tcomment_vim' " Easly comment stuff in/out
+Plug 'tomtom/tcomment_vim' " Easily comment stuff in/out
 Plug 'Yggdroot/indentLine'
-" Allign text easly
+" Align text easily
 Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 " }}}
 
-" Colorschemes {{{
+" Color schemes {{{
 Plug 'chriskempson/base16-vim'
 " }}}
 
@@ -323,7 +323,7 @@ map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimr
 noremap j gj
 noremap k gk
 
-" Yeah I know... I'm week
+" Yeah I know... I'm weak
 noremap <Down> <NOP>
 noremap <Up> <NOP>
 noremap <Left> <NOP>
@@ -347,14 +347,14 @@ else
   set background=dark
 endif
 colorscheme base16-eighties
-" Toogle between light and dark version
+" Toggle between light and dark version
 noremap <F6> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 " }}}
 
 " Toggle paste mode for code
 set pastetoggle=<F2>
 
-" Automaticaly set tmux window name
+" Automatically set tmux window name
 if exists('$TMUX') && !exists('$NORENAME')
   au BufEnter * if empty(&buftype) | call system('tmux rename-window '.expand('%:t:S')) | endif
   au VimLeave * call system('tmux set-window automatic-rename on')
@@ -368,11 +368,11 @@ endif
 
 " Support for AMPL
 autocmd BufNewFile,BufRead *.mod,*.dat,*.ampl set filetype=ampl
-" Enable spellchecking for Markdown
+" Enable spell checking for Markdown
 autocmd FileType markdown setlocal spell
 " Automatically wrap at 80 characters for Markdown
 autocmd BufRead,BufNewFile *.md setlocal textwidth=80
-" Enable spellchecking for Git commits
+" Enable spell checking for Git commits
 autocmd FileType gitcommit setlocal spell
 " Enable Rainbow Parentheses for racket
 autocmd FileType racket RainbowParentheses
@@ -432,21 +432,21 @@ let g:UltiSnipsUsePythonVersion = 2
 let g:UltiSnipsEnableSnipMate = 0
 " }}}
 
-" YouCompleteMe & UltiSnips interparability configuration {{{
+" YouCompleteMe & UltiSnips interoperability configuration {{{
 " NOTE: REALLY HACKY, PROBABLY WRONG, BUT SEEMS TO WORK WELL
 " Current_Setup:
-" - move between completition menu results using g:ultisnips_ycm_move_forwards
+" - move between completion menu results using g:ultisnips_ycm_move_forwards
 "   and g:ultisnips_ycm_move_backwards
 " - confirm result by either continuing to type or <CR>
-" - if confirmed with <CR> and autocompletition is a snippet it's expanded
+" - if confirmed with <CR> and auto completion is a snippet it's expanded
 "   (note: functions defined as some_func(arg1, arg2, ...) are converted to
-"   snippets and therefore expanded aswell)
+"   snippets and therefore expanded as well)
 " - when inside snippet move with the same keys between placeholders or by
 "   completing a result with <CR>
-" - inside a snippet movement inside the completition menu is prioritized
+" - inside a snippet movement inside the completion menu is prioritized
 "   over the movement between the placeholders
 " Limitations:
-" - if semantic completition is triggered inside a snippets, placeholders are
+" - if semantic completion is triggered inside a snippets, placeholders are
 "   removed
 
 let g:ultisnips_ycm_move_forwards  = "<tab>"
@@ -462,7 +462,7 @@ exec 'let escaped_ultisnips_ycm_move_forwards = "\'.g:ultisnips_ycm_move_forward
 exec 'let escaped_ultisnips_ycm_move_backwards = "\'.g:ultisnips_ycm_move_backwards.'"'
 " }}}
 
-" Hack: don't pop completion popup after confirming result {{{
+" Hack: don't pop completion pop-up after confirming result {{{
 augroup modify_ctrl_y_trigger_ycm
   autocmd!
   au BufEnter * exec "inoremap <expr><silent> <M-NP> g:DisablePopup()"
