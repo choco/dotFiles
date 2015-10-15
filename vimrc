@@ -591,10 +591,10 @@ function! InvalidateSnippet()
   endtry
 endfunction
 function! CheckInvalidateSnippet()
-  if g:invalidate_snippet_counter > 0
+  if g:invalidate_snippet_counter > 1
     call InvalidateSnippet()
   else
-    let g:invalidate_snippet_counter = 1
+    let g:invalidate_snippet_counter = g:invalidate_snippet_counter + 1
   endif
 endfunction
 " }}}
