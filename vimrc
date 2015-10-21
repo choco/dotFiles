@@ -178,9 +178,6 @@ let g:python3_host_skip_check = 1
 " Enable syntax highlighting
 syntax enable
 
-" Fuck you ESC and your position
-noremap! jj <ESC>
-
 " Some standard settings to make vim better
 set autoindent
 set autoread                            " reload files when changed on disk
@@ -406,6 +403,7 @@ let g:ycm_use_ultisnips_completer = 1
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_always_populate_location_list = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
+let g:ycm_autoclose_preview_window_after_completion = 1
 let g:ycm_confirm_extra_conf = 0
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_seed_identifiers_with_syntax = 1
@@ -487,15 +485,15 @@ endfun
 " create a snippet with Ultisnips for completed function names
 " NOTE: only works with function declaration like some_fun(arg1, args2, ...)
 "       and objc functions
-function! GenerateClikeFuncSnippet(with_brackets) " {{{
-  let abbr = v:completed_item.abbr
-  let startIdx = match(abbr,"(")
-  let endIdx = match(abbr,")")
+function! GenerateClikeFuncSnippet(base, with_starting_bracket, with_ending_bracket) " {{{
+  let base = a:base
+  let startIdx = match(base, "(")
+  let endIdx = match(base, ")")
   if endIdx - startIdx > 1
-    let argsStr = strpart(abbr, startIdx+1, endIdx - startIdx -1)
+    let argsStr = strpart(base, startIdx+1, endIdx - startIdx - 1)
     let argsList = split(argsStr, ",")
     let snippet = ""
-    if a:with_brackets > 0
+    if a:with_starting_bracket > 0
       let snippet = "("
     endif
     let c = 1
@@ -508,7 +506,7 @@ function! GenerateClikeFuncSnippet(with_brackets) " {{{
       let snippet = snippet . '${'.c.":".arg.'}'
       let c += 1
     endfor
-    if a:with_brackets > 0
+    if a:with_ending_bracket > 0
       let snippet = snippet . ")$0"
     else
       let snippet = snippet . "$0" " TODO: find a way to jump over existing character
@@ -554,7 +552,7 @@ function! GenerateSnippet(from_completeDone) "{{{
   endif
 
   let completed_type = v:completed_item.kind
-  if completed_type != 'f'
+  if completed_type != 'f' && &filetype != 'cs'
     return ""
   endif
 
@@ -565,8 +563,10 @@ function! GenerateSnippet(from_completeDone) "{{{
 
   if &filetype == 'objc'
     return GenerateObjCSnippet()
+  elseif &filetype == 'cs'
+    return GenerateClikeFuncSnippet(v:completed_item.menu, 0, 1)
   else
-    return a:from_completeDone ? GenerateClikeFuncSnippet(0) : GenerateClikeFuncSnippet(1)
+    return a:from_completeDone ? GenerateClikeFuncSnippet(v:completed_item.abbr, 0, 0) : GenerateClikeFuncSnippet(v:completed_item.abbr, 1, 1)
   endif
 
 endfunction
