@@ -385,6 +385,7 @@ autocmd FileType racket RainbowParentheses
 " delimitMate configuration {{{
 let delimitMate_expand_cr = 2
 let delimitMate_expand_space = 1
+let delimitMate_jump_expansion = 1
 " }}}
 
 " vim-endwise configuration {{{
@@ -447,11 +448,14 @@ let g:UltiSnipsEnableSnipMate = 0
 "   over the movement between the placeholders
 " Limitations:
 " - if semantic completion is triggered inside a snippets, placeholders are
-"   removed
+"   removed, apply this patch https://gist.github.com/cHoco/27549c8bc5119eda7d3b
+"   to fix this (it may cause other issues to arise
+"   https://github.com/SirVer/ultisnips/issues/586#issuecomment-148914335)
 
 let g:ultisnips_ycm_move_forwards  = "<tab>"
 let g:ultisnips_ycm_move_backwards = "<s-tab>"
 
+" globals holding snippets, don't touch
 let g:available_on_the_fly_snippet = 0
 let g:temporary_on_the_fly_snippet = ""
 let g:completedone_available_snippet = 0
@@ -481,16 +485,9 @@ endfun
 " }}}
 
 " create a snippet with Ultisnips for completed function names
-" note: only works with function declaration like some_fun(arg1, args2, ...)
-function! GenerateSnippet(with_brackets) "{{{
-  if !exists('v:completed_item') || empty(v:completed_item)
-    return ""
-  endif
-
-  let complete_str = v:completed_item.word
-  if complete_str == ''
-    return ""
-  endif
+" NOTE: only works with function declaration like some_fun(arg1, args2, ...)
+"       and objc functions
+function! GenerateClikeFuncSnippet(with_brackets) " {{{
   let abbr = v:completed_item.abbr
   let startIdx = match(abbr,"(")
   let endIdx = match(abbr,")")
@@ -517,7 +514,61 @@ function! GenerateSnippet(with_brackets) "{{{
       let snippet = snippet . "$0" " TODO: find a way to jump over existing character
     endif
     return snippet
+  else
+    return ""
   endif
+endfunction
+" }}}
+
+function! GenerateObjCSnippet() " {{{
+  let abbr = v:completed_item.abbr
+  let hasArguments = match(abbr, ":")
+  if hasArguments > 0
+    let argsList = split(abbr, ') \|)$')
+    let snippet = ""
+    let c = 1
+    for i in argsList
+      if c > 1
+        let snippet = snippet . " "
+      endif
+      let arg = split(i, ':')
+      let firstPart = arg[0] . ":"
+      if c == 1
+        let firstPart = ""
+      endif
+      let secondPart = arg[1] . ")"
+      let snippet = snippet . firstPart . '${'.c.":".secondPart.'}'
+      let c += 1
+    endfor
+    let snippet = snippet . "$0" " TODO: find a way to jump over existing character
+    return snippet
+  else
+    return ""
+  endif
+endfunction
+" }}}
+
+function! GenerateSnippet(from_completeDone) "{{{
+  if !exists('v:completed_item') || empty(v:completed_item)
+    return ""
+  endif
+
+  let completed_type = v:completed_item.kind
+  if completed_type != 'f'
+    return ""
+  endif
+
+  let complete_str = v:completed_item.word
+  if complete_str == ''
+    return ""
+  endif
+
+  if &filetype == 'objc'
+    return GenerateObjCSnippet()
+  else
+    return a:from_completeDone ? GenerateClikeFuncSnippet(0) : GenerateClikeFuncSnippet(1)
+  endif
+
 endfunction
 " }}}
 
@@ -530,7 +581,7 @@ function! <SID>ExpandSnippetOrReturn()
       return snippet
     else
       let g:available_on_the_fly_snippet = 0
-      let g:temporary_on_the_fly_snippet = GenerateSnippet(1)
+      let g:temporary_on_the_fly_snippet = GenerateSnippet(0)
       if len(g:temporary_on_the_fly_snippet)>1
         let g:available_on_the_fly_snippet = 1
       endif
@@ -609,7 +660,7 @@ exec 'snoremap <silent> ' . ultisnips_ycm_move_backwards . ' <Esc>:call UltiSnip
 
 function! GenerateCompleteDoneSnippet() " {{{
   let g:completedone_available_snippet = 0
-  let g:completedone_snippet = GenerateSnippet(0)
+  let g:completedone_snippet = GenerateSnippet(1)
   if len(g:completedone_snippet) > 1
     let g:completedone_available_snippet = 1
     augroup invalidate_completedone_snippet
@@ -761,7 +812,6 @@ nmap <silent> <leader>b <Plug>GoldenViewSwitchToggle
 let g:startify_files_number           = 5
 let g:startify_skiplist               = [
       \ 'COMMIT_EDITMSG',
-      \ $HOME . '/Projects/*',
 \ ]
 let g:startify_session_remove_lines   = ['set winheight=1 winwidth=1']
 let g:startify_session_autoload       = 1
