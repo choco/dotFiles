@@ -67,11 +67,11 @@ Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'kovisoft/paredit', { 'for': 'racket' }
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
-Plug 'junegunn/goyo.vim', { 'on': 'Goyo' }
+Plug 'junegunn/goyo.vim', { 'on': 'Goyo' } " Distraction-free writing
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
-Plug 'kennykaye/vim-relativity'
+Plug 'kennykaye/vim-relativity'            " Toggle relativenumber base on events
 Plug 'itchyny/vim-highlighturl'
-Plug 'tpope/vim-sleuth'
+Plug 'tpope/vim-sleuth'                    " Guess indentation values from buffer
 Plug 'Raimondi/delimitMate'
 Plug 'tpope/vim-endwise'
 " }}}
@@ -97,6 +97,7 @@ Plug 'ryanoasis/vim-devicons'
 " }}}
 
 " Language specific Plugs {{{
+" LaTeX
 Plug 'lervag/vimtex', { 'for': 'tex'}
 " Python
 Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
@@ -149,9 +150,6 @@ Plug 'majutsushi/tagbar'
 
 " Autocompleter and snippets {{{
 function! BuildYCM(info)
-  " info is a dictionary with 3 fields
-  " - name:   name of the plugin
-  " - status: 'installed', 'updated', or 'unchanged'
   " - force:  set on PlugInstall! or PlugUpdate!
   if a:info.status == 'installed' || a:info.force
     !./install.py --clang-completer --omnisharp-completer --gocode-completer
@@ -229,7 +227,7 @@ endif
 set ignorecase                          " case-insensitive search
 set incsearch                           " search as you type
 set smartcase                           " case-sensitive search if any caps
-set showmatch
+set showmatch                           " show matching brackets pair
 set gdefault                            " assume the /g flag on :s substitutions
                                         " to replace all matches in a line
 
@@ -242,7 +240,7 @@ set ttimeoutlen=10
 set fileformats+=mac                    " because Mac is the way
 set lazyredraw                          " only render when needed
 if !has('nvim')
-  set ttyfast                         " faster rendering
+  set ttyfast                           " faster rendering
   set ttymouse=sgr
 endif
 set secure                              " stay safe
@@ -260,6 +258,7 @@ if &diff
 else
   set foldmethod=syntax
 endif
+" Open folds by default (without changing fold level)
 autocmd BufWinEnter * silent! :%foldopen!
 
 " Session and view options to save
@@ -348,6 +347,15 @@ colorscheme base16-eighties
 noremap <F6> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 " }}}
 
+" Cursor configuration {{{
+" Use a blinking upright bar cursor in Insert mode, a solid block in normal
+" and a blinking underline in replace mode
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+let &t_SI                         = "\<Esc>[5 q"
+let &t_SR                         = "\<Esc>[3 q"
+let &t_EI                         = "\<Esc>[2 q"
+" }}}
+
 " Toggle paste mode for code
 set pastetoggle=<F2>
 
@@ -421,6 +429,7 @@ let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#completions_enabled    = 0
 let g:jedi#use_tabs_not_buffers   = 0
+let g:jedi#show_call_signatures_delay = 0
 " }}}
 
 " UltiSnips configuration {{{
@@ -552,12 +561,12 @@ function! GenerateSnippet(from_completeDone) "{{{
   endif
 
   let completed_type = v:completed_item.kind
-  if completed_type != 'f' && &filetype != 'cs'
+  if completed_type != 'f' && &filetype != 'cs' && &filetype != 'python'
     return ""
   endif
 
   let complete_str = v:completed_item.word
-  if complete_str == ''
+  if complete_str == '' && &filetype != 'python'
     return ""
   endif
 
@@ -565,6 +574,10 @@ function! GenerateSnippet(from_completeDone) "{{{
     return GenerateObjCSnippet()
   elseif &filetype == 'cs'
     return GenerateClikeFuncSnippet(v:completed_item.menu, 0, 1)
+  elseif &filetype == 'python'
+    return GenerateClikeFuncSnippet(v:completed_item.info, 1, 1)
+  elseif &filetype == 'go'
+    return GenerateClikeFuncSnippet(v:completed_item.menu, 1, 1)
   else
     return a:from_completeDone ? GenerateClikeFuncSnippet(v:completed_item.abbr, 0, 0) : GenerateClikeFuncSnippet(v:completed_item.abbr, 1, 1)
   endif
@@ -618,6 +631,12 @@ function! <SID>JumpOrKey(direction)
     if g:ulti_jump_forwards_res > 0
       return ''
     else
+      let c_col = col('.')
+      let n_char = getline('.')[c_col-1]
+      if n_char == ")" || n_char == "]"
+        call cursor(0, c_col+1)
+        return ""
+      endif
       return g:escaped_ultisnips_ycm_move_forwards
     endif
   else
@@ -625,6 +644,12 @@ function! <SID>JumpOrKey(direction)
     if g:ulti_jump_backwards_res > 0
       return ''
     else
+      let c_col = col('.')
+      let n_char = getline('.')[c_col-2]
+      if n_char == ")" || n_char == "]"
+        call cursor(0, c_col-1)
+        return ""
+      endif
       return g:escaped_ultisnips_ycm_move_backwards
     endif
   endif
@@ -652,6 +677,7 @@ endfunction
 
 " Mappings {{{
 imap <silent><CR> <C-R>=<SID>ExpandSnippetOrReturn()<CR>
+
 exec 'inoremap <silent> <expr> ' . ultisnips_ycm_move_forwards . ' pumvisible() ? "\' . ycm_key_list_select_completion[0] . '" : "<C-R>=<SID>JumpOrKey(1)<CR>"'
 exec 'inoremap <silent> <expr> ' . ultisnips_ycm_move_backwards . ' pumvisible() ? "\' . ycm_key_list_previous_completion[0] . '" : "<C-R>=<SID>JumpOrKey(0)<CR>"'
 exec 'snoremap <silent> ' . ultisnips_ycm_move_forwards . ' <Esc>:call UltiSnips#JumpForwards()<cr>'
@@ -851,15 +877,6 @@ let g:taboo_renamed_tab_format = "%N%U %l%m"
 " Sayonara configuration {{{
 nnoremap <silent> <leader>q :silent :Sayonara<cr>
 nnoremap <silent> <leader>Q :silent :Sayonara!<cr>
-" }}}
-
-" Cursor configuration {{{
-" Use a blinking upright bar cursor in Insert mode, a solid block in normal
-" and a blinking underline in replace mode
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
-let &t_SI                         = "\<Esc>[5 q"
-let &t_SR                         = "\<Esc>[3 q"
-let &t_EI                         = "\<Esc>[2 q"
 " }}}
 
 " vim-gutentags configuration {{{
