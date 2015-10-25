@@ -498,7 +498,8 @@ function! GenerateClikeFuncSnippet(base, with_starting_bracket, with_ending_brac
   let base = a:base
   let startIdx = match(base, "(")
   let endIdx = match(base, ")")
-  if endIdx - startIdx > 1
+  let ind_difference = endIdx - startIdx
+  if ind_difference > 0
     let argsStr = strpart(base, startIdx+1, endIdx - startIdx - 1)
     let argsList = split(argsStr, ",")
     let snippet = ""
@@ -515,7 +516,7 @@ function! GenerateClikeFuncSnippet(base, with_starting_bracket, with_ending_brac
       let snippet = snippet . '${'.c.":".arg.'}'
       let c += 1
     endfor
-    if a:with_ending_bracket > 0
+    if a:with_ending_bracket > 0 && !(ind_difference == 1 && a:with_starting_bracket == 0)
       let snippet = snippet . ")$0"
     else
       let snippet = snippet . "$0" " TODO: find a way to jump over existing character
@@ -625,6 +626,7 @@ endfunction
 " func JumpOrKey(direction) {{{
 let g:ulti_jump_forwards_res  = 0
 let g:ulti_jump_backwards_res = 0
+let g:jump_chars = [')', ']', '"', "'"]
 function! <SID>JumpOrKey(direction)
   if a:direction > 0
     call UltiSnips#JumpForwards()
@@ -633,10 +635,12 @@ function! <SID>JumpOrKey(direction)
     else
       let c_col = col('.')
       let n_char = getline('.')[c_col-1]
-      if n_char == ")" || n_char == "]"
-        call cursor(0, c_col+1)
-        return ""
-      endif
+      for jump_c in g:jump_chars
+        if n_char == jump_c
+          call cursor(0, c_col+1)
+          return ""
+        endif
+      endfor
       return g:escaped_ultisnips_ycm_move_forwards
     endif
   else
@@ -646,10 +650,12 @@ function! <SID>JumpOrKey(direction)
     else
       let c_col = col('.')
       let n_char = getline('.')[c_col-2]
-      if n_char == ")" || n_char == "]"
-        call cursor(0, c_col-1)
-        return ""
-      endif
+      for jump_c in g:jump_chars
+        if n_char == jump_c
+          call cursor(0, c_col-1)
+          return ""
+        endif
+      endfor
       return g:escaped_ultisnips_ycm_move_backwards
     endif
   endif
