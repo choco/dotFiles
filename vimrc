@@ -673,7 +673,7 @@ function! InvalidateSnippet()
   endtry
 endfunction
 function! CheckInvalidateSnippet()
-  if g:invalidate_snippet_counter > 1
+  if g:invalidate_snippet_counter > 0
     call InvalidateSnippet()
   else
     let g:invalidate_snippet_counter = g:invalidate_snippet_counter + 1
@@ -697,7 +697,6 @@ function! GenerateCompleteDoneSnippet() " {{{
     let g:completedone_available_snippet = 1
     augroup invalidate_completedone_snippet
       autocmd!
-      autocmd TextChangedI * call CheckInvalidateSnippet()
       autocmd CursorMovedI * call CheckInvalidateSnippet()
       autocmd InsertLeave * call InvalidateSnippet()
     augroup END
