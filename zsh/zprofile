@@ -45,6 +45,14 @@ typeset -gU cdpath fpath mailpath path
 #   $cdpath
 # )
 
+# Projects Directory
+export PROJECTS=$HOME/Projects
+
+# Dotfiles Directory
+export DOTFILES=$PROJECTS/dotFiles
+
+# Go Configuration
+export GOPATH=$PROJECTS/go
 
 # Set the list of directories that Zsh searches for programs.
 path=(
@@ -82,17 +90,9 @@ fi
 
 TMPPREFIX="${TMPDIR%/}/zsh"
 
-# Projects Directory
-export PROJECTS=$HOME/Projects
-
-# Dotfiles Directory
-export DOTFILES=$PROJECTS/dotFiles
-
 # Vagrant Configuration
 export VAGRANT_DEFAULT_PROVIDER='vmware_fusion'
 
-# Go Configuration
-export GOPATH=$PROJECTS/go
 # export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_25.jdk/Contents/Home/
 
 # fzf Configuration

@@ -20,7 +20,7 @@ endif
 
 " Load Plugins
 call plug#begin('~/.vim/plugged')
-
+"
 " Startup, shutdown, saving and session management {{{
 Plug 'mhinz/vim-startify'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
@@ -86,7 +86,7 @@ Plug 'tmhedberg/matchit'
 " File navigation {{{
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
-Plug 'junegunn/fzf', { 'do': 'yes \| ./install' }
+Plug 'junegunn/fzf', { 'do': './install -all' }
 Plug 'junegunn/fzf.vim'
 " }}}
 
@@ -99,9 +99,6 @@ Plug 'ryanoasis/vim-devicons'
 " Language specific Plugs {{{
 " LaTeX
 Plug 'lervag/vimtex', { 'for': 'tex'}
-" Python
-Plug 'tmhedberg/SimpylFold', { 'for': 'python' }
-Plug 'mitsuhiko/vim-python-combined', { 'for': 'python' }
 " Ruby
 Plug 'vim-ruby/vim-ruby', { 'for': 'ruby' }
 Plug 'tpope/vim-rails', { 'for': 'ruby' }
@@ -387,6 +384,12 @@ autocmd FileType racket RainbowParentheses
 
 " ============================================================================
 " Plugins configurations {{{
+" vimtex configuration {{{
+let g:vimtex_view_general_viewer
+  \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+let g:vimtex_view_general_options = '@line @pdf @tex'
+" }}}
+
 " delimitMate configuration {{{
 let delimitMate_expand_cr = 2
 let delimitMate_expand_space = 1
@@ -421,8 +424,8 @@ let g:ycm_extra_conf_globlist = [
 
 " actually don't use these mappings directly but with Tab and S-Tab in the
 " mapping for UltiSnips
-let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
-let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+let g:ycm_key_list_select_completion = ['<C-n>']
+let g:ycm_key_list_previous_completion = ['<C-p>']
 " }}}
 
 " jedi-vim configuration {{{
@@ -892,7 +895,7 @@ let g:gutentags_resolve_symlinks = 1
 " vim-auto-save configuration {{{
 let g:auto_save = 1
 let g:auto_save_in_insert_mode = 1
-let g:auto_save_events = ["InsertLeave", "TextChanged"]
+let g:auto_save_events = ["InsertLeave"]
 let g:auto_save_silent = 1
 "}}}
 " }}}
