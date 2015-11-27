@@ -248,8 +248,8 @@ set splitbelow                          " Open new split panes to right and
 set splitright                          " bottom which feels more natural
 
 " Folding
-nnoremap <Space> za
-vnoremap <Space> zf
+nnoremap <CR> za
+vnoremap <CR> zf
 if &diff
   set foldmethod=diff
 else
@@ -290,7 +290,7 @@ map <ScrollWheelUp>   <C-y>
 map <ScrollWheelDown> <C-e>
 
 " Let them know you are the king
-let mapleader = ','
+let mapleader = " "
 
 " Make Y behave like other capitals
 nnoremap Y y$
@@ -315,6 +315,10 @@ map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimr
 " Move between visual lines, not literal ones!
 noremap j gj
 noremap k gk
+
+"
+noremap , ;
+noremap ; ,
 
 " Yeah I know... I'm weak
 noremap <Down> <NOP>
@@ -436,9 +440,9 @@ let g:jedi#show_call_signatures_delay = 0
 " }}}
 
 " UltiSnips configuration {{{
-let g:UltiSnipsJumpForwardTrigger  = "<nop>"
-let g:UltiSnipsJumpBackwardTrigger = "<nop>"
-let g:UltiSnipsExpandTrigger       = "<nop>"
+let g:UltiSnipsJumpForwardTrigger  = '\<Nop>'
+let g:UltiSnipsJumpBackwardTrigger = '\<Nop>'
+let g:UltiSnipsExpandTrigger       = '\<Nop>'
 let g:UltiSnipsUsePythonVersion = 2
 let g:UltiSnipsEnableSnipMate = 0
 " }}}
