@@ -20,7 +20,7 @@ endif
 
 " Load Plugins
 call plug#begin('~/.vim/plugged')
-"
+
 " Startup, shutdown, saving and session management {{{
 Plug 'mhinz/vim-startify'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
@@ -42,7 +42,9 @@ Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
 " }}}
 
 " Commenting, aligning, folding and Indenting Plugs {{{
-Plug 'cHoco/BetterFoldText'
+let g:plug_url_format = 'git@github.com:%s.git'
+Plug 'cHoco/AwesomeFoldText'
+unlet g:plug_url_format
 Plug 'Konfekt/FastFold'
 Plug 'tomtom/tcomment_vim' " Easily comment stuff in/out
 Plug 'Yggdroot/indentLine'
@@ -55,7 +57,9 @@ Plug 'chriskempson/base16-vim'
 " }}}
 
 " Splits navigation look and feel {{{
+let g:plug_url_format = 'git@github.com:%s.git'
 Plug 'cHoco/GoldenView.Vim'
+unlet g:plug_url_format
 " }}}
 
 " Compiling and building helpers {{{
@@ -86,13 +90,8 @@ Plug 'tmhedberg/matchit'
 " File navigation {{{
 Plug 'scrooloose/nerdtree', { 'on': 'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin', { 'on': 'NERDTreeToggle' }
-Plug 'junegunn/fzf', { 'do': './install -all' }
+Plug 'junegunn/fzf', { 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-" }}}
-
-" Statusbar/tabbar look and feel plugins {{{
-Plug 'bling/vim-airline'
-Plug 'gcmt/taboo.vim'
 " }}}
 
 " Language specific Plugs {{{
@@ -168,7 +167,16 @@ Plug 'cHoco/vide'
 unlet g:plug_url_format
 " }}}
 
+" Other vim features extensions {{{
+Plug 'ciaranm/securemodelines'
+" }}}
+
+" Statusbar/tabbar look and feel plugins {{{
+Plug 'bling/vim-airline'
+Plug 'gcmt/taboo.vim'
 Plug 'ryanoasis/vim-devicons'
+" }}}
+
 call plug#end()
 
 " }}}
@@ -215,8 +223,6 @@ set wildmenu                            " show navigable menu for tab completion
 set wildmode=list:full
 set wildignorecase
 set showfulltag
-set modeline
-set modelines=2
 set synmaxcol=1000
 " Update syntax highlighting for more lines increased scrolling performance
 syntax sync minlines=256
@@ -252,6 +258,7 @@ if !has('nvim')
   set ttymouse=sgr
 endif
 set secure                              " stay safe
+set nomodeline                          " use securemodeline instead
 set noerrorbells                        " Disable any annoying beeps on errors.
 set visualbell
 
@@ -385,10 +392,8 @@ endif
 
 " Support for AMPL
 autocmd BufNewFile,BufRead *.mod,*.dat,*.ampl set filetype=ampl
-" Enable spell checking for Markdown
-autocmd FileType markdown setlocal spell
-" Automatically wrap at 80 characters for Markdown
-autocmd BufRead,BufNewFile *.md setlocal textwidth=80
+" Enable spell checking for Markdown and wrap at 80 characters for Markdown
+autocmd FileType markdown setlocal spell | setlocal textwidth=80
 " Enable spell checking for Git commits
 autocmd FileType gitcommit setlocal spell
 " Enable Rainbow Parentheses for racket
@@ -409,10 +414,6 @@ let g:vimtex_view_general_options = '@line @pdf @tex'
 let delimitMate_expand_cr = 2
 let delimitMate_expand_space = 1
 let delimitMate_jump_expansion = 1
-" }}}
-
-" vim-endwise configuration {{{
-let g:endwise_no_mappings = 1
 " }}}
 
 " NERDTree configuration {{{
@@ -511,7 +512,7 @@ nmap <leader>gk <plug>(signify-prev-hunk)
 
 " Fzf configuration {{{
 nnoremap <silent> <leader>t :silent :Files<CR>
-nnoremap <silent> <Leader><Enter> :silent :Buffers<CR>
+nnoremap <silent> <Leader><CR> :silent :Buffers<CR>
 nnoremap <silent> <Leader>f :silent :Lines<CR>
 nnoremap <silent> <Leader>u :silent :Tags<CR>
 " }}}
@@ -628,5 +629,21 @@ let g:auto_save_in_insert_mode = 1
 let g:auto_save_events = ["InsertLeave"]
 let g:auto_save_silent = 1
 "}}}
+
+" securemodelines configuration {{{
+let g:secure_modelines_allowed_items = [
+      \ "expandtab", "et", "noexpandtab", "noet",
+      \ "filetype", "ft",
+      \ "foldlevel", "fdl",
+      \ "foldmarker", "fmr",
+      \ "foldmethod", "fdm",
+      \ "rightleft", "rl", "norightleft", "norl",
+      \ "shiftwidth", "sw",
+      \ "softtabstop", "sts",
+      \ "tabstop", "ts",
+      \ "textwidth", "tw"
+      \ ]
+" }}}
+
 " }}}
 " ============================================================================
