@@ -68,6 +68,7 @@ Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
 
 " Text editing look and feel {{{
 Plug 'junegunn/rainbow_parentheses.vim'
+Plug 'osyo-manga/vim-jplus'
 Plug 'kovisoft/paredit', { 'for': 'racket' }
 Plug 'junegunn/vim-pseudocl'
 Plug 'junegunn/vim-oblique'
@@ -103,7 +104,7 @@ Plug 'tpope/vim-rails', { 'for': 'ruby' }
 " Javascript
 Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
 " Markdown
-Plug 'tpope/vim-markdown', { 'for': 'Markdown' }
+Plug 'plasticboy/vim-markdown'
 " Tmux syntax
 Plug 'tmux-plugins/vim-tmux', { 'for': 'tmux' }
 " JSON
@@ -155,11 +156,19 @@ Plug 'davidhalter/jedi-vim'
 Plug 'SirVer/ultisnips', { 'on': [] }
 Plug 'honza/vim-snippets', { 'on': [] }
 " Defer YouCompleteMe and UltiSnips loading until insert mode is entered {{{
-augroup load_us_ycm
+augroup load_ycm
   autocmd!
-  autocmd InsertEnter * call plug#load('ultisnips', 'vim-snippets', 'YouCompleteMe')
-        \| call youcompleteme#Enable()
-        \| autocmd! load_us_ycm
+  autocmd InsertEnter * call plug#load('YouCompleteMe')
+        \|  call youcompleteme#Enable()
+        \|  autocmd! load_ycm
+augroup END
+augroup load_us
+  autocmd!
+  autocmd InsertEnter * if !exists(':UltiSnipsEdit')
+        \|      call plug#load('ultisnips', 'vim-snippets')
+        \|      echo "CARICATO DA INSERT MODE"
+        \|  endif
+        \|  autocmd! load_us
 augroup END
 " }}}
 let g:plug_url_format = 'git@github.com:%s.git'
@@ -178,6 +187,7 @@ Plug 'ryanoasis/vim-devicons'
 " }}}
 
 call plug#end()
+
 
 " }}}
 " ============================================================================
@@ -448,6 +458,14 @@ let g:jedi#show_call_signatures_delay = 0
 
 " UltiSnips configuration {{{
 let g:UltiSnipsEnableSnipMate = 0
+noremap <Plug>(Ultisnips-savelastvisualsel) :call LoadUltisnipsAndSaveSel()<cr>gvs
+function! LoadUltisnipsAndSaveSel()
+  if !exists(':UltiSnipsEdit')
+    call plug#load('ultisnips', 'vim-snippets')
+  endif
+  call UltiSnips#SaveLastVisualSelection()
+endfunction
+xmap <silent> s <Plug>(Ultisnips-savelastvisualsel)
 " }}}
 
 " Airline configuration {{{
@@ -643,6 +661,13 @@ let g:secure_modelines_allowed_items = [
       \ "tabstop", "ts",
       \ "textwidth", "tw"
       \ ]
+" }}}
+
+" vim-jplus configuration {{{
+nmap J <Plug>(jplus)
+vmap J <Plug>(jplus)
+nmap <Leader>J <Plug>(jplus-getchar)
+vmap <Leader>J <Plug>(jplus-getchar)
 " }}}
 
 " }}}
