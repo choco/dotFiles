@@ -154,21 +154,17 @@ endfunction
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM'), 'on': [] }
 Plug 'davidhalter/jedi-vim'
 Plug 'SirVer/ultisnips', { 'on': [] }
-Plug 'honza/vim-snippets', { 'on': [] }
+Plug 'honza/vim-snippets'
 " Defer YouCompleteMe and UltiSnips loading until insert mode is entered {{{
-augroup load_ycm
-  autocmd!
-  autocmd InsertEnter * call plug#load('YouCompleteMe')
-        \|  call youcompleteme#Enable()
-        \|  autocmd! load_ycm
-augroup END
-augroup load_us
+augroup load_us_ycm
   autocmd!
   autocmd InsertEnter * if !exists(':UltiSnipsEdit')
-        \|      call plug#load('ultisnips', 'vim-snippets')
-        \|      echo "CARICATO DA INSERT MODE"
+        \|      call plug#load('ultisnips', 'YouCompleteMe')
+        \|  else
+        \|      call plug#load('YouCompleteMe')
         \|  endif
-        \|  autocmd! load_us
+        \|  call youcompleteme#Enable()
+        \|  autocmd! load_us_ycm
 augroup END
 " }}}
 let g:plug_url_format = 'git@github.com:%s.git'
@@ -461,7 +457,7 @@ let g:UltiSnipsEnableSnipMate = 0
 noremap <Plug>(Ultisnips-savelastvisualsel) :call LoadUltisnipsAndSaveSel()<cr>gvs
 function! LoadUltisnipsAndSaveSel()
   if !exists(':UltiSnipsEdit')
-    call plug#load('ultisnips', 'vim-snippets')
+    call plug#load('ultisnips')
   endif
   call UltiSnips#SaveLastVisualSelection()
 endfunction
