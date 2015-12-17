@@ -255,8 +255,8 @@ VIM_FILES = filemap(
 )
 
 NVIM_FILES = filemap(
-  'vim'           => '~/.nvim',
-  'vimrc'         => '~/.nvimrc'
+  'vim'           => '~/.config/nvim',
+  'vimrc'         => '~/.config/nvim/init.vim'
 )
 
 GIT_FILES = filemap(
@@ -309,6 +309,7 @@ task :install do
   VIM_FILES.each do |orig, link|
     link_file orig, link
   end
+  mkdir_p File.expand_path('~/.config')
   NVIM_FILES.each do |orig, link|
     link_file orig, link
   end
