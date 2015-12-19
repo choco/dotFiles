@@ -277,7 +277,6 @@ OTHER_FILES = filemap(
   'tmux.conf'     => '~/.tmux.conf',
   'slate.js'      => '~/.slate.js',
   'ssh'           => '~/.ssh',
-  'color_profile.sh' => '~/.color_profile.sh',
   'livestreamerrc' => '~/.livestreamerrc',
   'weechat' => '~/.weechat'
 )
