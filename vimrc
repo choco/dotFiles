@@ -24,7 +24,7 @@ call plug#begin('~/.vim/plugged')
 " Startup, shutdown, saving and session management {{{
 Plug 'mhinz/vim-startify'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
-Plug 'kopischke/vim-stay'
+Plug 'kopischke/vim-stay', { 'branch': 'fix/fastfold-integration' }
 Plug '907th/vim-auto-save', { 'for': 'tex' }
 " }}}
 
@@ -174,6 +174,7 @@ unlet g:plug_url_format
 
 " Other vim features extensions {{{
 Plug 'ciaranm/securemodelines'
+Plug 'kopischke/vim-fetch'
 " }}}
 
 " Statusbar/tabbar look and feel plugins {{{
@@ -410,6 +411,10 @@ autocmd FileType racket RainbowParentheses
 
 " ============================================================================
 " Plugins configurations {{{
+" Doxygen configuration {{{
+let g:load_doxygen_syntax = 1
+" }}}
+
 " vimtex configuration {{{
 let g:vimtex_view_general_viewer
   \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
@@ -432,6 +437,11 @@ nmap <leader>D :NERDTreeFind<CR>
 " }}}
 
 " YouCompleteMe configuration {{{
+if !exists('g:ycm_semantic_triggers')
+    let g:ycm_semantic_triggers = {}
+endif
+autocmd FileType python let g:ycm_min_num_of_chars_for_completion = 99
+let g:ycm_semantic_triggers.python = ['re!(?=[a-zA-Z_]{2})']
 let g:ycm_use_ultisnips_completer = 1
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_always_populate_location_list = 1
@@ -646,16 +656,24 @@ let g:auto_save_silent = 1
 
 " securemodelines configuration {{{
 let g:secure_modelines_allowed_items = [
-      \ "expandtab", "et", "noexpandtab", "noet",
-      \ "filetype", "ft",
-      \ "foldlevel", "fdl",
-      \ "foldmarker", "fmr",
-      \ "foldmethod", "fdm",
-      \ "rightleft", "rl", "norightleft", "norl",
-      \ "shiftwidth", "sw",
-      \ "softtabstop", "sts",
-      \ "tabstop", "ts",
-      \ "textwidth", "tw"
+      \ "textwidth",       "tw",
+      \ "softtabstop",     "sts",
+      \ "tabstop",         "ts",
+      \ "shiftwidth",      "sw",
+      \ "expandtab",       "et",        "noexpandtab",    "noet",
+      \ "filetype",        "ft",
+      \ "foldmarker",      "fmr",
+      \ "foldclose",
+      \ "foldmethod",      "fdm",
+      \ "commentstring",   "cms",
+      \ "formatoptions",   "fo",
+      \ "readonly",        "ro",        "noreadonly",     "noro",
+      \ "rightleft",       "rl",        "norightleft",    "norl",
+      \ "cindent",         "cin",       "nocindent",      "nocin",
+      \ "smartindent",     "si",        "nosmartindent",  "nosi",
+      \ "autoindent",      "ai",        "noautoindent",   "noai",
+      \ "spell",           "nospell",
+      \ "spelllang"
       \ ]
 " }}}
 
