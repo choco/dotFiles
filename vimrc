@@ -148,7 +148,7 @@ Plug 'majutsushi/tagbar'
 function! BuildYCM(info)
   " - force:  set on PlugInstall! or PlugUpdate!
   if a:info.status == 'installed' || a:info.force
-    !./install.py --clang-completer --omnisharp-completer --gocode-completer
+    !./install.py --clang-completer --omnisharp-completer --gocode-completer --tern-completer --racer-completer
   endif
 endfunction
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM'), 'on': [] }
@@ -178,7 +178,8 @@ Plug 'kopischke/vim-fetch'
 " }}}
 
 " Statusbar/tabbar look and feel plugins {{{
-Plug 'bling/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'vim-airline/vim-airline'
 Plug 'gcmt/taboo.vim'
 Plug 'ryanoasis/vim-devicons'
 " }}}
@@ -451,6 +452,7 @@ let g:ycm_confirm_extra_conf = 0
 let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_global_ycm_extra_conf = '~/.vim/conf/ycm_conf.py'
+let g:ycm_extra_conf_vim_data   = [ '&filetype' ]
 let g:ycm_extra_conf_globlist = [
     \ '~/Projects/*' ]
 " }}}
