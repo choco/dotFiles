@@ -52,7 +52,7 @@ export PROJECTS=$HOME/Projects
 export DOTFILES=$PROJECTS/dotFiles
 
 # Go Configuration
-export GOPATH=$PROJECTS/go
+export GOPATH=$PROJECTS/Go
 
 # Set the list of directories that Zsh searches for programs.
 path=(
