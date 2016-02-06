@@ -260,7 +260,7 @@ set timeoutlen=800
 set ttimeout                            " but not on mappings
 set ttimeoutlen=10
 set fileformats+=mac                    " because Mac is the way
-set lazyredraw                          " only render when needed
+set lazyredraw
 if !has('nvim')
   set ttyfast                           " faster rendering
   set ttymouse=sgr
@@ -388,7 +388,7 @@ set pastetoggle=<F2>
 
 " Automatically set tmux window name
 if exists('$TMUX') && !exists('$NORENAME')
-  au BufEnter * if empty(&buftype) | call system('tmux rename-window '.expand('%:t:S')) | endif
+  au BufEnter * if empty(&buftype) && !pumvisible() | call system('tmux rename-window '.expand('%:t:S')) | endif
   au VimLeave * call system('tmux set-window automatic-rename on')
 endif
 
@@ -483,6 +483,7 @@ let g:airline#extensions#tabline#show_tab_nr     = 0
 let g:airline#extensions#tabline#left_sep        = ' '
 let g:airline#extensions#tabline#left_alt_sep    = '│'
 let g:airline#extensions#tabline#exclude_preview = 1
+let g:airline#extensions#ycm#enabled             = 1
 " }}}
 
 " EasyAlign configuration {{{
