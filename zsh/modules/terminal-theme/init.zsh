@@ -5,10 +5,9 @@ function update_terminal_theme() {
   # save tty
   oldstty=$(stty -g)
   stty raw -echo min 0 time 0
-  printf "\x1bPtmux;\x1b\e]11;?\033\\" >/dev/tty
+  printf "\033]11;?\033\\" >/dev/tty
   # xterm needs the sleep (or "time 1", but that is 1/10th second).
-  sleep 0.01
-  read -r answer
+  read -t 0.5 answer
   result=${answer#*;}
   result=$(echo $result | sed 's/^.*\;//;s/[^rgb:0-9a-f/]//g')
   # restore tty
