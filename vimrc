@@ -312,8 +312,8 @@ autocmd VimResized * :wincmd =
 
 " Enable basic mouse behavior such as resizing buffers.
 set mouse=a
-map <ScrollWheelUp>   <C-y>
-map <ScrollWheelDown> <C-e>
+map <ScrollWheelUp>   <C-Y>
+map <ScrollWheelDown> <C-E>
 
 " Let them know you are the king
 let mapleader = " "
@@ -336,7 +336,7 @@ nnoremap <silent> <C-b> :silent :bp<CR>
 nnoremap <silent> <C-n> :silent :bn<CR>
 
 " Reload vimrc
-map <silent> <leader>V :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+map <silent> <leader>R :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 " Move between visual lines, not literal ones!
 noremap j gj
@@ -362,6 +362,10 @@ xnoremap > >gv
 
 " In case you forgot to sudo
 cmap w!! %!sudo tee > /dev/null %
+
+
+" Jump function definition
+nnoremap <leader>cd <C-]>
 
 " Color scheme preferences {{{
 if (exists('$TMUX') && system('tmux show-env TERMINAL_THEME') == "TERMINAL_THEME=light\n") || $TERMINAL_THEME == "light"
@@ -443,6 +447,12 @@ if !exists('g:ycm_semantic_triggers')
 endif
 autocmd FileType python let g:ycm_min_num_of_chars_for_completion = 99
 let g:ycm_semantic_triggers.python = ['re!(?=[a-zA-Z_]{2})']
+let g:ycm_semantic_triggers.cpp = ['->', '.', '::', 're!gl']
+let g:ycm_semantic_triggers.tex = [
+        \ 're!\\[A-Za-z]*(ref|cite)[A-Za-z]*([^]]*])?{([^}]*,?)*',
+        \ 're!\\includegraphics([^]]*])?{[^}]*',
+        \ 're!\\(include|input){[^}]*'
+        \ ]
 let g:ycm_use_ultisnips_completer = 1
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_always_populate_location_list = 1
@@ -480,10 +490,14 @@ xmap <silent> s <Plug>(Ultisnips-savelastvisualsel)
 let g:airline_powerline_fonts                    = 1
 let g:airline#extensions#tabline#enabled         = 1
 let g:airline#extensions#tabline#show_tab_nr     = 0
+let g:airline#extensions#tabline#show_buffers    = 2
 let g:airline#extensions#tabline#left_sep        = ' '
 let g:airline#extensions#tabline#left_alt_sep    = '│'
 let g:airline#extensions#tabline#exclude_preview = 1
+let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#ycm#enabled             = 1
+let g:airline_exclude_preview                    = 1
+let g:airline_theme                              = 'base16'
 " }}}
 
 " EasyAlign configuration {{{
