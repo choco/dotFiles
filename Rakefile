@@ -260,7 +260,7 @@ NVIM_FILES = filemap(
 )
 
 GIT_FILES = filemap(
-  'git/gitconfig' => '~/.gitconfig',
+  'git/gitconfig'        => '~/.gitconfig',
   'git/gitignore_global' => '~/.gitignore_global'
 )
 
@@ -273,12 +273,17 @@ ZSH_FILES = filemap(
   'zsh/zshrc'     => '~/.zshrc'
 )
 
+KWM_FILES = filemap(
+  'kwm'                       => '~/.kwm',
+  'kem/koekeishiya.kwm.plist' => '~/Library/LaunchAgents/koekeishiya.kwm.plist'
+)
+
 OTHER_FILES = filemap(
-  'tmux.conf'     => '~/.tmux.conf',
-  'slate.js'      => '~/.slate.js',
-  'ssh'           => '~/.ssh',
+  'tmux.conf'      => '~/.tmux.conf',
+  'slate.js'       => '~/.slate.js',
+  'ssh'            => '~/.ssh',
   'livestreamerrc' => '~/.livestreamerrc',
-  'weechat' => '~/.weechat'
+  'weechat'        => '~/.weechat'
 )
 
 desc 'Install these config files.'
@@ -318,6 +323,9 @@ task :install do
   ZSH_FILES.each do |orig, link|
     link_file orig, link
   end
+  KWM_FILES.each do |orig, link|
+    link_file orig, link
+  end
   OTHER_FILES.each do |orig, link|
     link_file orig, link
   end
@@ -344,6 +352,9 @@ task :uninstall do
     unlink_file orig, link
   end
   ZSH_FILES.each do |orig, link|
+    unlink_file orig, link
+  end
+  KWM_FILES.each do |orig, link|
     unlink_file orig, link
   end
   OTHER_FILES.each do |orig, link|
