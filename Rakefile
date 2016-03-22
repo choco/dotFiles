@@ -191,7 +191,7 @@ namespace :install do
   desc 'Install Neovim'
   task :neovim do
       step 'neovim'
-      sh "brew tap neovim/homebrew-neovim"
+      sh "brew tap cHoco/homebrew-formula"
       brew_install 'neovim', ['--HEAD']
   end
 
@@ -232,7 +232,7 @@ namespace :install do
   desc 'Install Vim Plugins'
   task :vim_plugins do
     step 'vim_plugins'
-    sh 'vim +PlugInstall +qall'
+    sh 'nvim +PlugInstall +qall'
   end
 end
 
