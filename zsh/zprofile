@@ -61,6 +61,7 @@ path=(
   /usr/local/opt/go/libexec/bin
   $GOPATH/bin
   $DOTFILES/bin
+  $PROJECTS/kwm/bin
   $path
 )
 
