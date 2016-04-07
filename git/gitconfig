@@ -1,6 +1,7 @@
 [user]
 	name = Enrico Ghirardi
 	email = i@choco.me
+	signingkey = D1A4F499
 [credential]
 	helper = osxkeychain
 [push]
@@ -39,3 +40,7 @@
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge %f
 	required = true
+[gpg]
+	program = gpg2
+[commit]
+	gpgsign = true
