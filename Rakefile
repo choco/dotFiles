@@ -275,7 +275,7 @@ ZSH_FILES = filemap(
 
 KWM_FILES = filemap(
   'kwm'                       => '~/.kwm',
-  'kem/koekeishiya.kwm.plist' => '~/Library/LaunchAgents/koekeishiya.kwm.plist'
+  'kwm/koekeishiya.kwm.plist' => '~/Library/LaunchAgents/koekeishiya.kwm.plist'
 )
 
 OTHER_FILES = filemap(
