@@ -164,6 +164,7 @@ augroup load_us_ycm
         \|      call plug#load('YouCompleteMe')
         \|  endif
         \|  call youcompleteme#Enable()
+        \|  silent! call feedkeys("\<Plug>indentLineReset")
         \|  autocmd! load_us_ycm
 augroup END
 " }}}
@@ -269,6 +270,7 @@ set secure                              " stay safe
 set nomodeline                          " use securemodeline instead
 set noerrorbells                        " Disable any annoying beeps on errors.
 set visualbell
+set shortmess=FTc
 
 set splitbelow                          " Open new split panes to right and
 set splitright                          " bottom which feels more natural
@@ -490,9 +492,10 @@ xmap <silent> s <Plug>(Ultisnips-savelastvisualsel)
 let g:airline_powerline_fonts                    = 1
 let g:airline#extensions#tabline#enabled         = 1
 let g:airline#extensions#tabline#show_tab_nr     = 0
-let g:airline#extensions#tabline#show_buffers    = 2
+let g:airline#extensions#tabline#show_buffers    = 1
+let g:airline#extensions#tabline#buffer_min_count = 2
 let g:airline#extensions#tabline#left_sep        = ' '
-let g:airline#extensions#tabline#left_alt_sep    = '│'
+let g:airline#extensions#tabline#left_alt_sep    = ' '
 let g:airline#extensions#tabline#exclude_preview = 1
 let g:airline#extensions#tabline#show_close_button = 0
 let g:airline#extensions#ycm#enabled             = 1
