@@ -80,6 +80,8 @@ kwmc config spawn left
 # This is because some applications do not have the
 # AXWindowRole and AXStandardWindowSubRole
 kwmc config add-role AXDialog iTerm2
+kwmc config add-role AXUnknown LolClient
+kwmc config add-role AXUnknown LoLPatcherUx
 
 # The following command blacklists a specific application
 # from Kwms tiling (PS: The app name is case-sensitive)
