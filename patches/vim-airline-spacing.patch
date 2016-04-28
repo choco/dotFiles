@@ -1,0 +1,25 @@
+diff --git a/autoload/airline/extensions/tabline.vim b/autoload/airline/extensions/tabline.vim
+index af03c62..2c14b51 100644
+--- a/autoload/airline/extensions/tabline.vim
++++ b/autoload/airline/extensions/tabline.vim
+@@ -68,7 +68,7 @@ function! airline#extensions#tabline#load_theme(palette)
+   let l:tab     = get(colors, 'airline_tab', a:palette.normal.airline_b)
+   let l:tabsel  = get(colors, 'airline_tabsel', a:palette.normal.airline_a)
+   let l:tabtype = get(colors, 'airline_tabtype', a:palette.visual.airline_a)
+-  let l:tabfill = get(colors, 'airline_tabfill', a:palette.normal.airline_c)
++  let l:tabfill = get(colors, 'airline_tabfill', a:palette.insert.airline_b)
+   let l:tabmod  = get(colors, 'airline_tabmod', a:palette.insert.airline_a)
+   let l:tabhid  = get(colors, 'airline_tabhid', a:palette.normal.airline_c)
+   if has_key(a:palette, 'normal_modified') && has_key(a:palette.normal_modified, 'airline_c')
+diff --git a/autoload/airline/extensions/tabline/buffers.vim b/autoload/airline/extensions/tabline/buffers.vim
+index 8c3f344..99f27c6 100644
+--- a/autoload/airline/extensions/tabline/buffers.vim
++++ b/autoload/airline/extensions/tabline/buffers.vim
+@@ -88,6 +88,7 @@ function! airline#extensions#tabline#buffers#get()
+     if has("tablineat")
+       call b.add_raw('%X')
+     endif
++    call b.add_section('airline_tabfill', '')
+   endfor
+ 
+   call b.add_section('airline_tabfill', '')

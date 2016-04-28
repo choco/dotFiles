@@ -1,0 +1,24 @@
+diff --git a/plugin/fastfold.vim b/plugin/fastfold.vim
+index e8b712f..5c4397b 100644
+--- a/plugin/fastfold.vim
++++ b/plugin/fastfold.vim
+@@ -169,11 +169,15 @@ function! s:init()
+     " Make &l:foldmethod local to Buffer and NOT Window.
+     " UpdateBuf/Win(1) = skip if another session is still loading.
+     autocmd BufEnter,WinEnter *
+-          \ if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif
++          \ if !pumvisible() |
++          \   if exists('b:lastfdm') | let w:lastfdm = b:lastfdm | call s:LeaveWin() | call s:EnterWin() | endif |
++          \ endif
+     autocmd BufLeave,WinLeave             *
+-          \ call s:LeaveWin() | call s:EnterWin() |
+-          \ if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
+-          \ elseif exists('b:lastfdm') | unlet b:lastfdm | endif
++          \ if !pumvisible() |
++          \   call s:LeaveWin() | call s:EnterWin() |
++          \   if exists('w:lastfdm')     | let b:lastfdm = w:lastfdm |
++          \   elseif exists('b:lastfdm') | unlet b:lastfdm | endif |
++          \ endif
+     autocmd BufEnter,WinEnter *
+           \ if &l:foldmethod isnot# 'diff' && exists('b:predifffdm') | call s:UpdateBuf(0) | endif
+     autocmd BufLeave,WinLeave *

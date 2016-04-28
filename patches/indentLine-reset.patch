@@ -1,0 +1,18 @@
+diff --git a/after/plugin/indentLine.vim b/after/plugin/indentLine.vim
+index 81711ba..7a79896 100644
+--- a/after/plugin/indentLine.vim
++++ b/after/plugin/indentLine.vim
+@@ -113,6 +113,13 @@ function! s:IndentLinesDisable()
+     endtry
+ endfunction
+ 
++function! indentLine#Reset()
++    call s:IndentLinesDisable()
++    call s:IndentLinesEnable()
++    return ""
++endfunction
++exec "inoremap <expr><silent> <Plug>indentLineReset indentLine#Reset()"
++
+ "{{{1 function! s:IndentLinesToggle()
+ function! s:IndentLinesToggle()
+     if exists("b:indentLine_enabled") && b:indentLine_enabled
