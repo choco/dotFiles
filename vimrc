@@ -24,7 +24,7 @@ call plug#begin('~/.vim/plugged')
 " Startup, shutdown, saving and session management {{{
 Plug 'mhinz/vim-startify'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
-Plug 'kopischke/vim-stay', { 'branch': 'fix/fastfold-integration' }
+Plug 'kopischke/vim-stay', { 'branch': 'release/1.4.0' }
 Plug '907th/vim-auto-save', { 'for': 'tex' }
 " }}}
 
@@ -489,18 +489,18 @@ xmap <silent> s <Plug>(Ultisnips-savelastvisualsel)
 " }}}
 
 " Airline configuration {{{
-let g:airline_powerline_fonts                    = 1
-let g:airline#extensions#tabline#enabled         = 1
-let g:airline#extensions#tabline#show_tab_nr     = 0
-let g:airline#extensions#tabline#show_buffers    = 1
-let g:airline#extensions#tabline#buffer_min_count = 2
-let g:airline#extensions#tabline#left_sep        = ' '
-let g:airline#extensions#tabline#left_alt_sep    = ' '
-let g:airline#extensions#tabline#exclude_preview = 1
+let g:airline_powerline_fonts                      = 1
+let g:airline#extensions#tabline#enabled           = 1
+let g:airline#extensions#tabline#show_tab_nr       = 0
+let g:airline#extensions#tabline#show_buffers      = 1
+let g:airline#extensions#tabline#buffer_min_count  = 2
+let g:airline#extensions#tabline#left_sep          = ' '
+let g:airline#extensions#tabline#left_alt_sep      = ' '
+let g:airline#extensions#tabline#exclude_preview   = 1
 let g:airline#extensions#tabline#show_close_button = 0
-let g:airline#extensions#ycm#enabled             = 1
-let g:airline_exclude_preview                    = 1
-let g:airline_theme                              = 'base16'
+let g:airline#extensions#ycm#enabled               = 1
+let g:airline_exclude_preview                      = 1
+let g:airline_theme                                = 'base16'
 " }}}
 
 " EasyAlign configuration {{{
