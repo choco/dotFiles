@@ -155,7 +155,8 @@ namespace :install do
   desc 'Install tmux'
   task :tmux do
     step 'tmux'
-    brew_install 'tmux', ['--HEAD']
+    sh "brew tap cHoco/homebrew-formula"
+    brew_install 'cHoco/homebrew-formula/tmux', ['--HEAD']
   end
 
   desc 'Install Zsh'
@@ -191,7 +192,6 @@ namespace :install do
   desc 'Install Neovim'
   task :neovim do
       step 'neovim'
-      sh "brew tap cHoco/homebrew-formula"
       brew_install 'neovim', ['--HEAD']
   end
 
@@ -280,8 +280,7 @@ KWM_FILES = filemap(
 
 OTHER_FILES = filemap(
   'tmux.conf'      => '~/.tmux.conf',
-  'slate.js'       => '~/.slate.js',
-  'ssh'            => '~/.ssh',
+  'ssh/config'     => '~/.ssh/config',
   'livestreamerrc' => '~/.livestreamerrc',
   'weechat'        => '~/.weechat'
 )
@@ -334,7 +333,7 @@ task :install do
   #   cp orig, copy, :verbose => true unless File.exist?(copy)
   # end
 
-  Rake::Task['install:vim_plugins'].invoke
+  #Rake::Task['install:vim_plugins'].invoke
 end
 
 desc 'Uninstall these config files.'
