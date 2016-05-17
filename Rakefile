@@ -155,8 +155,7 @@ namespace :install do
   desc 'Install tmux'
   task :tmux do
     step 'tmux'
-    sh "brew tap cHoco/homebrew-formula"
-    brew_install 'cHoco/homebrew-formula/tmux', ['--HEAD']
+    brew_install 'tmux', ['--HEAD']
   end
 
   desc 'Install Zsh'
@@ -192,13 +191,14 @@ namespace :install do
   desc 'Install Neovim'
   task :neovim do
       step 'neovim'
+      sh "brew tap cHoco/homebrew-formula"
       brew_install 'neovim', ['--HEAD']
   end
 
-  desc 'Install Archey'
-  task :archey do
-      step 'archey'
-      brew_install 'archey'
+  desc 'Install Neofetch'
+  task :neofetch do
+      step 'neofetch'
+      brew_install 'neofetch'
   end
 
   desc 'Install mono'
@@ -301,7 +301,7 @@ task :install do
   Rake::Task['install:vim'].invoke
   Rake::Task['install:macvim'].invoke
   Rake::Task['install:neovim'].invoke
-  Rake::Task['install:archey'].invoke
+  Rake::Task['install:neofetch'].invoke
   Rake::Task['install:mono'].invoke
   Rake::Task['install:opengl_support_libs'].invoke
   Rake::Task['install:aspell'].invoke
