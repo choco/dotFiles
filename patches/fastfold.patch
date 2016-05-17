@@ -1,8 +1,8 @@
 diff --git a/plugin/fastfold.vim b/plugin/fastfold.vim
-index e8b712f..5c4397b 100644
+index fabd1ae..77d54de 100644
 --- a/plugin/fastfold.vim
 +++ b/plugin/fastfold.vim
-@@ -169,11 +169,15 @@ function! s:init()
+@@ -171,11 +171,15 @@ function! s:init()
      " Make &l:foldmethod local to Buffer and NOT Window.
      " UpdateBuf/Win(1) = skip if another session is still loading.
      autocmd BufEnter,WinEnter *
