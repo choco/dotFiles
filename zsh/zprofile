@@ -157,6 +157,6 @@ rw() {
   fi
 }
 
-alias ida32='wine ~/.wine/drive_c/Program\ Files/IDA\ 6.6/idaq.exe'
-alias ida64='wine ~/.wine/drive_c/Program\ Files/IDA\ 6.6/idaq64.exe'
+alias ida32='wine ~/.wine/drive_c/Program\ Files/IDA\ 6.8/idaq.exe'
+alias ida64='wine ~/.wine/drive_c/Program\ Files/IDA\ 6.8/idaq64.exe'
 alias lvstrm='rw livestreamer && livestreamer'
