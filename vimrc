@@ -53,7 +53,7 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 " }}}
 
 " Color schemes {{{
-Plug 'chriskempson/base16-vim'
+Plug 'cHoco/base16-eighties'
 " }}}
 
 " Splits navigation look and feel {{{
