@@ -36,7 +36,7 @@ kwmc config hotkeys on
 kwmc config float-non-resizable on
 
 // Set focus-follows-mouse-mode to autoraise
-kwmc config focus-follows-mouse autoraise
+kwmc config focus-follows-mouse on
 
 // Automatically resize the window to its container
 kwmc config lock-to-container on
@@ -50,7 +50,7 @@ kwmc config standby-on-float on
 kwmc config mouse-follows-focus on
 
 // Allow window focus to wrap-around
-kwmc config cycle-focus screen
+kwmc config cycle-focus on
 
 /*
 Override default settings for space 1 on screen 0
@@ -83,14 +83,16 @@ looks like: kwmc config float Google Chrome
 */
 kwmc rule owner="Steam"                     properties={float="true"}
 kwmc rule owner="Photoshop"                 properties={float="true"}
-kwmc rule owner="Tweetbot"                  properties={float="true"}
+kwmc rule owner="Tweetbot"                  properties={space="3"; float="true"} except="Main Window"
+kwmc rule owner="Whatsie"                   properties={space="3"}
+kwmc rule owner="Textual"                   properties={space="3"}
 kwmc rule owner="App Store"                 properties={float="true"}
 kwmc rule owner="The Unarchiver"            properties={float="true"}
 kwmc rule owner="CleanMyMac 3"              properties={float="true"}
 kwmc rule owner="Trash"                     properties={float="true"}
 kwmc rule owner="Spotify"                   properties={float="true"}
 kwmc rule owner="Popcorn Time"              properties={float="true"}
-kwmc rule owner="Airmail"                   properties={float="true"}
+kwmc rule owner="Airmail 3"                 properties={float="true"}
 kwmc rule owner="Little Snitch Agent"       properties={float="true"}
 kwmc rule owner="Finder"    name="Copy"     properties={float="true"}
 kwmc rule owner="iTerm2"                    properties={role="AXDialog"}
