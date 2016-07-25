@@ -9,7 +9,7 @@
 [core]
 	editor = nvim
 	excludesfile = ~/.gitignore_global
-	pager = lest
+	pager = diff-so-fancy | lest
 [color]
 	ui = auto
 	interactive = auto
@@ -29,6 +29,7 @@
 [diff]
 	tool = vimdiff
 	algorithm = histogram
+	compactionHeuristic = true
 [filter "media"]
 	required = true
 	clean = git media clean %f
