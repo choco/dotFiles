@@ -1,5 +1,5 @@
 diff --git a/autoload/airline/extensions/tabline.vim b/autoload/airline/extensions/tabline.vim
-index af03c62..2c14b51 100644
+index 04a7159..d59ff28 100644
 --- a/autoload/airline/extensions/tabline.vim
 +++ b/autoload/airline/extensions/tabline.vim
 @@ -68,7 +68,7 @@ function! airline#extensions#tabline#load_theme(palette)
