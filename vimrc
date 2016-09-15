@@ -53,7 +53,9 @@ Plug 'junegunn/vim-easy-align', { 'on': ['<Plug>(EasyAlign)', 'EasyAlign'] }
 " }}}
 
 " Color schemes {{{
+let g:plug_url_format = 'git@github.com:%s.git'
 Plug 'cHoco/base16-eighties'
+unlet g:plug_url_format
 " }}}
 
 " Splits navigation look and feel {{{
@@ -176,6 +178,7 @@ unlet g:plug_url_format
 " Other vim features extensions {{{
 Plug 'ciaranm/securemodelines'
 Plug 'kopischke/vim-fetch'
+Plug 'metakirby5/codi.vim'
 " }}}
 
 " Statusbar/tabbar look and feel plugins {{{
@@ -341,8 +344,10 @@ nnoremap <silent> <C-n> :silent :bn<CR>
 map <silent> <leader>R :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
 
 " Move between visual lines, not literal ones!
-noremap j gj
-noremap k gk
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
 
 "
 noremap , ;
@@ -369,6 +374,8 @@ cmap w!! %!sudo tee > /dev/null %
 " Jump function definition
 nnoremap <leader>cd <C-]>
 
+" Enable 24-bit colors
+set termguicolors
 " Color scheme preferences {{{
 if (exists('$TMUX') && system('tmux show-env TERMINAL_THEME') == "TERMINAL_THEME=light\n") || $TERMINAL_THEME == "light"
   set background=light
@@ -426,6 +433,7 @@ let g:load_doxygen_syntax = 1
 let g:vimtex_view_general_viewer
   \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
 let g:vimtex_view_general_options = '@line @pdf @tex'
+let g:vimtex_echo_ignore_wait = 1
 " }}}
 
 " delimitMate configuration {{{
@@ -451,10 +459,15 @@ autocmd FileType python let g:ycm_min_num_of_chars_for_completion = 99
 let g:ycm_semantic_triggers.python = ['re!(?=[a-zA-Z_]{2})']
 let g:ycm_semantic_triggers.cpp = ['->', '.', '::', 're!gl']
 let g:ycm_semantic_triggers.tex = [
-        \ 're!\\[A-Za-z]*(ref|cite)[A-Za-z]*([^]]*])?{([^}]*,?)*',
-        \ 're!\\includegraphics([^]]*])?{[^}]*',
-        \ 're!\\(include|input){[^}]*'
-        \ ]
+      \ 're!\\[A-Za-z]*cite[A-Za-z]*(\[[^]]*\]){0,2}{[^}]*',
+      \ 're!\\[A-Za-z]*ref({[^}]*|range{([^,{}]*(}{)?))',
+      \ 're!\\hyperref\[[^]]*',
+      \ 're!\\includegraphics\*?(\[[^]]*\]){0,2}{[^}]*',
+      \ 're!\\(include(only)?|input){[^}]*',
+      \ 're!\\\a*(gls|Gls|GLS)(pl)?\a*(\s*\[[^]]*\]){0,2}\s*\{[^}]*',
+      \ 're!\\includepdf(\s*\[[^]]*\])?\s*\{[^}]*',
+      \ 're!\\includestandalone(\s*\[[^]]*\])?\s*\{[^}]*',
+      \ ]
 let g:ycm_use_ultisnips_completer = 1
 let g:ycm_add_preview_to_completeopt = 1
 let g:ycm_always_populate_location_list = 1
@@ -518,10 +531,11 @@ let g:easy_align_delimiters = {
 
 " Goyo configuration {{{
 nnoremap <Leader>G :Goyo<CR>
+let g:goyo_height = '95%'
 function! s:goyo_enter()
-  if exists('$TMUX')
-    silent !tmux set status off
-  endif
+  " if exists('$TMUX')
+  "   silent !tmux set status off
+  " endif
   set noshowcmd
   set scrolloff=999
   DisableGoldenViewAutoResize
@@ -530,9 +544,9 @@ function! s:goyo_enter()
   Limelight
 endfunction
 function! s:goyo_leave()
-  if exists('$TMUX')
-    silent !tmux set status on
-  endif
+  " if exists('$TMUX')
+  "   silent !tmux set status on
+  " endif
   set showcmd
   set scrolloff=4
   EnableGoldenViewAutoResize
@@ -669,8 +683,7 @@ let g:gutentags_resolve_symlinks = 1
 
 " vim-auto-save configuration {{{
 let g:auto_save = 1
-let g:auto_save_in_insert_mode = 1
-let g:auto_save_events = ["InsertLeave"]
+let g:auto_save_events = ["InsertLeave", "TextChanged"]
 let g:auto_save_silent = 1
 "}}}
 
