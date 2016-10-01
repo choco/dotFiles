@@ -4,12 +4,16 @@
 " GUI Settings {{{
 
 " Set correct font for the GUI
-if has('gui_running')
+if has('gui_running') && !has('nvim')
   set guifont=Source\ Code\ Pro\ plus\ Devicons:h12
   set guioptions-=L
   set linespace=2
   set guioptions-=r
   set guioptions-=e
+  if has('gui_macvim')
+    set macligatures                  " Enable ligatures
+    set macthinstrokes              " Use thin strokes in dark colorscheme
+  endif
 endif
 
 " }}}
@@ -45,7 +49,6 @@ Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
 let g:plug_url_format = 'git@github.com:%s.git'
 Plug 'cHoco/AwesomeFoldText'
 unlet g:plug_url_format
-Plug 'Konfekt/FastFold'
 Plug 'tomtom/tcomment_vim' " Easily comment stuff in/out
 Plug 'Yggdroot/indentLine'
 " Align text easily
@@ -209,7 +212,9 @@ set autoindent
 set autoread                            " reload files when changed on disk
 set backspace=indent,eol,start
 set clipboard=unnamed                   " yank & paste with system clipboard
-set encoding=utf-8
+if !has('nvim')
+  set encoding=utf-8
+endif
 set hidden                              " allow buffer switching without saving
 set expandtab                           " expand tabs to spaces
 set laststatus=2                        " always show statusline
@@ -240,8 +245,11 @@ set synmaxcol=1000
 syntax sync minlines=256
 set colorcolumn=80
 set cursorline
-autocmd InsertLeave * set cursorline
-autocmd InsertEnter * set nocursorline
+augroup cursorline_au
+  au!
+  autocmd InsertLeave * set cursorline
+  autocmd InsertEnter * set nocursorline
+augroup END
 set nostartofline                       " Keep the cursor on the same column
 
 " Use The Silver Searcher instead of grep
@@ -287,7 +295,13 @@ else
   set foldmethod=syntax
 endif
 " Open folds by default (without changing fold level)
-autocmd BufWinEnter * silent! :%foldopen!
+augroup open_folds
+  au!
+  autocmd BufWinEnter * if !exists('b:folds_opened')
+                      \|  silent! :%foldopen!
+                      \|  let b:folds_opened = 1
+                      \|endif
+augroup END
 
 " Session and view options to save
 set sessionoptions=buffers,folds,tabpages,curdir,globals
@@ -311,9 +325,6 @@ endif
 if !isdirectory(expand(&directory))
   call mkdir(expand(&directory), "p")
 endif
-
-" Automatically rebalance windows on vim resize
-autocmd VimResized * :wincmd =
 
 " Enable basic mouse behavior such as resizing buffers.
 set mouse=a
@@ -341,7 +352,11 @@ nnoremap <silent> <C-b> :silent :bp<CR>
 nnoremap <silent> <C-n> :silent :bn<CR>
 
 " Reload vimrc
-map <silent> <leader>R :source ~/.vimrc<CR>:filetype detect<CR>:exe ":echo 'vimrc reloaded'"<CR>
+augroup reload_vimrc
+  au!
+  " Automatically load .vimrc changes
+  autocmd BufWritePost .vimrc,$MYVIMRC,~/Projects/dotFiles/vimrc nested source $MYVIMRC
+augroup END
 
 " Move between visual lines, not literal ones!
 nnoremap j gj
@@ -401,8 +416,11 @@ set pastetoggle=<F2>
 
 " Automatically set tmux window name
 if exists('$TMUX') && !exists('$NORENAME')
-  au BufEnter * if empty(&buftype) && !pumvisible() | call system('tmux rename-window '.expand('%:t:S')) | endif
-  au VimLeave * call system('tmux set-window automatic-rename on')
+  augroup tmux_window_rename
+    au!
+    au BufEnter * if empty(&buftype) && !pumvisible() | call system('tmux rename-window '.expand('%:t:S')) | endif
+    au VimLeave * call system('tmux set-window automatic-rename on')
+  augroup END
 endif
 
 " }}}
@@ -412,13 +430,16 @@ endif
 " FileType specific configurations {{{
 
 " Support for AMPL
-autocmd BufNewFile,BufRead *.mod,*.dat,*.ampl set filetype=ampl
-" Enable spell checking for Markdown and wrap at 80 characters for Markdown
-autocmd FileType markdown setlocal spell | setlocal textwidth=80
-" Enable spell checking for Git commits
-autocmd FileType gitcommit setlocal spell
-" Enable Rainbow Parentheses for racket
-autocmd FileType racket RainbowParentheses
+augroup filetype_specific
+  au!
+  autocmd BufNewFile,BufRead *.mod,*.dat,*.ampl set filetype=ampl
+  " Enable spell checking for Markdown and wrap at 80 characters for Markdown
+  autocmd FileType markdown setlocal spell | setlocal textwidth=80
+  " Enable spell checking for Git commits
+  autocmd FileType gitcommit setlocal spell
+  " Enable Rainbow Parentheses for racket
+  autocmd FileType racket RainbowParentheses
+augroup END
 
 " }}}
 " ============================================================================
@@ -431,7 +452,7 @@ let g:load_doxygen_syntax = 1
 
 " vimtex configuration {{{
 let g:vimtex_view_general_viewer
-  \ = '/Applications/Skim.app/Contents/SharedSupport/displayline'
+  \ = '/Applications/PDF Expert.app/Contents/MacOS/PDF Expert'
 let g:vimtex_view_general_options = '@line @pdf @tex'
 let g:vimtex_echo_ignore_wait = 1
 " }}}
@@ -455,7 +476,10 @@ nmap <leader>D :NERDTreeFind<CR>
 if !exists('g:ycm_semantic_triggers')
     let g:ycm_semantic_triggers = {}
 endif
-autocmd FileType python let g:ycm_min_num_of_chars_for_completion = 99
+augroup disable_identifier_compl_for_python
+  au!
+  autocmd FileType python let g:ycm_min_num_of_chars_for_completion = 99
+augroup END
 let g:ycm_semantic_triggers.python = ['re!(?=[a-zA-Z_]{2})']
 let g:ycm_semantic_triggers.cpp = ['->', '.', '::', 're!gl']
 let g:ycm_semantic_triggers.tex = [
@@ -533,9 +557,6 @@ let g:easy_align_delimiters = {
 nnoremap <Leader>G :Goyo<CR>
 let g:goyo_height = '95%'
 function! s:goyo_enter()
-  " if exists('$TMUX')
-  "   silent !tmux set status off
-  " endif
   set noshowcmd
   set scrolloff=999
   DisableGoldenViewAutoResize
@@ -544,9 +565,6 @@ function! s:goyo_enter()
   Limelight
 endfunction
 function! s:goyo_leave()
-  " if exists('$TMUX')
-  "   silent !tmux set status on
-  " endif
   set showcmd
   set scrolloff=4
   EnableGoldenViewAutoResize
@@ -554,13 +572,15 @@ function! s:goyo_leave()
   Limelight!
 endfunction
 
-autocmd! User GoyoEnter nested call <SID>goyo_enter()
-autocmd! User GoyoLeave nested call <SID>goyo_leave()
+augroup goyo_conf
+  au!
+  autocmd User GoyoEnter nested call <SID>goyo_enter()
+  autocmd User GoyoLeave nested call <SID>goyo_leave()
+augroup END
 " }}}
 
 " Vim-Signify configuration {{{
 let g:signify_vcs_list           = [ 'git', 'hg' ]
-let g:signify_update_on_bufenter = 1
 let g:signify_disable_by_default = 1
 nnoremap <leader>gt :SignifyToggle<CR>
 " Hunk jumping
