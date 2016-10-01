@@ -274,8 +274,13 @@ ZSH_FILES = filemap(
 )
 
 KWM_FILES = filemap(
-  'kwm'                       => '~/.kwm',
-  'kwm/koekeishiya.kwm.plist' => '~/Library/LaunchAgents/koekeishiya.kwm.plist'
+  'kwm'                             => '~/.kwm',
+  'kwm/com.koekeishiya.kwm.plist'   => '~/Library/LaunchAgents/com.koekeishiya.kwm.plist'
+)
+
+KHD_FILES = filemap(
+  'khd/khdrc'                       => '~/.khdrc',
+  'khd/com.koekeishiya.khd.plist'   => '~/Library/LaunchAgents/com.koekeishiya.khd.plist'
 )
 
 OTHER_FILES = filemap(
@@ -325,6 +330,9 @@ task :install do
   KWM_FILES.each do |orig, link|
     link_file orig, link
   end
+  KHD_FILES.each do |orig, link|
+    link_file orig, link
+  end
   OTHER_FILES.each do |orig, link|
     link_file orig, link
   end
@@ -354,6 +362,9 @@ task :uninstall do
     unlink_file orig, link
   end
   KWM_FILES.each do |orig, link|
+    unlink_file orig, link
+  end
+  KHD_FILES.each do |orig, link|
     unlink_file orig, link
   end
   OTHER_FILES.each do |orig, link|

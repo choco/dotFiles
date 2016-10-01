@@ -1,0 +1,61 @@
+# enable kwm compatibility mode
+khd kwm on
+
+# set border color for different modes
+khd mode default color 0xFFDD5A45
+khd mode tree prefix on
+khd mode tree color 0xddfabd2f
+khd mode tree restore default
+khd mode tree timeout 1.00
+
+# toggle between modes
+ctrl - s                :   khd -e "mode activate tree"
+
+# quick launch iTerm
+cmd - return            :   open -a /Applications/iTerm2.app;\
+                            khd -e "mode activate default"
+# move focus between windows
+cmd + alt - h           :   kwmc window -f west
+cmd + alt - l           :   kwmc window -f east
+cmd + alt - j           :   kwmc window -f south
+cmd + alt - k           :   kwmc window -f north
+cmd + alt - b           :   kwmc window -fm prev
+cmd + alt - n           :   kwmc window -fm next
+
+# switch focuses window position
+ctrl + alt - h           :   kwmc window -s west
+ctrl + alt - l           :   kwmc window -s east
+ctrl + alt - j           :   kwmc window -s south
+ctrl + alt - k           :   kwmc window -s north
+
+# move focues window to space
+ctrl + alt - left       :   kwmc window -m space left;\
+                            khd -p "ctrl - left"
+ctrl + alt - right      :   kwmc window -m space right;\
+                            khd -p "ctrl - right"
+
+# tree mode
+tree - f                :   kwmc window -z fullscreen
+tree - d                :   kwmc window -z parent
+tree - w                :   kwmc window -t focused
+tree - r                :   kwmc tree rotate 90
+
+# modify container split mode (horizontal, vertical)
+tree - s                :   kwmc window -c split - mode toggle;\
+                            khd -e "mode activate default"
+
+# change window container between bsp and monocle
+tree - c                :   kwmc window -c type toggle;\
+                            khd -e "mode activate default"
+
+# expands/reduce tree nodes
+tree - b                :   kwmc window -c reduce 0.05 focused
+tree - n                :   kwmc window -c expand 0.05 focused
+tree - h                :   kwmc window -c expand 0.05 west
+tree - j                :   kwmc window -c expand 0.05 south
+tree - k                :   kwmc window -c expand 0.05 north
+tree - l                :   kwmc window -c expand 0.05 east
+tree + shift - h        :   kwmc window -c reduce 0.05 west
+tree + shift - j        :   kwmc window -c reduce 0.05 south
+tree + shift - k        :   kwmc window -c reduce 0.05 north
+tree + shift - l        :   kwmc window -c reduce 0.05 east
