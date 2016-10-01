@@ -62,6 +62,7 @@ path=(
   $GOPATH/bin
   $DOTFILES/bin
   $PROJECTS/kwm/bin
+  $PROJECTS/khd/bin
   $path
 )
 
