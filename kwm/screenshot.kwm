@@ -1,5 +1,0 @@
-kwmc=~/Projects/kwm/bin/kwmc
-screenshot_dir=~/Desktop
-$kwmc config focused-border off
-screencapture -i $screenshot_dir/"$(date "+Screen Shot %Y-%m-%d at %H.%M.%S.png")"
-$kwmc config focused-border on
