@@ -139,7 +139,7 @@ Plug 'wlangstroth/vim-racket'
 " Haskell
 Plug 'neovimhaskell/haskell-vim', { 'for': 'haskell' }
 " Swift
-Plug 'toyamarinyon/vim-swift', { 'for': 'swift' }
+Plug 'bumaociyuan/vim-swift', { 'for': 'swift' }
 " CSV
 Plug 'chrisbra/csv.vim', { 'for': 'csv' }
 " }}}

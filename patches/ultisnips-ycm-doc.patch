@@ -1,8 +1,8 @@
 diff --git a/pythonx/UltiSnips/snippet_manager.py b/pythonx/UltiSnips/snippet_manager.py
-index aed93fa..84283f2 100644
+index 331500e..c4c5bf0 100644
 --- a/pythonx/UltiSnips/snippet_manager.py
 +++ b/pythonx/UltiSnips/snippet_manager.py
-@@ -369,7 +369,7 @@ class SnippetManager(object):
+@@ -366,7 +366,7 @@ class SnippetManager(object):
          _vim.command(
              'autocmd InsertLeave * call UltiSnips#LeavingInsertMode()')
  

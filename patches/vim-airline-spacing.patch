@@ -1,8 +1,8 @@
 diff --git a/autoload/airline/extensions/tabline.vim b/autoload/airline/extensions/tabline.vim
-index 04a7159..d59ff28 100644
+index cadb399..3c574d3 100644
 --- a/autoload/airline/extensions/tabline.vim
 +++ b/autoload/airline/extensions/tabline.vim
-@@ -68,7 +68,7 @@ function! airline#extensions#tabline#load_theme(palette)
+@@ -70,7 +70,7 @@ function! airline#extensions#tabline#load_theme(palette)
    let l:tab     = get(colors, 'airline_tab', a:palette.normal.airline_b)
    let l:tabsel  = get(colors, 'airline_tabsel', a:palette.normal.airline_a)
    let l:tabtype = get(colors, 'airline_tabtype', a:palette.visual.airline_a)

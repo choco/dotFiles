@@ -1,8 +1,8 @@
 diff --git a/after/plugin/indentLine.vim b/after/plugin/indentLine.vim
-index 81711ba..7a79896 100644
+index 532cefb..c18e7e7 100644
 --- a/after/plugin/indentLine.vim
 +++ b/after/plugin/indentLine.vim
-@@ -113,6 +113,13 @@ function! s:IndentLinesDisable()
+@@ -117,6 +117,13 @@ function! s:IndentLinesDisable()
      endtry
  endfunction
  
