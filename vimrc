@@ -49,6 +49,7 @@ Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
 let g:plug_url_format = 'git@github.com:%s.git'
 Plug 'cHoco/AwesomeFoldText'
 unlet g:plug_url_format
+Plug 'tweekmonster/braceless.vim'
 Plug 'tomtom/tcomment_vim' " Easily comment stuff in/out
 Plug 'Yggdroot/indentLine'
 " Align text easily
@@ -168,7 +169,6 @@ augroup load_us_ycm
         \|  else
         \|      call plug#load('YouCompleteMe')
         \|  endif
-        \|  call youcompleteme#Enable()
         \|  silent! call feedkeys("\<Plug>indentLineReset")
         \|  autocmd! load_us_ycm
 augroup END
@@ -747,6 +747,10 @@ let g:haskell_enable_pattern_synonyms = 1
 let g:haskell_enable_typeroles = 1
 let g:haskell_enable_static_pointers = 1
 let g:haskell_classic_highlighting = 1
+" }}}
+
+" braceless configuration {{{
+autocmd FileType python BracelessEnable +indent +fold-slow
 " }}}
 
 " }}}
