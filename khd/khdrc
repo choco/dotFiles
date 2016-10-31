@@ -22,17 +22,27 @@ cmd + alt - k           :   kwmc window -f north
 cmd + alt - b           :   kwmc window -fm prev
 cmd + alt - n           :   kwmc window -fm next
 
-# switch focuses window position
+# switch focused window position
 ctrl + alt - h           :   kwmc window -s west
 ctrl + alt - l           :   kwmc window -s east
 ctrl + alt - j           :   kwmc window -s south
 ctrl + alt - k           :   kwmc window -s north
 
+# move focused window into another container
+ctrl + cmd - h           :   ~/.kwm/scripts/move_window.sh west
+ctrl + cmd - l           :   ~/.kwm/scripts/move_window.sh east
+ctrl + cmd - j           :   ~/.kwm/scripts/move_window.sh south
+ctrl + cmd - k           :   ~/.kwm/scripts/move_window.sh north
+
 # move focues window to space
-ctrl + alt - left       :   kwmc window -m space left;\
-                            khd -p "ctrl - left"
-ctrl + alt - right      :   kwmc window -m space right;\
-                            khd -p "ctrl - right"
+ctrl + alt - left       :   osascript -e "tell application \"System Events\" to key code 123 using control down";\
+                            kwmc window -m space left
+ctrl + alt - right      :   osascript -e "tell application \"System Events\" to key code 124 using control down";\
+                            kwmc window -m space right
+# ctrl + alt - left       :   khd -p ctrl - left;\
+#                             kwmc window -m space left
+# ctrl + alt - right      :   khd -p ctrl - right;\
+#                             kwmc window -m space right
 
 # tree mode
 tree - f                :   kwmc window -z fullscreen
