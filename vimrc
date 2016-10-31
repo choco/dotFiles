@@ -40,7 +40,6 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle'   }
 
 " Tmux plugins {{{
 Plug 'jpalardy/vim-slime'
-Plug 'tmux-plugins/vim-tmux-focus-events'
 Plug 'tpope/vim-dispatch'
 Plug 'christoomey/vim-tmux-navigator' " Better vim/tmux split navigation
 " }}}
@@ -76,8 +75,7 @@ Plug 'rdnetto/YCM-Generator', { 'branch': 'stable' }
 Plug 'junegunn/rainbow_parentheses.vim'
 Plug 'osyo-manga/vim-jplus'
 Plug 'kovisoft/paredit', { 'for': 'racket' }
-Plug 'junegunn/vim-pseudocl'
-Plug 'junegunn/vim-oblique'
+Plug 'junegunn/vim-slash'
 Plug 'junegunn/goyo.vim', { 'on': 'Goyo' } " Distraction-free writing
 Plug 'junegunn/limelight.vim', { 'on': 'Limelight' }
 Plug 'kennykaye/vim-relativity'            " Toggle relativenumber base on events
@@ -364,6 +362,9 @@ nnoremap k gk
 vnoremap j gj
 vnoremap k gk
 
+" Search for visually selected text
+vmap // y/<C-R>"<CR>
+
 "
 noremap , ;
 noremap ; ,
@@ -391,6 +392,10 @@ nnoremap <leader>cd <C-]>
 
 " Enable 24-bit colors
 set termguicolors
+if(!has('nvim'))
+  let &t_8f="\e[38;2;%ld;%ld;%ldm"
+  let &t_8b="\e[48;2;%ld;%ld;%ldm"
+endif
 " Color scheme preferences {{{
 if (exists('$TMUX') && system('tmux show-env TERMINAL_THEME') == "TERMINAL_THEME=light\n") || $TERMINAL_THEME == "light"
   set background=light
