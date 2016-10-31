@@ -1,49 +1,46 @@
-// Set default values for screen padding
+# Set default values for screen padding
 kwmc config padding 40 20 20 20
 
-// Set default values for container gaps
+# Set default values for container gaps
 kwmc config gap 15 15
 
-// Default tiling mode for Kwm (bsp | monocle | float | off)
+# Default tiling mode for Kwm (bsp | monocle | float | off)
 kwmc config tiling bsp
 
-// Let Kwm listen for hotkeys
-kwmc config hotkeys on
-
-// Automatically float windows that fail to resize
+# Automatically float windows that fail to resize
 kwmc config float-non-resizable on
 
-// Set focus-follows-mouse-mode to autoraise
+# Set focus-follows-mouse-mode to autoraise
 kwmc config focus-follows-mouse on
 
-// Automatically resize the window to its container
+# Automatically resize the window to its container
 kwmc config lock-to-container on
 
-// Center a window when switched to float
+# Center a window when switched to float
 kwmc config center-on-float on
 
-// Focus-follows-mouse is temporarily disabled when
-// a floating window has focus
+# Focus-follows-mouse is temporarily disabled when
+# a floating window has focus
 kwmc config standby-on-float on
 
-// The mouse will automatically move to the center
-// of the focused window
+# The mouse will automatically move to the center
+# of the focused window
 kwmc config mouse-follows-focus on
 
-// Allow window focus to wrap-around
+# Allow window focus to wrap-around
 kwmc config cycle-focus on
 
-// Enable window exchange when dragging them between containers
+# Enable window exchange when dragging them between containers
 kwmc config mouse-drag on
 kwmc config mouse-drag mod shift+cmd
 
-// Set default container split-ratio
+# Set default container split-ratio
 kwmc config split-ratio 0.5
 
-// New splits become the left leaf-node
+# New splits become the left leaf-node
 kwmc config spawn left
 
-// Custom tiling rules
+# Custom tiling rules
 kwmc rule owner="Steam"                     properties={float="true"}
 kwmc rule owner="Photoshop"                 properties={float="true"}
 kwmc rule owner="Fantastical 2"             properties={float="true"}
@@ -61,19 +58,24 @@ kwmc rule owner="Popcorn Time"              properties={float="true"}
 kwmc rule owner="Airmail 3"                 properties={float="true"}
 kwmc rule owner="Airmail"                   properties={float="true"}
 kwmc rule owner="Finder"    name="Copy"     properties={float="true"}
-kwmc rule owner="LeagueClientUx"            properties={role="AXUnknown" float="true"}
+kwmc rule owner="LeagueClientUx"            properties={role="AXUnknown" float="true" space="2"}
 
-// Processes to whitelist to force notifications subscription
+# Processes to whitelist to force notifications subscription
 kwmc whitelist mpv
 kwmc whitelist App for WhatsApp
 kwmc whitelist LeagueClientUx
 
-// on border for focused window
+# on border for focused window
 kwmc config border focused on
 kwmc config border focused size 3
+kwmc config border focused radius 6
 kwmc config border focused color 0xFFDD5A45
 
-// on border for marked window
+# on border for marked window
 kwmc config border marked on
 kwmc config border marked size 3
+kwmc config border marked radius 6
 kwmc config border marked color 0xFFBDD322
+
+# layout
+kwmc config space 0 3 tree social
