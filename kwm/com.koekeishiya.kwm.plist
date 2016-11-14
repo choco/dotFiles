@@ -16,6 +16,8 @@
     <dict>
       <key>SockServiceName</key>
       <string>3020</string>
+      <key>SockNodeName</key>
+      <string>localhost</string>
       <key>SockType</key>
       <string>dgram</string>
       <key>SockFamily</key>
