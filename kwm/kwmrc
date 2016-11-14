@@ -49,6 +49,7 @@ kwmc rule owner="Tweetbot"                  properties={space="3"; float="true"}
 kwmc rule owner="Tweetbot"                  properties={space="3"}
 kwmc rule owner="App for WhatsApp"          properties={space="3"}
 kwmc rule owner="Textual"                   properties={space="3"}
+kwmc rule owner="iTerm2" name=".*\bVisor\b.*" properties={float="true"}
 kwmc rule owner="App Store"                 properties={float="true"}
 kwmc rule owner="The Unarchiver"            properties={float="true"}
 kwmc rule owner="CleanMyMac 3"              properties={float="true"}
