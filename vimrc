@@ -200,7 +200,9 @@ call plug#end()
 
 " Faster startup time on neovim
 let g:python_host_skip_check = 1
+let g:python_host_prog = "/usr/local/bin/python2"
 let g:python3_host_skip_check = 1
+let g:python3_host_prog = "/usr/local/bin/python3"
 
 " Enable syntax highlighting
 syntax enable
