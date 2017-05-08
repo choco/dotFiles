@@ -1,3 +1,16 @@
+diff --git a/autoload/airline/extensions/branch.vim b/autoload/airline/extensions/branch.vim
+index aa66457..6c3e42c 100644
+--- a/autoload/airline/extensions/branch.vim
++++ b/autoload/airline/extensions/branch.vim
+@@ -327,7 +327,7 @@ function! airline#extensions#branch#head()
+     let b:airline_head = ''
+   endif
+   let minwidth = empty(get(b:, 'airline_hunks', '')) ? 14 : 7
+-  let b:airline_head = airline#util#shorten(b:airline_head, 120, minwidth)
++  let b:airline_head = airline#util#shorten(b:airline_head, 120, minwidth, 1)
+   return b:airline_head
+ endfunction
+ 
 diff --git a/autoload/airline/extensions/tabline.vim b/autoload/airline/extensions/tabline.vim
 index cadb399..3c574d3 100644
 --- a/autoload/airline/extensions/tabline.vim
@@ -12,10 +25,10 @@ index cadb399..3c574d3 100644
    let l:tabhid  = get(colors, 'airline_tabhid', a:palette.normal.airline_c)
    if has_key(a:palette, 'normal_modified') && has_key(a:palette.normal_modified, 'airline_c')
 diff --git a/autoload/airline/extensions/tabline/buffers.vim b/autoload/airline/extensions/tabline/buffers.vim
-index 8c3f344..99f27c6 100644
+index 31ad4da..e6d9830 100644
 --- a/autoload/airline/extensions/tabline/buffers.vim
 +++ b/autoload/airline/extensions/tabline/buffers.vim
-@@ -88,6 +88,7 @@ function! airline#extensions#tabline#buffers#get()
+@@ -89,6 +89,7 @@ function! airline#extensions#tabline#buffers#get()
      if has("tablineat")
        call b.add_raw('%X')
      endif
@@ -23,3 +36,56 @@ index 8c3f344..99f27c6 100644
    endfor
  
    call b.add_section('airline_tabfill', '')
+diff --git a/autoload/airline/extensions/whitespace.vim b/autoload/airline/extensions/whitespace.vim
+index 861fb28..4ff84c0 100644
+--- a/autoload/airline/extensions/whitespace.vim
++++ b/autoload/airline/extensions/whitespace.vim
+@@ -114,7 +114,7 @@ function! airline#extensions#whitespace#check()
+       endif
+     endif
+   endif
+-  return airline#util#shorten(b:airline_whitespace_check, 120, 9)
++  return airline#util#shorten(b:airline_whitespace_check, 120, 9, 1)
+ endfunction
+ 
+ function! airline#extensions#whitespace#toggle()
+diff --git a/autoload/airline/parts.vim b/autoload/airline/parts.vim
+index f7b56fb..11ff044 100644
+--- a/autoload/airline/parts.vim
++++ b/autoload/airline/parts.vim
+@@ -53,7 +53,7 @@ endfunction
+ " }}}
+ 
+ function! airline#parts#mode()
+-  return airline#util#shorten(get(w:, 'airline_current_mode', ''), 79, 1)
++  return airline#util#shorten(get(w:, 'airline_current_mode', ''), 79, 1, 0)
+ endfunction
+ 
+ function! airline#parts#crypt()
+diff --git a/autoload/airline/util.vim b/autoload/airline/util.vim
+index 4246ccd..2a7bf94 100644
+--- a/autoload/airline/util.vim
++++ b/autoload/airline/util.vim
+@@ -6,14 +6,19 @@ scriptencoding utf-8
+ call airline#init#bootstrap()
+ let s:spc = g:airline_symbols.space
+ 
+-function! airline#util#shorten(text, winwidth, minwidth, ...)
++function! airline#util#shorten(text, winwidth, minwidth, ellipsis, ...)
+   if winwidth(0) < a:winwidth && len(split(a:text, '\zs')) > a:minwidth
++    if a:ellipsis > 0
++      let eli = '…'
++    else
++      let eli = ''
++    endif
+     if get(a:000, 0, 0)
+       " shorten from tail
+-      return '…'.matchstr(a:text, '.\{'.a:minwidth.'}$')
++      return eli.matchstr(a:text, '.\{'.a:minwidth.'}$')
+     else
+       " shorten from beginning of string
+-      return matchstr(a:text, '^.\{'.a:minwidth.'}').'…'
++      return matchstr(a:text, '^.\{'.a:minwidth.'}').eli
+     endif
+   else
+     return a:text

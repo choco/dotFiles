@@ -1,5 +1,5 @@
 diff --git a/pythonx/UltiSnips/snippet_manager.py b/pythonx/UltiSnips/snippet_manager.py
-index 331500e..c4c5bf0 100644
+index 3d2a2a5..61fc27f 100644
 --- a/pythonx/UltiSnips/snippet_manager.py
 +++ b/pythonx/UltiSnips/snippet_manager.py
 @@ -366,7 +366,7 @@ class SnippetManager(object):
