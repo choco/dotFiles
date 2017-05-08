@@ -58,8 +58,10 @@ export GOPATH=$PROJECTS/Go
 path=(
   /usr/local/{bin,sbin}
   $HOME/Library/Haskell/bin
+  $HOME/Library/Python/2.7/bin
   /usr/local/opt/go/libexec/bin
   $GOPATH/bin
+  $HOME/.cargo/bin
   $DOTFILES/bin
   $PROJECTS/kwm/bin
   $PROJECTS/khd/bin
