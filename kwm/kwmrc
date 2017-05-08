@@ -1,8 +1,8 @@
 # Set default values for screen padding
-kwmc config padding 40 20 20 20
+kwmc config padding 42 20 20 20
 
 # Set default values for container gaps
-kwmc config gap 15 15
+kwmc config gap 17 17
 
 # Default tiling mode for Kwm (bsp | monocle | float | off)
 kwmc config tiling bsp
@@ -17,7 +17,8 @@ kwmc config focus-follows-mouse on
 kwmc config lock-to-container on
 
 # Center a window when switched to float
-kwmc config center-on-float on
+kwmc config center-on-float off
+kwmc config display 0 float-dim 1250 800
 
 # Focus-follows-mouse is temporarily disabled when
 # a floating window has focus
@@ -41,29 +42,31 @@ kwmc config split-ratio 0.5
 kwmc config spawn left
 
 # Custom tiling rules
-kwmc rule owner="Steam"                     properties={float="true"}
-kwmc rule owner="Photoshop"                 properties={float="true"}
-kwmc rule owner="Fantastical 2"             properties={float="true"}
-kwmc rule owner="Fantastical"               properties={float="true"}
-kwmc rule owner="Tweetbot"                  properties={space="3"; float="true"} except="Main Window"
-kwmc rule owner="Tweetbot"                  properties={space="3"}
-kwmc rule owner="App for WhatsApp"          properties={space="3"}
-kwmc rule owner="Textual"                   properties={space="3"}
+kwmc rule owner="Steam"                       properties={float="true"}
+kwmc rule owner="Xcode"                       properties={float="true"}
+kwmc rule owner=".*Photoshop CC.*"            properties={float="true"}
+kwmc rule owner="Fantastical 2"               properties={float="true"}
+kwmc rule owner="Fantastical"                 properties={float="true"}
+kwmc rule owner="Tweetbot"                    properties={space="3"; float="true"} except="Main Window"
+kwmc rule owner="Tweetbot"                    properties={space="3"}
+kwmc rule owner="ChatMate for WhatsApp"       properties={space="3"}
+kwmc rule owner="Textual"                     properties={space="3"}
 kwmc rule owner="iTerm2" name=".*\bVisor\b.*" properties={float="true"}
-kwmc rule owner="App Store"                 properties={float="true"}
-kwmc rule owner="The Unarchiver"            properties={float="true"}
-kwmc rule owner="CleanMyMac 3"              properties={float="true"}
-kwmc rule owner="Trash"                     properties={float="true"}
-kwmc rule owner="Spotify"                   properties={float="true"}
-kwmc rule owner="Popcorn Time"              properties={float="true"}
-kwmc rule owner="Airmail 3"                 properties={float="true"}
-kwmc rule owner="Airmail"                   properties={float="true"}
-kwmc rule owner="Finder"    name="Copy"     properties={float="true"}
-kwmc rule owner="LeagueClientUx"            properties={role="AXUnknown" float="true" space="2"}
+kwmc rule owner="App Store"                   properties={float="true"}
+kwmc rule owner="The Unarchiver"              properties={float="true"}
+kwmc rule owner="CleanMyMac 3"                properties={float="true"}
+kwmc rule owner="Finder" name="Trash"         properties={float="true"}
+kwmc rule owner="Spotify"                     properties={float="true"}
+kwmc rule owner="Popcorn Time"                properties={float="true"}
+kwmc rule owner="Airmail 3"                   properties={float="true"}
+kwmc rule owner="Airmail"                     properties={float="true"}
+kwmc rule owner="Finder" name=".*\bCopy\b.*"  properties={float="true"}
+kwmc rule owner="LeagueClientUx" properties={float="true"; space="2"; role="AXUnknown"}
 
 # Processes to whitelist to force notifications subscription
 kwmc whitelist mpv
 kwmc whitelist App for WhatsApp
+kwmc whitelist LeagueClient
 kwmc whitelist LeagueClientUx
 
 # on border for focused window
