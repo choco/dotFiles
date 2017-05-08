@@ -1,0 +1,117 @@
+diff --git a/iTerm2.xcodeproj/project.pbxproj b/iTerm2.xcodeproj/project.pbxproj
+index 29e6cadb..2e94ca12 100644
+--- a/iTerm2.xcodeproj/project.pbxproj
++++ b/iTerm2.xcodeproj/project.pbxproj
+@@ -7181,8 +7181,7 @@
+ 						DevelopmentTeam = H7V7XYVQ7D;
+ 					};
+ 					874206460564169600CFC3F1 = {
+-						DevelopmentTeam = H7V7XYVQ7D;
+-						ProvisioningStyle = Automatic;
++						DevelopmentTeam = VJ8592T25A;
+ 					};
+ 					A66717851DCE36C3000CE608 = {
+ 						DevelopmentTeam = H7V7XYVQ7D;
+@@ -8958,7 +8957,7 @@
+ 				CODE_SIGN_IDENTITY = "Mac Developer";
+ 				COMBINE_HIDPI_IMAGES = YES;
+ 				COPY_PHASE_STRIP = YES;
+-				DEVELOPMENT_TEAM = H7V7XYVQ7D;
++				DEVELOPMENT_TEAM = VJ8592T25A;
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)",
+@@ -10138,7 +10137,7 @@
+ 				COMBINE_HIDPI_IMAGES = YES;
+ 				COPY_PHASE_STRIP = NO;
+ 				DEBUG_INFORMATION_FORMAT = dwarf;
+-				DEVELOPMENT_TEAM = H7V7XYVQ7D;
++				DEVELOPMENT_TEAM = VJ8592T25A;
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)",
+@@ -10207,7 +10206,7 @@
+ 				CODE_SIGN_IDENTITY = "Mac Developer";
+ 				COMBINE_HIDPI_IMAGES = YES;
+ 				COPY_PHASE_STRIP = YES;
+-				DEVELOPMENT_TEAM = H7V7XYVQ7D;
++				DEVELOPMENT_TEAM = VJ8592T25A;
+ 				FRAMEWORK_SEARCH_PATHS = (
+ 					"$(inherited)",
+ 					"$(SRCROOT)",
+diff --git a/sources/PseudoTerminal.m b/sources/PseudoTerminal.m
+index 9876adad..1b806e79 100644
+--- a/sources/PseudoTerminal.m
++++ b/sources/PseudoTerminal.m
+@@ -384,9 +384,17 @@ static NSRect iTermRectCenteredVerticallyWithinRect(NSRect frameToCenter, NSRect
+         case WINDOW_TYPE_BOTTOM_PARTIAL:
+         case WINDOW_TYPE_LEFT_PARTIAL:
+         case WINDOW_TYPE_RIGHT_PARTIAL:
+-        case WINDOW_TYPE_NO_TITLE_BAR:
+             return mask | NSBorderlessWindowMask | NSResizableWindowMask;
+ 
++        case WINDOW_TYPE_NO_TITLE_BAR:
++            return (mask |
++                    NSFullSizeContentViewWindowMask |
++                    NSTitledWindowMask |
++                    NSClosableWindowMask |
++                    NSMiniaturizableWindowMask |
++                    NSResizableWindowMask |
++                    NSTexturedBackgroundWindowMask);
++
+         case WINDOW_TYPE_TRADITIONAL_FULL_SCREEN:
+             return mask | NSBorderlessWindowMask;
+ 
+@@ -600,7 +608,7 @@ static NSRect iTermRectCenteredVerticallyWithinRect(NSRect frameToCenter, NSRect
+         [myWindow setFrame:initialFrame display:NO];
+     }
+ 
+-    [myWindow setHasShadow:(windowType == WINDOW_TYPE_NORMAL)];
++    [myWindow setHasShadow:(windowType == WINDOW_TYPE_NORMAL) || (windowType == WINDOW_TYPE_NO_TITLE_BAR)];
+ 
+     DLog(@"Create window %@", myWindow);
+ 
+@@ -651,6 +659,17 @@ static NSRect iTermRectCenteredVerticallyWithinRect(NSRect frameToCenter, NSRect
+     }
+ 
+     [self updateTabBarStyle];
++    // If the window type is borderless rounded...
++    if(windowType == WINDOW_TYPE_NO_TITLE_BAR) {
++        // Hide the titlebar
++        NSWindow *terminalWindow = self.window;
++        terminalWindow.titlebarAppearsTransparent = YES;
++        terminalWindow.titleVisibility = NSWindowTitleHidden;
++        terminalWindow.showsToolbarButton = NO;
++        [[terminalWindow standardWindowButton:NSWindowCloseButton] setHidden:YES];
++        [[terminalWindow standardWindowButton:NSWindowMiniaturizeButton] setHidden:YES];
++        [[terminalWindow standardWindowButton:NSWindowZoomButton] setHidden:YES];
++    }
+     self.window.delegate = self;
+ 
+     [[NSNotificationCenter defaultCenter] addObserver:self
+diff --git a/sources/iTermPreciseTimer.h b/sources/iTermPreciseTimer.h
+index b0f894b2..b5860db2 100644
+--- a/sources/iTermPreciseTimer.h
++++ b/sources/iTermPreciseTimer.h
+@@ -23,7 +23,7 @@ typedef struct {
+     double m2;
+ } iTermPreciseTimerStats;
+ 
+-#define ENABLE_PRECISE_TIMERS 1
++#define ENABLE_PRECISE_TIMERS 0
+ 
+ #if ENABLE_PRECISE_TIMERS
+ void iTermPreciseTimerStart(iTermPreciseTimer *timer);
+diff --git a/sources/iTermTextDrawingHelper.m b/sources/iTermTextDrawingHelper.m
+index 2bdce153..2a64c3eb 100644
+--- a/sources/iTermTextDrawingHelper.m
++++ b/sources/iTermTextDrawingHelper.m
+@@ -1266,7 +1266,7 @@ typedef struct iTermTextColorContext {
+     int savedFontSmoothingStyle = 0;
+     const CGFloat *components = CGColorGetComponents(cgColor);
+     const CGFloat brightness = PerceivedBrightness(components[0], components[1], components[2]);
+-    BOOL useThinStrokes = [self thinStrokes] && ([backgroundColor brightnessComponent] < brightness);
++    BOOL useThinStrokes = [self thinStrokes] && (([backgroundColor brightnessComponent] < brightness) || bold);
+     if (useThinStrokes) {
+         CGContextSetShouldSmoothFonts(cgContext, YES);
+         // This seems to be available at least on 10.8 and later. The only reference to it is in
