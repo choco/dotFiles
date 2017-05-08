@@ -6,3 +6,6 @@ Host bitbucket.org
 
 Host ssh.choco.me
   IdentityFile ~/.ssh/id_bebop
+
+Host *
+  UseKeychain yes
