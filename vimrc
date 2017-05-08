@@ -152,7 +152,7 @@ Plug 'majutsushi/tagbar'
 function! BuildYCM(info)
   " - force:  set on PlugInstall! or PlugUpdate!
   if a:info.status == 'installed' || a:info.force
-    !./install.py --clang-completer --omnisharp-completer --gocode-completer --tern-completer --racer-completer
+    !python3 install.py --clang-completer --omnisharp-completer --gocode-completer --tern-completer --racer-completer
   endif
 endfunction
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM'), 'on': [] }
@@ -162,12 +162,11 @@ Plug 'honza/vim-snippets'
 " Defer YouCompleteMe and UltiSnips loading until insert mode is entered {{{
 augroup load_us_ycm
   autocmd!
-  autocmd InsertEnter * if !exists(':UltiSnipsEdit')
+  autocmd InsertEnter,CursorHold,CursorHoldI * if !exists(':UltiSnipsEdit')
         \|      call plug#load('ultisnips', 'YouCompleteMe')
         \|  else
         \|      call plug#load('YouCompleteMe')
         \|  endif
-        \|  silent! call feedkeys("\<Plug>indentLineReset")
         \|  autocmd! load_us_ycm
 augroup END
 " }}}
@@ -220,6 +219,9 @@ set expandtab                           " expand tabs to spaces
 set laststatus=2                        " always show statusline
 set list                                " show trailing whitespace
 set listchars=tab:▸\ ,trail:▫
+set listchars+=nbsp:⦸                  " CIRCLED REVERSE SOLIDUS (U+29B8, UTF-8: E2 A6 B8)
+set listchars+=extends:»              " RIGHT-POINTING DOUBLE ANGLE QUOTATION MARK (U+00BB, UTF-8: C2 BB)
+set listchars+=precedes:«             " LEFT-POINTING DOUBLE ANGLE QUOTATION MARK (U+00AB, UTF-8: C2 AB)
 set number                              " show line numbers
 set ruler                               " show where you are
 set linebreak                           " break properly, don't split words
@@ -241,6 +243,7 @@ set wildmode=list:full
 set wildignorecase
 set showfulltag
 set synmaxcol=1000
+set virtualedit=block
 " Update syntax highlighting for more lines increased scrolling performance
 syntax sync minlines=256
 set colorcolumn=80
@@ -267,6 +270,7 @@ set gdefault                            " assume the /g flag on :s substitutions
 
 set complete-=i
 set smarttab
+set updatetime=2000
 set timeout                             " timeout on key codes
 set timeoutlen=800
 set ttimeout                            " but not on mappings
@@ -412,7 +416,8 @@ noremap <F6> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 " Cursor configuration {{{
 " Use a blinking upright bar cursor in Insert mode, a solid block in normal
 " and a blinking underline in replace mode
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+set guicursor&
+set guicursor=n-v-c-o:block-blinkon0,i-ci:ver100-blinkwait300-blinkon300-blinkoff400,sm-cr-r:hor100-blinkwait300-blinkon300-blinkoff400
 let &t_SI                         = "\<Esc>[5 q"
 let &t_SR                         = "\<Esc>[3 q"
 let &t_EI                         = "\<Esc>[2 q"
@@ -515,6 +520,7 @@ let g:ycm_extra_conf_globlist = [
 
 " jedi-vim configuration {{{
 let g:jedi#auto_vim_configuration = 0
+let g:jedi#force_py_version = 'auto'
 let g:jedi#completions_enabled    = 0
 let g:jedi#use_tabs_not_buffers   = 0
 let g:jedi#show_call_signatures_delay = 0
@@ -642,6 +648,8 @@ nnoremap <leader>o :TagbarToggle<CR>
 
 " indentLine configuration {{{
 let g:indentLine_char = '┊'
+let g:indentLine_fileTypeExclude = ['startify']
+let g:indentLine_faster = 1
 " }}}
 
 " slime configuration {{{
