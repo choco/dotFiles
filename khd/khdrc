@@ -35,14 +35,11 @@ ctrl + cmd - j           :   ~/.kwm/scripts/move_window.sh south
 ctrl + cmd - k           :   ~/.kwm/scripts/move_window.sh north
 
 # move focues window to space
-# ctrl + alt - left       :   khd -p ctrl - left;\
-#                             kwmc window -m space left
-# ctrl + alt - right      :   khd -p ctrl - right;\
-#                             kwmc window -m space right
 ctrl + alt - left       :   kwmc window -m space left;\
-                            ~/.kwm/scripts/change_space left
+                            khd -p "ctrl - left"
 ctrl + alt - right      :   kwmc window -m space right;\
-                            ~/.kwm/scripts/change_space right
+                            khd -p "ctrl - right"
+
 # tree mode
 tree - f                :   kwmc window -z fullscreen
 tree - d                :   kwmc window -z parent
