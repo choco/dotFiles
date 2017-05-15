@@ -160,13 +160,16 @@ Plug 'davidhalter/jedi-vim'
 Plug 'SirVer/ultisnips', { 'on': [] }
 Plug 'honza/vim-snippets'
 " Defer YouCompleteMe and UltiSnips loading until insert mode is entered {{{
+function! LoadYCM()
+  if !exists(':UltiSnipsEdit')
+    call plug#load('ultisnips')
+  endif
+  call plug#load('YouCompleteMe')
+endfunction
+command! -nargs=* YcmCompleter call LoadYCM() | sleep 2 | YcmCompleter <args>
 augroup load_us_ycm
   autocmd!
-  autocmd InsertEnter,CursorHold,CursorHoldI * if !exists(':UltiSnipsEdit')
-        \|      call plug#load('ultisnips', 'YouCompleteMe')
-        \|  else
-        \|      call plug#load('YouCompleteMe')
-        \|  endif
+  autocmd InsertEnter,CursorHold,CursorHoldI * call LoadYCM()
         \|  autocmd! load_us_ycm
 augroup END
 " }}}
@@ -392,9 +395,12 @@ xnoremap > >gv
 " In case you forgot to sudo
 cmap w!! %!sudo tee > /dev/null %
 
-
 " Jump function definition
-nnoremap <leader>cd <C-]>
+nnoremap <leader>jt <C-]>
+nnoremap <leader>jg :YcmCompleter GoTo<CR>
+nnoremap <leader>ji :YcmCompleter GoToInclude<CR>
+nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
+nnoremap <leader>jc :YcmCompleter GoToDeclaration<CR>
 
 " Enable 24-bit colors
 set termguicolors
@@ -648,7 +654,8 @@ nnoremap <leader>o :TagbarToggle<CR>
 
 " indentLine configuration {{{
 let g:indentLine_char = '┊'
-let g:indentLine_fileTypeExclude = ['startify']
+let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'startify', 'tagbar', 'vimfiler']
+let g:indentLine_bufNameExclude = ['Startify']
 let g:indentLine_faster = 1
 " }}}
 
@@ -676,23 +683,21 @@ let g:startify_session_autoload       = 1
 let g:startify_session_delete_buffers = 1
 let g:startify_session_persistence    = 1
 let g:startify_custom_header          = [
-\ '                                                                 ',
-\ '                 ,╓╦╢╣┘                         ╣╩▄              ',
-\ '                ╣╬╬░▒Γ                ,╢Ç╖RφQ▒▄▓▒╬╬              ',
-\ '            ,▄▄▒▒▒▒╬▒╣╣@╗╗╖,       ╒╦██▄▓▄▒█▒╬▓▓▌╣╬τ             ',
-\ '         ` ΓΓ    └╚╬░╣▒▒╙╨╩░╬╬╬▒╣@╗▓▓▓▌╬╣╣╬╬╬▓▓▓█▌╝▐M            ',
-\ '                             ^δ╬╬▄▓█▓█▒╣▒▒╬▀█τ²▀<                ',
-\ '                            ,Q███░╬░╣Σ▀╬╬╬░▒╣╗╖            ƒΓ  ▄m',
-\ '                        ,▄▒██░╬░╬╫░░╣▒δ`╨╚▒░╬╬╬╬╣╗╖      ╓╣ ╔▓█  ',
-\ '                     ▄▒█▌░╣╩╨Σ▓▓█▀▓▌╬▒Γ      ╚Å▒░╬╬╬╣╗,╔╬▒ ▄█▀   ',
-\ '                 ╓▄▀▀╝╜`  ,▄▓▓█▐█▓▓█δ╨          ╙δ╬╬╬╣▒▒Ñ▄▓█     ',
-\ '               ²`      ▄▄▓█▀Γ                      ▄░▒Ñ▓▓▓.      ',
-\ '                  ,▄▄▓▀Γ                         ╦╣▒Ñ╒▓█         ',
-\ '                ▄▄█▀                              Ä ▄█           ',
-\ '            ,▄█▀.                               @╨▄▀             ',
-\ '          ▄▀Γ                                   ,█.              ',
-\ '',
-\ '',
+\ '     *       .                 .       *    .       .       *    ',
+\ '           .     ,╓╦╢╣┘      +      .           ╣╩▄    *         ',
+\ ' .              ╣╬╬░▒Γ    .     *     ,╢Ç╖RφQ▒▄▓▒╬╬  .      +    ',
+\ '            ,▄▄▒▒▒▒╬▒╣╣@╗╗╖,       ╒╦██▄▓▄▒█▒╬▓▓▌╣╬τ    .        ',
+\ '    *    ` ΓΓ    └╚╬░╣▒▒╙╨╩░╬╬╬▒╣@╗▓▓▓▌╬╣╣╬╬╬▓▓▓█▌╝▐M        . * ',
+\ '      +          .           ^δ╬╬▄▓█▓█▒╣▒▒╬▀█τ²▀<       *        ',
+\ ' *         .   .     *      ,Q███░╬░╣Σ▀╬╬╬░▒╣╗╖      .     ƒΓ  ▄m',
+\ '          *             ,▄▒██░╬░╬╫░░╣▒δ`╨╚▒░╬╬╬╬╣╗╖      ╓╣ ╔▓█  ',
+\ '     .          .    ▄▒█▌░╣╩╨Σ▓▓█▀▓▌╬▒Γ      ╚Å▒░╬╬╬╣╗,╔╬▒ ▄█▀   ',
+\ '         *       ╓▄▀▀╝╜`  ,▄▓▓█▐█▓▓█δ╨          ╙δ╬╬╬╣▒▒Ñ▄▓█     ',
+\ ' .             ²`      ▄▄▓█▀Γ                *     ▄░▒Ñ▓▓▓.      ',
+\ '                  ,▄▄▓▀Γ    .      *       .     ╦╣▒Ñ╒▓█       . ',
+\ '     * .        ▄▄█▀                   +          Ä ▄█    .      ',
+\ '            ,▄█▀.        +         .       *    @╨▄▀ .       +   ',
+\ '  .       ▄▀Γ       *         .                 ,█.       .   *  ',
 \ '',
 \ '',
 \ ]
