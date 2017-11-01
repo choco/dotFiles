@@ -1,0 +1,58 @@
+#!/bin/zsh
+
+# Plugins dir
+chunkc core::plugin_dir ~/Projects/chunkwm/plugins
+chunkc core::hotload 1
+
+# Tiling Conf
+chunkc set global_desktop_mode           bsp
+chunkc set global_desktop_offset_top      60
+chunkc set global_desktop_offset_bottom   60
+chunkc set global_desktop_offset_left     60
+chunkc set global_desktop_offset_right    60
+chunkc set global_desktop_offset_gap      15
+# desktop 3 layout
+chunkc set 3_desktop_tree    ~/.social.chkwm
+
+chunkc set desktop_padding_step_size    10.0
+chunkc set desktop_gap_step_size         5.0
+
+chunkc set bsp_spawn_left                  1
+chunkc set bsp_optimal_ratio           1.618
+chunkc set bsp_split_mode            optimal
+chunkc set bsp_split_ratio               0.5
+
+chunkc set window_focus_cycle            all
+chunkc set mouse_follows_focus             1
+chunkc set window_float_next               0
+chunkc set window_float_center             1
+chunkc set window_region_locked            1
+chunkc set mouse_modifier                 fn
+
+# Border conf
+chunkc set focused_border_color   0xFFDD5A45
+chunkc set focused_border_width            4
+chunkc set focused_border_radius           4
+
+# Plugins to load
+chunkc core::load ffm.so
+chunkc core::load border.so
+chunkc core::load tiling.so
+
+# Tiling rules
+chunkc tiling::rule --owner \"^Tweetbot$\"        --state float   --except \"Main Window\"
+chunkc tiling::rule --owner \"^Tweetbot$\"        --desktop   3
+chunkc tiling::rule --owner \"^Textual IRC Client$\"              --desktop 3
+chunkc tiling::rule --owner \"^ChatMate for WhatsApp$\"           --desktop 3
+chunkc tiling::rule --owner \"^Xcode$\"           --state float
+chunkc tiling::rule --owner \"^Photoshop CC$\"    --state float
+chunkc tiling::rule --owner \"^Fantastical 2$\"   --state float
+chunkc tiling::rule --owner \"^Fantastical$\"     --state float
+chunkc tiling::rule --owner \"^App Store$\"       --state float
+chunkc tiling::rule --owner \"^The Unarchiver$\"  --state float
+chunkc tiling::rule --owner \"^CleanMyMac 3$\"    --state float
+chunkc tiling::rule --owner \"^Spotify$\"         --state float
+chunkc tiling::rule --owner \"^Airmail$\"         --state float
+chunkc tiling::rule --owner \"^LeagueClientUx$\"  --state float
+chunkc tiling::rule --owner \"^Finder$\"          --name \"Trash\"  --state float
+chunkc tiling::rule --owner \"^Finder$\"          --name \"Copy\"   --state float
