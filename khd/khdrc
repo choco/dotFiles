@@ -1,10 +1,7 @@
-# enable kwm compatibility mode
-khd kwm on
-
 # set border color for different modes
-khd mode default color 0xFFDD5A45
+khd mode default on_enter chunkc border::color 0xFFDD5A45
 khd mode tree prefix on
-khd mode tree color 0xddfabd2f
+khd mode tree on_enter chunkc border::color 0xddfabd2f
 khd mode tree restore default
 khd mode tree timeout 1.00
 
@@ -14,54 +11,56 @@ ctrl - s                :   khd -e "mode activate tree"
 # quick launch iTerm
 cmd - return            :   open -a /Applications/iTerm2.app;\
                             khd -e "mode activate default"
+# open floating preferences
+cmd - 0x2B            ->:   chunkc set window_float_next 1
+
+# screenshot
+cmd + shift - 4         :   chunkc border::clear;\
+                            screencapture -i ~/Desktop/"$(date "+Screen Shot %Y-%m-%d at %H.%M.%S.png")";\
+                            chunkc border::color 0xFFDD5A45
+
 # move focus between windows
-cmd + alt - h           :   kwmc window -f west
-cmd + alt - l           :   kwmc window -f east
-cmd + alt - j           :   kwmc window -f south
-cmd + alt - k           :   kwmc window -f north
-cmd + alt - b           :   kwmc window -fm prev
-cmd + alt - n           :   kwmc window -fm next
+cmd + alt - h           :   chunkc tiling::window --focus west
+cmd + alt - l           :   chunkc tiling::window --focus east
+cmd + alt - j           :   chunkc tiling::window --focus south
+cmd + alt - k           :   chunkc tiling::window --focus north
 
 # switch focused window position
-ctrl + alt - h           :   kwmc window -s west
-ctrl + alt - l           :   kwmc window -s east
-ctrl + alt - j           :   kwmc window -s south
-ctrl + alt - k           :   kwmc window -s north
+ctrl + alt - h           :   chunkc tiling::window --swap west
+ctrl + alt - l           :   chunkc tiling::window --swap east
+ctrl + alt - j           :   chunkc tiling::window --swap south
+ctrl + alt - k           :   chunkc tiling::window --swap north
 
 # move focused window into another container
-ctrl + cmd - h           :   ~/.kwm/scripts/move_window.sh west
-ctrl + cmd - l           :   ~/.kwm/scripts/move_window.sh east
-ctrl + cmd - j           :   ~/.kwm/scripts/move_window.sh south
-ctrl + cmd - k           :   ~/.kwm/scripts/move_window.sh north
+ctrl + cmd - h           :   chunkc tiling::window --warp west
+ctrl + cmd - l           :   chunkc tiling::window --warp east
+ctrl + cmd - j           :   chunkc tiling::window --warp south
+ctrl + cmd - k           :   chunkc tiling::window --warp north
 
 # move focues window to space
-ctrl + alt - left       :   kwmc window -m space left;\
+ctrl + alt - left       :   chunkc tiling::window --send-to-desktop prev;\
                             khd -p "ctrl - left"
-ctrl + alt - right      :   kwmc window -m space right;\
+ctrl + alt - right      :   chunkc tiling::window --send-to-desktop next;\
                             khd -p "ctrl - right"
 
 # tree mode
-tree - f                :   kwmc window -z fullscreen
-tree - d                :   kwmc window -z parent
-tree - w                :   kwmc window -t focused
-tree - r                :   kwmc tree rotate 90
+tree - f                :   chunkc tiling::window --toggle fullscreen
+tree - d                :   chunkc tiling::window --toggle parent
+tree - w                :   chunkc tiling::window --toggle float
+tree - r                :   chunkc tiling::desktop --rotate 90
 
 # modify container split mode (horizontal, vertical)
-tree - s                :   kwmc window -c split - mode toggle;\
-                            khd -e "mode activate default"
-
-# change window container between bsp and monocle
-tree - c                :   kwmc window -c type toggle;\
+tree - s                :   chunkc tiling::window --toggle split;\
                             khd -e "mode activate default"
 
 # expands/reduce tree nodes
 tree - b                :   kwmc window -c reduce 0.05 focused
 tree - n                :   kwmc window -c expand 0.05 focused
-tree - h                :   kwmc window -c expand 0.05 west
-tree - j                :   kwmc window -c expand 0.05 south
-tree - k                :   kwmc window -c expand 0.05 north
-tree - l                :   kwmc window -c expand 0.05 east
-tree + shift - h        :   kwmc window -c reduce 0.05 west
-tree + shift - j        :   kwmc window -c reduce 0.05 south
-tree + shift - k        :   kwmc window -c reduce 0.05 north
-tree + shift - l        :   kwmc window -c reduce 0.05 east
+tree - h                :   chunkc tiling::window --use-temporary-ratio 0.02 --adjust-window-edge west
+tree - j                :   chunkc tiling::window --use-temporary-ratio 0.02 --adjust-window-edge south
+tree - k                :   chunkc tiling::window --use-temporary-ratio 0.02 --adjust-window-edge north
+tree - l                :   chunkc tiling::window --use-temporary-ratio 0.02 --adjust-window-edge east
+tree + shift - h        :   chunkc tiling::window --use-temporary-ratio -0.02 --adjust-window-edge west
+tree + shift - j        :   chunkc tiling::window --use-temporary-ratio -0.02 --adjust-window-edge south
+tree + shift - k        :   chunkc tiling::window --use-temporary-ratio -0.02 --adjust-window-edge north
+tree + shift - l        :   chunkc tiling::window --use-temporary-ratio -0.02 --adjust-window-edge east

@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-  <key>Label</key>
-  <string>koekeishiya.kwm</string>
-  <key>ProgramArguments</key>
-  <array>
-    <string>/Users/cHoco/Projects/kwm/bin/kwm</string>
-  </array>
-  <key>KeepAlive</key>
-  <true/>
-  <key>Sockets</key>
   <dict>
-    <key>Listeners</key>
+    <key>Label</key>
+    <string>com.koekeishiya.chunkwm</string>
+    <key>ProgramArguments</key>
+    <array>
+      <string>/Users/choco/Projects/chunkwm/bin/chunkwm</string>
+    </array>
+    <key>EnvironmentVariables</key>
     <dict>
-      <key>SockServiceName</key>
-      <string>3020</string>
-      <key>SockNodeName</key>
-      <string>localhost</string>
-      <key>SockType</key>
-      <string>dgram</string>
-      <key>SockFamily</key>
-      <string>IPv4</string>
+      <key>PATH</key>
+      <string>/Users/choco/Projects/chunkwm/src/chunkc/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin</string>
+    </dict>
+    <key>RunAtLoad</key>
+    <true/>
+    <key>KeepAlive</key>
+    <true/>
+    <key>StandardOutPath</key>
+    <string>/tmp/chunkwm.out</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/chunkwm.err</string>
   </dict>
-</dict>
-</dict>
 </plist>

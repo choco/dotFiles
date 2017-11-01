@@ -1,8 +1,8 @@
 diff --git a/iTerm2.xcodeproj/project.pbxproj b/iTerm2.xcodeproj/project.pbxproj
-index 2e6b540b..2e94ca12 100644
+index c129d95b..68f86868 100644
 --- a/iTerm2.xcodeproj/project.pbxproj
 +++ b/iTerm2.xcodeproj/project.pbxproj
-@@ -7181,7 +7181,7 @@
+@@ -7221,7 +7221,7 @@
  						DevelopmentTeam = H7V7XYVQ7D;
  					};
  					874206460564169600CFC3F1 = {
@@ -11,7 +11,7 @@ index 2e6b540b..2e94ca12 100644
  					};
  					A66717851DCE36C3000CE608 = {
  						DevelopmentTeam = H7V7XYVQ7D;
-@@ -8954,10 +8954,10 @@
+@@ -9012,10 +9012,10 @@
  			buildSettings = {
  				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
  				CLANG_WARN_INT_CONVERSION = YES;
@@ -24,7 +24,7 @@ index 2e6b540b..2e94ca12 100644
  				FRAMEWORK_SEARCH_PATHS = (
  					"$(inherited)",
  					"$(SRCROOT)",
-@@ -10133,11 +10133,11 @@
+@@ -10670,11 +10670,11 @@
  			buildSettings = {
  				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
  				CLANG_WARN_INT_CONVERSION = YES;
@@ -38,7 +38,7 @@ index 2e6b540b..2e94ca12 100644
  				FRAMEWORK_SEARCH_PATHS = (
  					"$(inherited)",
  					"$(SRCROOT)",
-@@ -10203,10 +10203,10 @@
+@@ -10744,10 +10744,10 @@
  			buildSettings = {
  				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
  				CLANG_WARN_INT_CONVERSION = YES;
@@ -52,10 +52,10 @@ index 2e6b540b..2e94ca12 100644
  					"$(inherited)",
  					"$(SRCROOT)",
 diff --git a/sources/PseudoTerminal.m b/sources/PseudoTerminal.m
-index 9876adad..1b806e79 100644
+index fa2195ef..86be8a06 100644
 --- a/sources/PseudoTerminal.m
 +++ b/sources/PseudoTerminal.m
-@@ -384,9 +384,17 @@ static NSRect iTermRectCenteredVerticallyWithinRect(NSRect frameToCenter, NSRect
+@@ -396,9 +396,17 @@ static NSRect iTermRectCenteredVerticallyWithinRect(NSRect frameToCenter, NSRect
          case WINDOW_TYPE_BOTTOM_PARTIAL:
          case WINDOW_TYPE_LEFT_PARTIAL:
          case WINDOW_TYPE_RIGHT_PARTIAL:
@@ -74,7 +74,7 @@ index 9876adad..1b806e79 100644
          case WINDOW_TYPE_TRADITIONAL_FULL_SCREEN:
              return mask | NSBorderlessWindowMask;
  
-@@ -600,7 +608,7 @@ static NSRect iTermRectCenteredVerticallyWithinRect(NSRect frameToCenter, NSRect
+@@ -638,7 +646,7 @@ static NSRect iTermRectCenteredVerticallyWithinRect(NSRect frameToCenter, NSRect
          [myWindow setFrame:initialFrame display:NO];
      }
  
@@ -83,7 +83,7 @@ index 9876adad..1b806e79 100644
  
      DLog(@"Create window %@", myWindow);
  
-@@ -651,6 +659,17 @@ static NSRect iTermRectCenteredVerticallyWithinRect(NSRect frameToCenter, NSRect
+@@ -689,6 +697,17 @@ static NSRect iTermRectCenteredVerticallyWithinRect(NSRect frameToCenter, NSRect
      }
  
      [self updateTabBarStyle];
@@ -102,7 +102,7 @@ index 9876adad..1b806e79 100644
  
      [[NSNotificationCenter defaultCenter] addObserver:self
 diff --git a/sources/iTermPreciseTimer.h b/sources/iTermPreciseTimer.h
-index b0f894b2..b5860db2 100644
+index a8fa874c..c20813b3 100644
 --- a/sources/iTermPreciseTimer.h
 +++ b/sources/iTermPreciseTimer.h
 @@ -23,7 +23,7 @@ typedef struct {

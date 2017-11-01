@@ -1,8 +1,8 @@
 diff --git a/python/ycm/vimsupport.py b/python/ycm/vimsupport.py
-index adb8505..cb2581c 100644
+index 82881083..ad3350a6 100644
 --- a/python/ycm/vimsupport.py
 +++ b/python/ycm/vimsupport.py
-@@ -408,44 +408,32 @@ def GetVimCommand( user_command, default = 'edit' ):
+@@ -402,44 +402,32 @@ def GetVimCommand( user_command, default = 'edit' ):
  
  # Both |line| and |column| need to be 1-based
  def JumpToLocation( filename, line, column ):
@@ -16,7 +16,7 @@ index adb8505..cb2581c 100644
 +  tagname = vim.eval( 'expand("<cword>")' )
 +  content = '{0}\t{1}\t{2}'.format(tagname,
 +      filename,
-+      'call cursor({0}, {1})'.format(line, column))
++      'call cursor({0}, {1}) | normal zz'.format(line, column))
  
 -  if filename != GetCurrentBufferFilepath():
 -    # We prefix the command with 'keepjumps' so that opening the file is not

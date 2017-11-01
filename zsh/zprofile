@@ -65,6 +65,8 @@ path=(
   $DOTFILES/bin
   $PROJECTS/kwm/bin
   $PROJECTS/khd/bin
+  $PROJECTS/chunkwm/bin
+  $PROJECTS/chunkwm/src/chunkc/bin
   $path
 )
 
@@ -163,3 +165,5 @@ rw() {
 alias ida32='wine ~/.wine/drive_c/Program\ Files/IDA\ 6.8/idaq.exe'
 alias ida64='wine ~/.wine/drive_c/Program\ Files/IDA\ 6.8/idaq64.exe'
 alias lvstrm='rw livestreamer && livestreamer'
+
+export PATH="$HOME/.cargo/bin:$PATH"

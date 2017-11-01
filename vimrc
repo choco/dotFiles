@@ -29,6 +29,11 @@ call plug#begin('~/.vim/plugged')
 Plug 'mhinz/vim-startify'
 Plug 'mhinz/vim-sayonara', { 'on': 'Sayonara' }
 Plug 'kopischke/vim-stay', { 'branch': 'release/1.4.0' }
+augroup stay_no_lcd
+  autocmd!
+  autocmd User BufStaySavePre  if haslocaldir() | let w:lcd = getcwd() | cd - | cd - | endif
+  autocmd User BufStaySavePost if exists('w:lcd') | execute 'lcd' fnameescape(w:lcd) | unlet w:lcd | endif
+augroup END
 Plug '907th/vim-auto-save', { 'for': 'tex' }
 " }}}
 
@@ -155,16 +160,22 @@ function! BuildYCM(info)
     !python3 install.py --clang-completer --omnisharp-completer --gocode-completer --tern-completer --racer-completer
   endif
 endfunction
-Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM'), 'on': [] }
+Plug 'choco/YouCompleteMe', { 'do': function('BuildYCM'), 'on': [] }
 Plug 'davidhalter/jedi-vim'
 Plug 'SirVer/ultisnips', { 'on': [] }
 Plug 'honza/vim-snippets'
 " Defer YouCompleteMe and UltiSnips loading until insert mode is entered {{{
 function! LoadYCM()
+  if exists('b:stay_loaded_view')
+    mkview
+  endif
   if !exists(':UltiSnipsEdit')
     call plug#load('ultisnips')
   endif
   call plug#load('YouCompleteMe')
+  if exists('b:stay_loaded_view')
+    loadview
+  endif
 endfunction
 command! -nargs=* YcmCompleter call LoadYCM() | sleep 2 | YcmCompleter <args>
 augroup load_us_ycm
@@ -212,6 +223,7 @@ syntax enable
 " Some standard settings to make vim better
 set autoindent
 set autoread                            " reload files when changed on disk
+autocmd FocusGained * checktime
 set backspace=indent,eol,start
 set clipboard=unnamed                   " yank & paste with system clipboard
 if !has('nvim')
@@ -245,7 +257,7 @@ set wildmenu                            " show navigable menu for tab completion
 set wildmode=list:full
 set wildignorecase
 set showfulltag
-set synmaxcol=1000
+set synmaxcol=300
 set virtualedit=block
 " Update syntax highlighting for more lines increased scrolling performance
 syntax sync minlines=256
@@ -316,11 +328,10 @@ set viewoptions=cursor,folds
 
 set undofile
 set backup
-set swapfile
+set noswapfile
 
 set undodir=~/.vim/tmp/undo//           " undo files
 set backupdir=~/.vim/tmp/backup//       " backups
-set directory=~/.vim/tmp/swap//         " swap files
 
 " Make those folders automatically if they don't already exist.
 if !isdirectory(expand(&undodir))
@@ -329,14 +340,9 @@ endif
 if !isdirectory(expand(&backupdir))
   call mkdir(expand(&backupdir), "p")
 endif
-if !isdirectory(expand(&directory))
-  call mkdir(expand(&directory), "p")
-endif
 
 " Enable basic mouse behavior such as resizing buffers.
 set mouse=a
-map <ScrollWheelUp>   <C-Y>
-map <ScrollWheelDown> <C-E>
 
 " Let them know you are the king
 let mapleader = " "
@@ -366,10 +372,10 @@ augroup reload_vimrc
 augroup END
 
 " Move between visual lines, not literal ones!
-nnoremap j gj
-nnoremap k gk
-vnoremap j gj
-vnoremap k gk
+nnoremap <expr> j v:count ? 'j' : 'gj'
+nnoremap <expr> k v:count ? 'k' : 'gk'
+vnoremap <expr> j v:count ? 'j' : 'gj'
+vnoremap <expr> k v:count ? 'k' : 'gk'
 
 " Search for visually selected text
 vmap // y/<C-R>"<CR>
@@ -422,24 +428,25 @@ noremap <F6> :let &background = ( &background == "dark"? "light" : "dark" )<CR>
 " Cursor configuration {{{
 " Use a blinking upright bar cursor in Insert mode, a solid block in normal
 " and a blinking underline in replace mode
-set guicursor&
 set guicursor=n-v-c-o:block-blinkon0,i-ci:ver100-blinkwait300-blinkon300-blinkoff400,sm-cr-r:hor100-blinkwait300-blinkon300-blinkoff400
 let &t_SI                         = "\<Esc>[5 q"
 let &t_SR                         = "\<Esc>[3 q"
 let &t_EI                         = "\<Esc>[2 q"
 " }}}
 
+" Enable Italics
+let &t_ZH                         = "\<Esc>[3m"
+let &t_ZR                         = "\<Esc>[23m"
+
 " Toggle paste mode for code
 set pastetoggle=<F2>
 
 " Automatically set tmux window name
-if exists('$TMUX') && !exists('$NORENAME')
-  augroup tmux_window_rename
-    au!
-    au BufEnter * if empty(&buftype) && !pumvisible() | call system('tmux rename-window '.expand('%:t:S')) | endif
-    au VimLeave * call system('tmux set-window automatic-rename on')
-  augroup END
-endif
+augroup tmux_window_rename
+  au!
+  au BufEnter * if empty(&buftype) && !pumvisible() && exists('$TMUX') && !exists('$NORENAME') | call system('tmux rename-window '.expand('%:t:S')) | endif
+  au VimLeave * if exists('$TMUX') && !exists('$NORENAME') | call system('tmux set-window automatic-rename on') | endif
+augroup END
 
 " }}}
 " ============================================================================
@@ -473,7 +480,7 @@ let g:vimtex_view_general_viewer
   \ = '/Applications/PDF Expert.app/Contents/MacOS/PDF Expert'
 let g:vimtex_view_general_options = '@line @pdf @tex'
 let g:vimtex_echo_ignore_wait = 1
-" }}}
+" }}}
 
 " delimitMate configuration {{{
 let delimitMate_expand_cr = 2
@@ -486,8 +493,8 @@ let g:NERDTreeIgnore     = ['\.DS_Store$']
 let g:NERDTreeShowHidden = 1
 let g:NERDSpaceDelims    = 1
 let g:NERDTreeMinimalUI  = 1
-nmap <leader>d :NERDTreeToggle<CR>
-nmap <leader>D :NERDTreeFind<CR>
+nmap <leader>d :silent! DisableGoldenViewAutoResize<CR>:silent! NERDTreeToggle<CR>:silent! EnableGoldenViewAutoResize<cr>
+nmap <leader>D :silent! DisableGoldenViewAutoResize<CR>:silent! NERDTreeFind<CR>:silent! EnableGoldenViewAutoResize<cr>
 " }}}
 
 " YouCompleteMe configuration {{{
@@ -520,8 +527,9 @@ let g:ycm_collect_identifiers_from_tags_files = 1
 let g:ycm_seed_identifiers_with_syntax = 1
 let g:ycm_global_ycm_extra_conf = '~/.vim/conf/ycm_conf.py'
 let g:ycm_extra_conf_vim_data   = [ '&filetype' ]
+let g:ycm_server_python_interpreter = '/usr/local/bin/python3'
 let g:ycm_extra_conf_globlist = [
-    \ '~/Projects/*' ]
+  \ '~/Projects/*' ]
 " }}}
 
 " jedi-vim configuration {{{
@@ -599,7 +607,7 @@ augroup END
 " }}}
 
 " Vim-Signify configuration {{{
-let g:signify_vcs_list           = [ 'git', 'hg' ]
+let g:signify_vcs_list           = [ 'git' ]
 let g:signify_disable_by_default = 1
 nnoremap <leader>gt :SignifyToggle<CR>
 " Hunk jumping
@@ -655,7 +663,6 @@ nnoremap <leader>o :TagbarToggle<CR>
 " indentLine configuration {{{
 let g:indentLine_char = '┊'
 let g:indentLine_fileTypeExclude = ['help', 'nerdtree', 'startify', 'tagbar', 'vimfiler']
-let g:indentLine_bufNameExclude = ['Startify']
 let g:indentLine_faster = 1
 " }}}
 
@@ -775,3 +782,6 @@ autocmd FileType python BracelessEnable +indent +fold-slow
 
 " }}}
 " ============================================================================
+" hi! VertSplit ctermbg=NONE guibg=NONE
+hi VertSplit guibg=#282828 guifg=#181A1F
+set fillchars+=vert:│

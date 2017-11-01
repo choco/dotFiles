@@ -286,31 +286,30 @@ KHD_FILES = filemap(
 OTHER_FILES = filemap(
   'tmux.conf'      => '~/.tmux.conf',
   'ssh/config'     => '~/.ssh/config',
-  'livestreamerrc' => '~/.livestreamerrc',
   'weechat'        => '~/.weechat'
 )
 
 desc 'Install these config files.'
 task :install do
-  Rake::Task['install:brew'].invoke
-  Rake::Task['install:git'].invoke
-  Rake::Task['install:cmake'].invoke
-  Rake::Task['install:ctags'].invoke
-  Rake::Task['install:cscope'].invoke
-  Rake::Task['install:the_silver_searcher'].invoke
-  Rake::Task['install:reattach_to_user_namespace'].invoke
-  Rake::Task['install:tmux'].invoke
-  Rake::Task['install:zsh'].invoke
-  Rake::Task['install:python2'].invoke
-  Rake::Task['install:python3'].invoke
-  Rake::Task['install:vim'].invoke
-  Rake::Task['install:macvim'].invoke
-  Rake::Task['install:neovim'].invoke
-  Rake::Task['install:neofetch'].invoke
-  Rake::Task['install:mono'].invoke
-  Rake::Task['install:opengl_support_libs'].invoke
-  Rake::Task['install:aspell'].invoke
-  Rake::Task['install:weechat'].invoke
+  #Rake::Task['install:brew'].invoke
+  #Rake::Task['install:git'].invoke
+  #Rake::Task['install:cmake'].invoke
+  #Rake::Task['install:ctags'].invoke
+  #Rake::Task['install:cscope'].invoke
+  #Rake::Task['install:the_silver_searcher'].invoke
+  #Rake::Task['install:reattach_to_user_namespace'].invoke
+  #Rake::Task['install:tmux'].invoke
+  #Rake::Task['install:zsh'].invoke
+  #Rake::Task['install:python2'].invoke
+  #Rake::Task['install:python3'].invoke
+  #Rake::Task['install:vim'].invoke
+  #Rake::Task['install:macvim'].invoke
+  #Rake::Task['install:neovim'].invoke
+  #Rake::Task['install:neofetch'].invoke
+  #Rake::Task['install:mono'].invoke
+  #Rake::Task['install:opengl_support_libs'].invoke
+  #Rake::Task['install:aspell'].invoke
+  #Rake::Task['install:weechat'].invoke
 
   step 'symlink'
 

@@ -155,6 +155,7 @@ fallback_flags_filetype_map = {
     '-std=c11',
     '-Wall',
     '-Wextra',
+    '-I', '/System/Library/Frameworks/Kernel.framework/Headers',
     '-I', '.'
   ],
   'objc': [
