@@ -6,7 +6,7 @@
     <string>com.koekeishiya.khd</string>
     <key>ProgramArguments</key>
     <array>
-        <string>/Users/cHoco/Projects/khd/bin/khd</string>
+        <string>/Users/choco/Projects/khd/bin/khd</string>
     </array>
     <key>RunAtLoad</key>
     <true/>

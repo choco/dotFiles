@@ -326,9 +326,9 @@ task :install do
   ZSH_FILES.each do |orig, link|
     link_file orig, link
   end
-  KWM_FILES.each do |orig, link|
-    link_file orig, link
-  end
+#  KWM_FILES.each do |orig, link|
+#    link_file orig, link
+#  end
   KHD_FILES.each do |orig, link|
     link_file orig, link
   end
